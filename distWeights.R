@@ -16,7 +16,9 @@ distWeights <- function(gens = 10000, max.step, sampling.area) {
 	# Create and define the start points, angles and distances that will be
 	# used to construct end points.
 	#extract matrix to be able to feed csr
-	sampling.area.matrix <- sampling.area@polygons[[1]]@Polygons[[1]]@coords 
+
+  # sampling.area.matrix <- sampling.area@polygons[[1]]@Polygons[[1]]@coords 
+  sampling.area.matrix <- geom(sampling.area)[, c("x", "y")] # extract coordinates
 	start.points <- csr(sampling.area.matrix, gens)
 	colnames(start.points) <- c("x", "y")
 	angles <- runif(gens, min = 0, max = 2*pi)

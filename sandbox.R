@@ -1,10 +1,8 @@
 library(raster)
 library(rgeos)
 library(snowfall)
-#library(cluster)
-#library(splancs) #csr
-
-setwd("q:/workspace/trpd_uniform/trpd/")
+library(cluster)
+library(splancs) #csr
 
 source("simulation.R")
 source("walkerContribution.R")
@@ -49,7 +47,7 @@ simulation(
         num.walkers = 10000,
         n.steps = 1000,
         sessions = 5,
-        work.dir = "q:/layers",
+        work.dir = ".",
         seed = 156,
         summary.file = "simulation_list.txt",
         home.range = hr/2, # treba uporabit polmer

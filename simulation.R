@@ -71,7 +71,7 @@ simulation <- function(
   
   ## Create a filename with a unique tag (date and time up to a minute).
   file.name <- paste("mark-", format(Sys.time(), "%Y-%m-%d-%H-%M"), ".txt", sep = "")
-  
+
   ## Create an empty object of the world.
   #	object <- raster(nrow = area, ncol = area,
   #		xmn = -area/2, xmx = area/2,
@@ -80,7 +80,7 @@ simulation <- function(
   object <- raster(nrow = area * 2, ncol = area * 2,
     xmn = -area, xmx = area,
     ymn = -area, ymx = area,
-    crs = "+proj=NA") # no projection, can be extended to use one
+    crs = NA) # no projection, can be extended to use one
   res(object) <- c(rsln, rsln)
   
   ## Construct a list of parameters to be passed on.

@@ -35,8 +35,8 @@ calculateBins <- function(walk.pair, num.bins, sap.poly, ...num.boots,
     })
   
   output <- list(
-    bins = uniform,
-#    bins = bins,
+    # bins = uniform,
+   bins = bins,
     effect.distance = effect.distance
   )
   

@@ -45,9 +45,7 @@ calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
 #	.. ..$ upper : num [1:28] 230 229 227 222 215 ...
 #	$ effect.distance: num 26.7
   
-  browser()
-  asdf
-  
+  # browser()
   # TODO:
   # Za vsak walker je treba pogledat, če je tako blizu roba sampling area,
   # da se ga še splača vzorčit. Za vsakega, ki se ga splača povzorčit, se
