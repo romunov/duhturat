@@ -17,21 +17,21 @@
 #' @author Roman Luštrik (\email{roman.lustrik@gmail.com})
 # roxygenize()
 
-writeINP <- function(object, supop, pars, probs, cap.hist) {
+writeINP <- function(object, supop, pars, probs) {
   
-  browser()
-  asdf
+  # browser()
+  # asdf
   
   if (is.null(pars$comment)) pars$comment <- NA
   
-  file.name <- strsplit(pars$file.name, "\\.")[[1]][1] #remove .txt
+  file.name <- sub(pattern = ".txt", replacement = "", x = pars$file.name) # remove .txt
   file.name <- paste(paste(file.name, colnames(supop), attr(supop, "weight"), sep = "-"), "inp", sep = ".")
   
   #FOR TESTING: prepare grouping variable
-  group <- object$sample$include
+  # group <- object$sample$include
   
   ###### COMPARE REAL, MODELED AND SAMPLED #######
-#  sp.real <- object$sample$actual.ratio
+  sp.real <- object$sample$actual.ratio
   sp.mdl <- object$contrib$model.contrib$weight.yes
   sp.smp <- object$contrib$cona$weight.yes
   
@@ -40,15 +40,15 @@ writeINP <- function(object, supop, pars, probs, cap.hist) {
 #  mrg <- data.frame(real = sp.real, model = sp.mdl, sample = NA)
   mrg <- cbind(model = sp.mdl[smp.nms, ], sample = sp.smp)
 #  mrg[smp.nms, "sample"] <- as.numeric(sp.smp) 
-  plot(mrg)
-  mrg.sorted <- mrg[order(sp.real), ]
+  # plot(mrg)
+  # mrg.sorted <- mrg[order(sp.real), ]
   
-  pdf(paste("diagnostics_plot", paste(format(Sys.time(), format = "%Y-%m-%d_at_%H:%M"), "pdf", sep = "."), sep = "_", collapse = "_"))
+  # pdf(paste("diagnostics_plot", paste(format(Sys.time(), format = "%Y-%m-%d_at_%H:%M"), "pdf", sep = "."), sep = "_", collapse = "_"))
   
 #  plot(mrg.sorted$real, mrg.sorted$mean)
-  plot(mrg.sorted$real, mrg.sorted$sample, xlim = c(0, 1), ylim = c(0, 1))
-  points(mrg.sorted$real, mrg.sorted$mean, pch = 1, col = "red")
-  lines(mrg.sorted$real, mrg.sorted$mean, col = "red")
+  # plot(mrg.sorted$real, mrg.sorted$sample, xlim = c(0, 1), ylim = c(0, 1))
+  # points(mrg.sorted$real, mrg.sorted$mean, pch = 1, col = "red")
+  # lines(mrg.sorted$real, mrg.sorted$mean, col = "red")
   
 #  plot(x = 1:length(sp.real), ylim = c(0, 1), type = "n")
 #  lines(1:length(sp.real), mrg.sorted$real, col = "red")
@@ -56,9 +56,9 @@ writeINP <- function(object, supop, pars, probs, cap.hist) {
 #  points(1:length(sp.real), mrg.sorted$sample, col = "blue")
 #  legend("topleft", legend = c("real", "model"), col = c("red", "black"), lty = 1)
 
-  rl <- mrg[is.na(mrg$sample), "real"]
-  plot(ecdf(rl))
-  summary(ecdf(rl))
+  # rl <- mrg[is.na(mrg$sample), "real"]
+  # plot(ecdf(rl))
+  # summary(ecdf(rl))
   
   ###### COMPARE REAL, MODELED AND SAMPLED #######
   
@@ -77,7 +77,7 @@ writeINP <- function(object, supop, pars, probs, cap.hist) {
     })
   cap.hist <- as.data.frame(cap.hist)
   
-  mat <- cbind(cap.hist = cap.hist, probs = probs, group = group)
+  mat <- cbind(cap.hist = cap.hist, probs = probs) # , group = group)
   
   # prepare data.frame for printing
   par.df <-	data.frame(

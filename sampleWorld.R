@@ -1,4 +1,4 @@
-sampleWorld <- function(walk, sap.poly, sessions, prob, ...) {
+sampleWorld <- function(walk, sap.poly, sessions, prob, SD, ...) {
 	
 #	if (!sfIsRunning()) sfInit(parallel = TRUE, ...)
 #	
@@ -65,7 +65,7 @@ sampleWorld <- function(walk, sap.poly, sessions, prob, ...) {
 #	walk.sample <- sampleWalkers(walk = walk.subset, sessions = sessions, prob = prob,
 #		sap = sap.poly, ...)
 	walk.sample <- sampleWalkers(walk = walk, sessions = sessions, prob = prob,
-		sap = sap.poly, ...)
+		sap = sap.poly, SD = SD, ...)
   
 	# Calculate pairwise distances within each walker's sampled points. 
 	walk.pair <- lapply(X = walk.sample[["sample"]], FUN = function(x) {

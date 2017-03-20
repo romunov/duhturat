@@ -10,6 +10,7 @@
 
 markAnalysis <- function(fn, wd.model, wd.inp, ...) {
 	
+  browser()
   
 	# READ IN RAW FILE
 	oldwd <- getwd()

@@ -27,6 +27,7 @@ source("readRunModels.R")
 
 hr <- 80
 N <- 200
+SD <- 3
 
 crc <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = hr/2, quadsegs = 100)
 wrld <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = 2*(hr/2), quadsegs = 100)
@@ -55,8 +56,11 @@ simulation(
         sw = 1000,
         rsln = 1,
         cpus = 3,
+        SD = SD,
         type = "SOCK",
         num.boots = 1000,
         weight.switch = TRUE, #currently only weighted curve is included in the result, so switch should be TRUE
         custom.walkers = xy
 )
+
+markAnalysis("./data/mark-2017-03-16-21-34-mean-weight.yes.inp", wd.model = "./temp", wd.inp = "./temp")

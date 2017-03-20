@@ -9,6 +9,7 @@
 #' @param home.range Radius (r) of the walker's home range.
 #' @param area Numeric. Edge of the world around the sampling area. Implicitly, this is a square.
 #' @param rsln Numeric. Grid resolution.
+#' @param SD Standard deviation (square root of variance) for walker's walk. Used to generate points around walker centroids.
 #' @param prob Probability of capture, on the interval of \code{[0, 1]}.
 #' @param sw Numeric. Edge of the super world. This is far bigger than the area. Here to compensate for the edge effect when estimating density. 
 #' @param weight.switch Logical. If TRUE, pairwise data is bootstrapped and a weighted and unweighted data.frame of bins are created.
@@ -25,6 +26,7 @@ simulation <- function(
   prob,
   sw,
   rsln,
+  SD,
   sessions,
   num.boots,
   weight.switch,
@@ -105,7 +107,7 @@ simulation <- function(
   walk.data <- walkerContribution(num.walkers = num.walkers, sw = sw, area = area,
     home.range = home.range, sap.poly = sap.poly, n.steps = n.steps, prob = prob,
     sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
-    custom.walkers = custom.walkers, ...)
+    custom.walkers = custom.walkers, SD = SD, ...)
   
   ## Based on the cumulative curve that we used to calculate contribution for
   ## individual walker, we will now calculate contribution for each cell inside
@@ -113,6 +115,8 @@ simulation <- function(
   supop <- superPopulation(.object = object, sap.poly = sap.poly,
     effect.distance = walk.data$contribs$effect.distance,
     ring.weights = walk.data$contrib$bins, ...)
+  
+  browser()
   
   ## For weight yes/no write data for each column into an inp file.
   for(i in 1:length(supop)) {

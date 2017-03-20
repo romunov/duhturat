@@ -18,6 +18,9 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
   
   if (missing(effect.distance)) stop("No effect.distance argument in individualContribution")
   
+  # browser()
+  # asdf
+  
   empty.object <- ...object #store empty object to be passed to later functions
   
   # For each walker, find a medoid point of all sampled points.

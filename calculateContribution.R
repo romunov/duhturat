@@ -14,7 +14,7 @@
 
 calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
   weight.switch, ..object, walks, ...) {
-  
+  # browser()
   # Calculate the number of cells in a radius of the home range and
   # recommend number of bins.
   num.bins <- numberOfBins(...object = ..object, walk.pair = walk.pair)
@@ -79,6 +79,8 @@ calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
     .sap.poly = sap.poly, effect.distance = my.bins$effect.distance,
     ring.weights = my.bins$bins)
   
+  # browser()
+  # asdf
 #  # diagnostics plotting
 # sp.smp <- walker.contrib[[1]]
 # sp.mdl <- moco[[1]]
