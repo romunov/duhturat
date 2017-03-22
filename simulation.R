@@ -116,8 +116,6 @@ simulation <- function(
     effect.distance = walk.data$contribs$effect.distance,
     ring.weights = walk.data$contrib$bins, ...)
   
-  browser()
-  
   ## For weight yes/no write data for each column into an inp file.
   for(i in 1:length(supop)) {
     for(j in 1:ncol(supop[[i]])) {

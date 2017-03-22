@@ -7,10 +7,12 @@
 #'  looks for it in the working directory.
 #' @param wd Character. Working directory where model files (\code{wd.model} 
 #'  will be deposited and the source of \code{.inp} files (\code{wd.inp}).
+#'  
+# TODO: dodati še exporte za RMark funkcije
 
 markAnalysis <- function(fn, wd.model, wd.inp, ...) {
 	
-  browser()
+  # browser()
   
 	# READ IN RAW FILE
 	oldwd <- getwd()
@@ -18,6 +20,7 @@ markAnalysis <- function(fn, wd.model, wd.inp, ...) {
 	data.in <- readMark(as.character(fn))
 	
 	# DO THE ANALYSIS
+	setwd(oldwd)
 	setwd(wd.model)
 	tr.process <- process.data(data.in, model = "Huggins")
 	tr.ddl <- make.design.data(tr.process)

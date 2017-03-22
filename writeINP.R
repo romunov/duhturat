@@ -8,20 +8,13 @@
 #'			information is extracted automatically.
 #' @param supop		Numeric. A character of length one as a result of superPopulation
 #'			function.
-#' @param walk.dens Numeric. A value denoting density of walkers per cell.
-#' @param work.dir Character. Working dir where the files is to be saved.
 #' @param comment Character. A comment to be written to the file.
 #' @param probs A list of probabilities ("sp") for individual walker.
-#' @param cap.hist A data.frame with capture histories for individual walker.
-#' @param params A list of parameters used to simulate the data.
+#' @param pars A list of parameters used to simulate the data.
 #' @author Roman Luštrik (\email{roman.lustrik@gmail.com})
 # roxygenize()
 
 writeINP <- function(object, supop, pars, probs) {
-  
-  # browser()
-  # asdf
-  
   if (is.null(pars$comment)) pars$comment <- NA
   
   file.name <- sub(pattern = ".txt", replacement = "", x = pars$file.name) # remove .txt
@@ -68,7 +61,7 @@ writeINP <- function(object, supop, pars, probs) {
   
   ## Construct a working directory where files will be saved.
   work.dir <- pars$work.dir
-  work.dir <- paste(dirname(work.dir), basename(work.dir), sep = "")
+  # work.dir <- paste(dirname(work.dir), basename(work.dir), sep = "")
   summary.file <- paste(work.dir, pars$summary.file, sep = "/")
   
   # Collapse capture history

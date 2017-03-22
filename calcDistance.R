@@ -38,6 +38,8 @@
 calcDistance <- function(origin.point, object, effect.distance, ring.weights,
   empty.object, raster.mask, mask = FALSE, contr = FALSE) {
   
+  if (nrow(origin.point) == 0) return(NA)
+
   # Some functions may pass origin.point as data.frame/matrix, while others
   # pass a vector. We need to perform a check and coerce to the correct
   # class if needed, otherwise raster::extract will crap out.

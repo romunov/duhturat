@@ -15,40 +15,37 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   
   st <- Sys.time()
   
-  # browser()
   # sample per session, result is a list of
   # the same length as the number of sessions with each element
   # within session representing a captured walker.
   out.sampled <- lapply(as.list(seq_len(sessions)), 
                         FUN = function(xs, walkers, shape = sap, prob) {
-                          #  out.sampled <- sapply(sessions, FUN = function(xs, walkers, shape = sap, prob) {
                           
                           lapply(X = walkers, FUN = function(x, prob, shape) {
+                            # browser()
                             # sample a point inside the sampling area?
                             check <- sample(0:1, size = 1, prob = c(1-prob, prob))
                             if (check == 1)  { # if caught, sample a point
-                              # sampled.pt <- spsample(x, n = 1, type = "random")
                               centers <- coordinates(x)
                               sampled.pt <- data.frame(x = rnorm(1, mean = centers[, 1], sd = SD),
                                                        y = rnorm(1, mean = centers[, 2], sd = SD))
                               sampled.pt <- SpatialPoints(sampled.pt) # needs to be a SpatialPoints
                               # and see if it falls inside the sampling polygon
-                              is.inside <- any(gCrosses(sampled.pt, shape) | gContains(sampled.pt, shape) | gCovers(shape, sampled.pt))
+                              out <- coordinates(sampled.pt)
+                              out <- cbind(out, capt = 1)
+                              colnames(out) <- c("x", "y", "capt")
                               
+                              is.inside <- any(gCrosses(sampled.pt, shape) | gContains(sampled.pt, shape) | gCovers(shape, sampled.pt))
                               # record it if point is within the sampling area, else
                               # return an empty result
-                              if (is.inside) {
-                                out <- coordinates(sampled.pt)
-                                out <- cbind(out, capt = 1)
-                                colnames(out) <- c("x", "y", "capt")
-                                out
-                              } else {
-                                #              out <- data.frame(x = NA, y = NA, capt = 0)
-                                out <- coordinates(sampled.pt)
-                                out <- cbind(out, capt = 0)
-                                colnames(out) <- c("x", "y", "capt")
-                                out
+                              if (!is.inside) {
+                                out[, "capt"] <- 0 # assumes only one row
+                                return(out)
                               }
+                              return(out)
+                            } else {
+                              out <- data.frame(x = NA, y = NA, capt = 0)
+                              return(out)
                             }
                           }, shape = shape, prob = prob)
                           
@@ -69,11 +66,7 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   #  [1,] 55.71639 -25.37155    0
   
   # Do "rbind" for each session
-  session.data <- lapply(out.sampled, function(x) {
-    out <- do.call("rbind", x)
-    rownames(out) <- names(x)
-    out
-  })
+  session.data <- lapply(out.sampled, function(x) do.call(rbind, x))
   
   #  > head(session.data)
   #  [[1]]
@@ -106,7 +99,7 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   walker.data <- lapply(session.data, function(y) {
     y[, "capt"]
   })
-  capture.df <- do.call("cbind", walker.data)
+  capture.df <- do.call(cbind, walker.data)
   
   #> capture.df
   #	     [,1] [,2] [,3] [,4] [,5]
@@ -115,13 +108,20 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   #	[3,]    0    1    0    1    1
   #	[4,]    0    0    0    0    0
   
+  # browser()
   # Create a list where each element is a walker with each
   # line in a data.frame representing data from sampling sessions.
-  captured.walkers <- lapply(1:length(walk), function(y) {
-    do.call("rbind", lapply(session.data, FUN = function(m) {
-      m[y, , drop = FALSE]
-    }))
-  })
+  
+  captured.walkers <- as.data.frame(do.call(rbind, session.data))
+  captured.walkers$walker <- unlist(sapply(strsplit(
+    rownames(captured.walkers), "_"), "[", 1))
+  captured.walkers <- split(captured.walkers, f = captured.walkers$walker)
+  # captured.walkers <- lapply(1:length(walk), function(y) {
+  #   do.call("rbind", lapply(session.data, FUN = function(m) {
+  #     m[y, , drop = FALSE]
+  #   }))
+  # })
+  
   #  > head(captured.walkers)
   #  [[1]]
   #  x         y capt
@@ -138,13 +138,20 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   #  [ reached getOption("max.print") -- omitted 2 rows ]
   
   # Remove any walkers that were never sampled.
-  empty.cases <- apply(X = capture.df, MARGIN = 1, FUN = sum)
-  capture.df <- capture.df[which(empty.cases != 0), ] # remove those walkers with no capture
+  empty.cases <- rowSums(capture.df, na.rm = TRUE)
+  capture.df <- capture.df[empty.cases != 0, ] # remove those walkers with no capture
   
   message(paste("sampleWalkers:", length(walk) - nrow(capture.df), " walkers were never sampled within the sampling area"))
   
-  names(captured.walkers) <- names(walk)
-  captured.walkers <- captured.walkers[which(empty.cases != 0)] 
+  # omit those that have never been caught even once
+  captured.walkers <- sapply(captured.walkers, FUN = function(x) {
+    cds <- apply(x, MARGIN = 1, FUN = function(m) !any(is.na(m)))
+    
+    x[(x$capt * cds) != 0, ]
+  }, simplify = FALSE)
+  find.nodata <- sapply(captured.walkers, nrow)
+  
+  captured.walkers <- captured.walkers[find.nodata != 0]
   
   # Find information whether walker comes from the border or core of the sampling area
   find.pos <- unlist(lapply(strsplit(names(walk), "_"), "[[", 2))

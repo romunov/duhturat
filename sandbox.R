@@ -3,6 +3,7 @@ library(rgeos)
 library(snowfall)
 library(cluster)
 library(splancs) #csr
+library(RMark)
 
 source("simulation.R")
 source("walkerContribution.R")
@@ -45,14 +46,14 @@ plot(gBuffer(SpatialPoints(xy[rd[1], 1:2, drop = FALSE], proj4string = CRS(as.ch
 
 simulation(
         sap = hr/2, #polmer!!!!111oneoneeleven
-        num.walkers = 10000,
+        num.walkers = 500,
         n.steps = 1000,
         sessions = 5,
-        work.dir = ".",
-        seed = 156,
+        work.dir = "./data",
+        seed = 111,
         summary.file = "simulation_list.txt",
         home.range = hr/2, # treba uporabit polmer
-        prob = 1,
+        prob = 0.2,
         sw = 1000,
         rsln = 1,
         cpus = 3,
@@ -63,4 +64,7 @@ simulation(
         custom.walkers = xy
 )
 
-markAnalysis("./data/mark-2017-03-16-21-34-mean-weight.yes.inp", wd.model = "./temp", wd.inp = "./temp")
+ax <- sapply(list.files("./data", pattern = ".inp"), FUN = markAnalysis, 
+             wd.model = "./temp", 
+             wd.inp = "./data",
+             simplify = FALSE)
