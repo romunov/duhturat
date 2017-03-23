@@ -22,7 +22,6 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
                         FUN = function(xs, walkers, shape = sap, prob) {
                           
                           lapply(X = walkers, FUN = function(x, prob, shape) {
-                            # browser()
                             # sample a point inside the sampling area?
                             check <- sample(0:1, size = 1, prob = c(1-prob, prob))
                             if (check == 1)  { # if caught, sample a point
@@ -156,8 +155,7 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   find.nodata <- sapply(captured.walkers, nrow)
   
   captured.walkers <- captured.walkers[find.nodata != 0]
-# browser()
-
+  
   # Find information whether walker comes from the border or core of the sampling area
   # find.pos <- unlist(lapply(strsplit(names(walk), "_"), "[[", 2))
   # find.pos <- find.pos[which(empty.cases != 0)]
