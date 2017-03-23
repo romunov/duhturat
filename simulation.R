@@ -30,7 +30,7 @@ simulation <- function(
   sessions,
   num.boots,
   weight.switch,
-  custom.walkers, # for debugging purposes
+  custom.walkers = NULL, # for debugging purposes
   ...
 ) {
   
@@ -97,7 +97,7 @@ simulation <- function(
   pars$prob <- prob
   pars$summary.file <- summary.file
   pars$seed <- seed
-  pars$custom.walkers <- ifelse(exists("custom.walkers"), TRUE, FALSE)
+  pars$custom.walkers <- ifelse(!is.null(custom.walkers), TRUE, FALSE)
   pars$num.walker <- num.walkers
   pars$n.steps <- n.steps
   pars$num.boots <- num.boots

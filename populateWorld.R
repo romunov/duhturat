@@ -10,13 +10,12 @@
 populateWorld <- function(num.walkers, sw, area, home.range, n.steps, sap, 
   custom.walkers, ...) {
   
-  if (exists("custom.walkers")) {
+  if (!is.null(custom.walkers)) {
     xy <- custom.walkers
   } else {
-    x <- runif(num.walkers, min = -sw/2, max = sw/2)
-    y <- runif(num.walkers, min = -sw/2, max = sw/2)
-    xy <- data.frame(x, y, count = 1:num.walkers)
-    rm(x, y)
+    xy <- data.frame(x = runif(num.walkers, min = -sw/2, max = sw/2), 
+                     y = runif(num.walkers, min = -sw/2, max = sw/2),
+                     count = 1:num.walkers)
     
     # Simulation can't handle a lot of walkers, so we'll subset only the points
     # that are close to the sampling area.

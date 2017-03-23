@@ -28,7 +28,7 @@ source("readRunModels.R")
 
 hr <- 80
 N <- 200
-SD <- 3
+SD <- 1
 
 crc <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = hr/2, quadsegs = 100)
 wrld <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = 2*(hr/2), quadsegs = 100)
@@ -46,7 +46,7 @@ plot(gBuffer(SpatialPoints(xy[rd[1], 1:2, drop = FALSE], proj4string = CRS(as.ch
 
 simulation(
         sap = hr/2, #polmer!!!!111oneoneeleven
-        num.walkers = 500,
+        num.walkers = 1500,
         n.steps = 1000,
         sessions = 5,
         work.dir = "./data",
@@ -60,11 +60,13 @@ simulation(
         SD = SD,
         type = "SOCK",
         num.boots = 1000,
-        weight.switch = TRUE, #currently only weighted curve is included in the result, so switch should be TRUE
-        custom.walkers = xy
+        weight.switch = TRUE #currently only weighted curve is included in the result, so switch should be TRUE
+        # custom.walkers = NULL
 )
 
 ax <- sapply(list.files("./data", pattern = ".inp"), FUN = markAnalysis, 
              wd.model = "./temp", 
              wd.inp = "./data",
              simplify = FALSE)
+
+# TODO: home.range in SD se tepeta

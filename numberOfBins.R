@@ -5,7 +5,7 @@
 #' @author Roman Luštrik
 
 numberOfBins <- function(...object, walk.pair) {
-
+  
 	effect.distance <- max(unlist(walk.pair))
 	op <- matrix(c(0, 0), ncol = 2) # celica okoli katere se bo našlo buffer
 	

@@ -68,6 +68,10 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   # Do "rbind" for each session
   session.data <- lapply(out.sampled, function(x) do.call(rbind, x))
   
+  plot(sap, xlim = c(-300, 300), ylim = c(-300, 300))
+  sapply(walk, plot, add = TRUE)
+  
+  browser()
   #  > head(session.data)
   #  [[1]]
   #                  x           y capt
@@ -152,10 +156,11 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   find.nodata <- sapply(captured.walkers, nrow)
   
   captured.walkers <- captured.walkers[find.nodata != 0]
-  
+# browser()
+
   # Find information whether walker comes from the border or core of the sampling area
-  find.pos <- unlist(lapply(strsplit(names(walk), "_"), "[[", 2))
-  find.pos <- find.pos[which(empty.cases != 0)]
+  # find.pos <- unlist(lapply(strsplit(names(walk), "_"), "[[", 2))
+  # find.pos <- find.pos[which(empty.cases != 0)]
   
   # Convert data for each walker into a data.frame.
   captured.walkers <- lapply(captured.walkers, function(p) {
