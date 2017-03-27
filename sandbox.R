@@ -45,7 +45,7 @@ rd <- order(xy[, 1], xy[, 2], decreasing = TRUE)
 plot(gBuffer(SpatialPoints(xy[rd[1], 1:2, drop = FALSE], proj4string = CRS(as.character(NA))), width = hr/2, quadsegs = 100), lty = "dashed", add = T)
 
 simulation(
-        sap = hr/2, #polmer!!!!111oneoneeleven
+        sap = 200, #polmer!!!!111oneoneeleven
         num.walkers = 1500,
         n.steps = 1000,
         sessions = 5,

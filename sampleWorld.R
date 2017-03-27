@@ -64,6 +64,9 @@ sampleWorld <- function(walk, sap.poly, sessions, prob, SD, ...) {
 # CHANGED: use all walkers, no matter how many occur inside/outside
 #	walk.sample <- sampleWalkers(walk = walk.subset, sessions = sessions, prob = prob,
 #		sap = sap.poly, ...)
+	
+	# browser()
+	
 	walk.sample <- sampleWalkers(walk = walk, sessions = sessions, prob = prob,
 		sap = sap.poly, SD = SD, ...)
   

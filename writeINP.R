@@ -29,9 +29,9 @@ writeINP <- function(object, supop, pars, probs) {
   sp.smp <- object$contrib$cona$weight.yes
   
   # merge sampled contributions
-  smp.nms <- as.numeric(unlist(lapply(strsplit(rownames(sp.smp), "_"), "[", 1)))
+  # smp.nms <- as.numeric(unlist(lapply(strsplit(rownames(sp.smp), "_"), "[", 1)))
 #  mrg <- data.frame(real = sp.real, model = sp.mdl, sample = NA)
-  mrg <- cbind(model = sp.mdl[smp.nms, ], sample = sp.smp)
+  # mrg <- cbind(model = sp.mdl[smp.nms, ], sample = sp.smp)
 #  mrg[smp.nms, "sample"] <- as.numeric(sp.smp) 
   # plot(mrg)
   # mrg.sorted <- mrg[order(sp.real), ]
@@ -54,6 +54,9 @@ writeINP <- function(object, supop, pars, probs) {
   # summary(ecdf(rl))
   
   ###### COMPARE REAL, MODELED AND SAMPLED #######
+  
+  browser()
+  adf
   
   probs <- data.frame(unlist(probs))
   names(probs) <- NULL

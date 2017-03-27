@@ -67,10 +67,10 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   # Do "rbind" for each session
   session.data <- lapply(out.sampled, function(x) do.call(rbind, x))
   
-  plot(sap, xlim = c(-300, 300), ylim = c(-300, 300))
+  plot(sap, xlim = c(-300, 300), ylim = c(-300, 300), border = "red")
   sapply(walk, plot, add = TRUE)
   
-  browser()
+  # browser()
   #  > head(session.data)
   #  [[1]]
   #                  x           y capt

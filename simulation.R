@@ -6,7 +6,7 @@
 #' @param sap Radius of sampling area polygon. If radius, it a positive integer should be supplied. Can also be SpatialPolygon.
 #' @param work.dir A directory where all the magic happens. If missing. \code{work.dir} is used.
 #' @param	summary.file A file into which simulation results are to be written. Defaults to \code{simulation_list.txt}
-#' @param home.range Radius (r) of the walker's home range.
+#' @param home.range Radius (r) of the walker's home range. Amount by which sampling area will be padded.
 #' @param area Numeric. Edge of the world around the sampling area. Implicitly, this is a square.
 #' @param rsln Numeric. Grid resolution.
 #' @param SD Standard deviation (square root of variance) for walker's walk. Used to generate points around walker centroids.
@@ -116,10 +116,13 @@ simulation <- function(
     effect.distance = walk.data$contribs$effect.distance,
     ring.weights = walk.data$contrib$bins, ...)
   
+  browser()
+  
   ## For weight yes/no write data for each column into an inp file.
   for(i in 1:length(supop)) {
     for(j in 1:ncol(supop[[i]])) {
       supop.column <- supop[[i]][, j, drop = FALSE]
+      # TODO: tale je daljši od capture history
       prob.column <- walk.data$contribs$cona[[i]][, j, drop = FALSE]
       attr(supop.column, "weight") <- names(supop[i])
       
