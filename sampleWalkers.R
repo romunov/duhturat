@@ -67,10 +67,9 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   # Do "rbind" for each session
   session.data <- lapply(out.sampled, function(x) do.call(rbind, x))
   
-  plot(sap, xlim = c(-300, 300), ylim = c(-300, 300), border = "red")
-  sapply(walk, plot, add = TRUE)
+  # plot(sap, xlim = c(-300, 300), ylim = c(-300, 300), border = "red")
+  # sapply(walk, plot, add = TRUE)
   
-  # browser()
   #  > head(session.data)
   #  [[1]]
   #                  x           y capt
@@ -103,6 +102,7 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
     y[, "capt"]
   })
   capture.df <- do.call(cbind, walker.data)
+  # table(rowSums(capture.df)) # TODO: WTF, kam grejo vsi ulovi iste živali?
   
   #> capture.df
   #	     [,1] [,2] [,3] [,4] [,5]
@@ -111,7 +111,6 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   #	[3,]    0    1    0    1    1
   #	[4,]    0    0    0    0    0
   
-  # browser()
   # Create a list where each element is a walker with each
   # line in a data.frame representing data from sampling sessions.
   
@@ -119,11 +118,12 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
   captured.walkers$walker <- unlist(sapply(strsplit(
     rownames(captured.walkers), "_"), "[", 1))
   captured.walkers <- split(captured.walkers, f = captured.walkers$walker)
-  # captured.walkers <- lapply(1:length(walk), function(y) {
-  #   do.call("rbind", lapply(session.data, FUN = function(m) {
-  #     m[y, , drop = FALSE]
-  #   }))
-  # })
+  
+  captured.walkers <- lapply(1:length(walk), function(y) {
+    do.call("rbind", lapply(session.data, FUN = function(m) {
+      m[y, , drop = FALSE]
+    }))
+  })
   
   #  > head(captured.walkers)
   #  [[1]]

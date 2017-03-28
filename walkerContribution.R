@@ -17,17 +17,17 @@ walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly,
 	walk.sample <- sampleWorld(walk = walk.walkers, sap.poly = sap.poly,
 		sessions = sessions, prob = prob, SD = SD, ...)
 #  lapply(walk.walkers[rownames(walk.contrib$cona$weight.yes)], plot, add = T)
-  # browser()
   
 	walk.contrib <- calculateContribution(walk.pair = walk.sample$walk.pair,
 		sap.poly = sap.poly, walks = walk.sample$sample, weight.switch = weight.switch,
 		..object = .object, ..num.boots = .num.boots, ...)
 
+  browser()
 	# Construct output object
 	out <- list(
 		walkers = walk.walkers,
 		sample = walk.sample,
-		contribs = walk.contrib # contributions
+		contribs = walk.contrib
 	)
 	
 	return(out)
