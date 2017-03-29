@@ -14,11 +14,13 @@
 #' @author Roman Luštrik (\email{roman.lustrik@gmail.com})
 # roxygenize()
 
-writeINP <- function(object, supop, pars, probs) {
+writeINP <- function(object, supop = NULL, pars, probs) {
   if (is.null(pars$comment)) pars$comment <- NA
+  if (is.null(supop)) supop <- ""
   
   file.name <- sub(pattern = ".txt", replacement = "", x = pars$file.name) # remove .txt
-  file.name <- paste(paste(file.name, colnames(supop), attr(supop, "weight"), sep = "-"), "inp", sep = ".")
+  file.name <- paste(file.name, ".inp", sep = "")
+  # file.name <- paste(paste(file.name, colnames(supop), attr(supop, "weight"), sep = "-"), "inp", sep = ".")
   
   #FOR TESTING: prepare grouping variable
   # group <- object$sample$include
@@ -55,9 +57,6 @@ writeINP <- function(object, supop, pars, probs) {
   
   ###### COMPARE REAL, MODELED AND SAMPLED #######
   
-  browser()
-  adf
-  
   probs <- data.frame(unlist(probs))
   names(probs) <- NULL
   rownames(probs) <- NULL
@@ -78,8 +77,8 @@ writeINP <- function(object, supop, pars, probs) {
   # prepare data.frame for printing
   par.df <-	data.frame(
 #		walk_dens = pars$dens, # walker density
-    cont_supop = supop["supop", ], # contribution area of super population
-    cont_sample = supop["sample", ], # ontribution area of sampling area
+    # cont_supop = supop["supop", ], # contribution area of super population
+    # cont_sample = supop["sample", ], # contribution area of sampling area
     num_of_walkers_supop = object$sample$in.out, # number of walkers in super population
     sessions = nchar(as.character(cap.hist[1, ])), # number of sessions
     sampling_area_r = pars$sap, # r of the sampling area
@@ -115,8 +114,8 @@ writeINP <- function(object, supop, pars, probs) {
   
   # write human readable data (duplicate of the par.df above)
 #  cat("Walker density:", pars$walk.dens, "\n", file = file.to.write, append = TRUE)
-  cat("Contribution area of super population:", supop["supop", ], "\n", file = file.to.write, append = TRUE)
-  cat("Contribution area of sampling area:", supop["sample", ], "\n", file = file.to.write, append = TRUE)
+  # cat("Contribution area of super population:", supop["supop", ], "\n", file = file.to.write, append = TRUE)
+  # cat("Contribution area of sampling area:", supop["sample", ], "\n", file = file.to.write, append = TRUE)
   cat("Number of walkers in super population:", object$sample$in.out, "\n", file = file.to.write, append = TRUE)
   cat("Capture history has", nchar(as.character(cap.hist[1, ])),
     "sessions and", nrow(cap.hist), "walkers", "\n", file = file.to.write, append = TRUE)
@@ -135,7 +134,7 @@ writeINP <- function(object, supop, pars, probs) {
   cat("Comment:", pars$comment, "\n", file = file.to.write, append = TRUE)
   cat("Columns: cap.hist - group - probs */\n\n", file = file.to.write, append = TRUE)
   
-#	# write capture history with individual covariates
+	# write capture history with individual covariates
   write.table(mat, file = file.to.write, append = TRUE, 
     col.names = FALSE, row.names = FALSE, quote = FALSE)
   
@@ -152,7 +151,6 @@ writeINP <- function(object, supop, pars, probs) {
     write.table(x = write.out, file = summary.file,	append = FALSE, sep = "\t",
       col.names = TRUE, row.names = FALSE)
   }
-  
   
   message("Done writing MARK file ", file.name)
   

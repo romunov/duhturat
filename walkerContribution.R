@@ -22,7 +22,6 @@ walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly,
 		sap.poly = sap.poly, walks = walk.sample$sample, weight.switch = weight.switch,
 		..object = .object, ..num.boots = .num.boots, ...)
 
-  browser()
 	# Construct output object
 	out <- list(
 		walkers = walk.walkers,

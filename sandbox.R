@@ -50,7 +50,7 @@ simulation(
         n.steps = 1000,
         sessions = 5,
         work.dir = "./data",
-        seed = 111,
+        seed = 600,
         summary.file = "simulation_list.txt",
         home.range = hr/2, # treba uporabit polmer
         prob = 0.2,

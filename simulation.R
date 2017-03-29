@@ -49,7 +49,7 @@ simulation <- function(
   ## Create sampling area. This creates a circle of defined radius.
   if (is.numeric(sap)) {
     sap.poly <- gBuffer(SpatialPoints(matrix(c(0, 0), nrow = 1)),
-      width = sap, quadsegs = 50)
+                        width = sap, quadsegs = 50)
     message("Creating a circular sampling area polygon.")
   }
   
@@ -60,7 +60,7 @@ simulation <- function(
   box.range <- apply(sap.poly@bbox, 1, range) # find range of x and y
   box.range <- max(abs(box.range))
   area <- home.range * 4 # since home.range is r, we need 2 * r, ergo 4 * r
-#  area <- (1 + abs((home.range * 2) / box.range)) * box.range # add padding for 1.5 * home.range
+  #  area <- (1 + abs((home.range * 2) / box.range)) * box.range # add padding for 1.5 * home.range
   
   start.date <- Sys.time() # record simulation start time
   message(paste("Simulation started at:", start.date))
@@ -73,16 +73,16 @@ simulation <- function(
   
   ## Create a filename with a unique tag (date and time up to a minute).
   file.name <- paste("mark-", format(Sys.time(), "%Y-%m-%d-%H-%M"), ".txt", sep = "")
-
+  
   ## Create an empty object of the world.
   #	object <- raster(nrow = area, ncol = area,
   #		xmn = -area/2, xmx = area/2,
   #		ymn = -area/2, ymx = area/2,
   #		crs = "+proj=NA") # no projection, can be extended to use one
   object <- raster(nrow = area * 2, ncol = area * 2,
-    xmn = -area, xmx = area,
-    ymn = -area, ymx = area,
-    crs = NA) # no projection, can be extended to use one
+                   xmn = -area, xmx = area,
+                   ymn = -area, ymx = area,
+                   crs = NA) # no projection, can be extended to use one
   res(object) <- c(rsln, rsln)
   
   ## Construct a list of parameters to be passed on.
@@ -105,29 +105,26 @@ simulation <- function(
   ## Ok, things are ready now. Time to generate walkers and calculate their
   ## contribution area.
   walk.data <- walkerContribution(num.walkers = num.walkers, sw = sw, area = area,
-    home.range = home.range, sap.poly = sap.poly, n.steps = n.steps, prob = prob,
-    sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
-    custom.walkers = custom.walkers, SD = SD, ...)
+                                  home.range = home.range, sap.poly = sap.poly, n.steps = n.steps, prob = prob,
+                                  sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
+                                  custom.walkers = custom.walkers, SD = SD, ...)
   
   ## Based on the cumulative curve that we used to calculate contribution for
   ## individual walker, we will now calculate contribution for each cell inside
   ## the contribution area (inside the sampling area and a rim around it).
-  supop <- superPopulation(.object = object, sap.poly = sap.poly,
-    effect.distance = walk.data$contribs$effect.distance,
-    ring.weights = walk.data$contrib$bins, ...)
+  # supop <- superPopulation(.object = object, sap.poly = sap.poly,
+  #   effect.distance = walk.data$contribs$effect.distance,
+  #   ring.weights = walk.data$contrib$bins, ...)
   
-  browser()
-  
+  writeINP(object = walk.data, pars = pars, probs = walk.data$contribs$cona$weight.yes)
   ## For weight yes/no write data for each column into an inp file.
-  for(i in 1:length(supop)) {
-    for(j in 1:ncol(supop[[i]])) {
-      supop.column <- supop[[i]][, j, drop = FALSE]
-      # TODO: tale je daljši od capture history
-      prob.column <- walk.data$contribs$cona[[i]][, j, drop = FALSE]
-      attr(supop.column, "weight") <- names(supop[i])
-      
-      writeINP(object = walk.data, supop = supop.column, pars = pars,
-        probs = prob.column)
-    }
-  }
+  # for(i in 1:length(supop)) {
+  #   for(j in 1:ncol(supop[[i]])) {
+  #     # supop.column <- supop[[i]][, j, drop = FALSE]
+  #     # attr(supop.column, "weight") <- names(supop[i])
+  #     prob.column <- walk.data$contribs$cona[[i]][, j, drop = FALSE]
+  #     
+  #     writeINP(object = walk.data, supop = supop.column, pars = pars, probs = prob.column)
+  #   }
+  # }
 }
