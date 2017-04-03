@@ -5,12 +5,11 @@
 
 
 walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly, 
-	n.steps, prob, sessions, weight.switch, .object, .num.boots, custom.walkers, SD, ...) {
+	prob, sessions, weight.switch, .object, .num.boots, custom.walkers, SD, ...) {
   # browser()
 	# We first need to populate our world from which we will sample.
 	walk.walkers <- populateWorld(num.walkers = num.walkers, sw = sw,
-		area = area, home.range = home.range, n.steps = n.steps, 
-    custom.walkers = custom.walkers, ...)
+		area = area, home.range = home.range, custom.walkers = custom.walkers, ...)
 	
   # Sample walkers that come in contact with the sampling area with
 	# a certain probability in a number of sessions.

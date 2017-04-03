@@ -9,7 +9,7 @@
 #' @param home.range Radius (r) of the walker's home range. Amount by which sampling area will be padded.
 #' @param area Numeric. Edge of the world around the sampling area. Implicitly, this is a square.
 #' @param rsln Numeric. Grid resolution.
-#' @param SD Standard deviation (square root of variance) for walker's walk. Used to generate points around walker centroids.
+#' @param SD Standard deviation (square root of variance) for walker's walk from centroid.
 #' @param prob Probability of capture, on the interval of \code{[0, 1]}.
 #' @param sw Numeric. Edge of the super world. This is far bigger than the area. Here to compensate for the edge effect when estimating density. 
 #' @param weight.switch Logical. If TRUE, pairwise data is bootstrapped and a weighted and unweighted data.frame of bins are created.
@@ -18,7 +18,6 @@
 simulation <- function(
   sap,
   num.walkers,
-  n.steps,
   work.dir,
   seed = NULL,
   summary.file,
@@ -99,13 +98,12 @@ simulation <- function(
   pars$seed <- seed
   pars$custom.walkers <- ifelse(!is.null(custom.walkers), TRUE, FALSE)
   pars$num.walker <- num.walkers
-  pars$n.steps <- n.steps
   pars$num.boots <- num.boots
   
   ## Ok, things are ready now. Time to generate walkers and calculate their
   ## contribution area.
   walk.data <- walkerContribution(num.walkers = num.walkers, sw = sw, area = area,
-                                  home.range = home.range, sap.poly = sap.poly, n.steps = n.steps, prob = prob,
+                                  home.range = home.range, sap.poly = sap.poly, prob = prob,
                                   sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
                                   custom.walkers = custom.walkers, SD = SD, ...)
   

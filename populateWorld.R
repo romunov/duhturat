@@ -7,7 +7,7 @@
 #' @return A list of walkers.
 #' @author Roman Luštrik
 
-populateWorld <- function(num.walkers, sw, area, home.range, n.steps, sap, 
+populateWorld <- function(num.walkers, sw, area, home.range, sap, 
   custom.walkers, ...) {
   
   if (!is.null(custom.walkers)) {
@@ -26,11 +26,11 @@ populateWorld <- function(num.walkers, sw, area, home.range, n.steps, sap,
   message("Walkers near the sampling area: ", nrow(xy))
 
   # Create home range area for each walker.
-  out <- apply(xy[, c("x", "y")], MARGIN = 1, FUN = function(xy, n.steps, home.range) {
+  out <- apply(xy[, c("x", "y")], MARGIN = 1, FUN = function(xy, home.range) {
       dot <- SpatialPoints(coordinates(matrix(c(xy[1], xy[2]), ncol = 2)))
       random.walk <- gBuffer(spgeom = dot, width = home.range, quadsegs = home.range * 5)
       random.walk
-    }, n.steps = n.steps, home.range = home.range)
+    }, home.range = home.range)
   
   names(out) <- paste(1:length(custom.walkers[, "capt"]), custom.walkers[, "capt"], sep = "_")
   out

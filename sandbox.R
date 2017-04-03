@@ -47,7 +47,6 @@ plot(gBuffer(SpatialPoints(xy[rd[1], 1:2, drop = FALSE], proj4string = CRS(as.ch
 simulation(
         sap = 200, #polmer!!!!111oneoneeleven
         num.walkers = 1500,
-        n.steps = 1000,
         sessions = 5,
         work.dir = "./data",
         seed = 600,

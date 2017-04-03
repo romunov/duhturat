@@ -84,7 +84,6 @@ writeINP <- function(object, supop = NULL, pars, probs) {
     sampling_area_r = pars$sap, # r of the sampling area
     num_of_sampled_walkers = nrow(cap.hist), # number of sampled walkers
     generated_walkers = pars$num.walker, # number of generated walkers
-    steps_per_walker = pars$n.steps, # number of steps per walks
     area_size = pars$area, # are of the sampling area (for resolution 1)
     home_range = pars$home.range, # home range of walker
     effect_distance = object$contribs$effect.distance, # effect distance used
