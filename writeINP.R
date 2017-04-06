@@ -32,25 +32,25 @@ writeINP <- function(object, supop = NULL, pars, probs) {
   
   # merge sampled contributions
   # smp.nms <- as.numeric(unlist(lapply(strsplit(rownames(sp.smp), "_"), "[", 1)))
-#  mrg <- data.frame(real = sp.real, model = sp.mdl, sample = NA)
+  #  mrg <- data.frame(real = sp.real, model = sp.mdl, sample = NA)
   # mrg <- cbind(model = sp.mdl[smp.nms, ], sample = sp.smp)
-#  mrg[smp.nms, "sample"] <- as.numeric(sp.smp) 
+  #  mrg[smp.nms, "sample"] <- as.numeric(sp.smp) 
   # plot(mrg)
   # mrg.sorted <- mrg[order(sp.real), ]
   
   # pdf(paste("diagnostics_plot", paste(format(Sys.time(), format = "%Y-%m-%d_at_%H:%M"), "pdf", sep = "."), sep = "_", collapse = "_"))
   
-#  plot(mrg.sorted$real, mrg.sorted$mean)
+  #  plot(mrg.sorted$real, mrg.sorted$mean)
   # plot(mrg.sorted$real, mrg.sorted$sample, xlim = c(0, 1), ylim = c(0, 1))
   # points(mrg.sorted$real, mrg.sorted$mean, pch = 1, col = "red")
   # lines(mrg.sorted$real, mrg.sorted$mean, col = "red")
   
-#  plot(x = 1:length(sp.real), ylim = c(0, 1), type = "n")
-#  lines(1:length(sp.real), mrg.sorted$real, col = "red")
-#  lines(1:length(sp.real), mrg.sorted$mean, col = "black")
-#  points(1:length(sp.real), mrg.sorted$sample, col = "blue")
-#  legend("topleft", legend = c("real", "model"), col = c("red", "black"), lty = 1)
-
+  #  plot(x = 1:length(sp.real), ylim = c(0, 1), type = "n")
+  #  lines(1:length(sp.real), mrg.sorted$real, col = "red")
+  #  lines(1:length(sp.real), mrg.sorted$mean, col = "black")
+  #  points(1:length(sp.real), mrg.sorted$sample, col = "blue")
+  #  legend("topleft", legend = c("real", "model"), col = c("red", "black"), lty = 1)
+  
   # rl <- mrg[is.na(mrg$sample), "real"]
   # plot(ecdf(rl))
   # summary(ecdf(rl))
@@ -68,15 +68,15 @@ writeINP <- function(object, supop = NULL, pars, probs) {
   
   # Collapse capture history
   cap.hist <- apply(object$sample$capture, 1, function(x) {
-      paste(x, collapse = "")
-    })
+    paste(x, collapse = "")
+  })
   cap.hist <- as.data.frame(cap.hist)
   
   mat <- cbind(cap.hist = cap.hist, probs = probs) # , group = group)
   
   # prepare data.frame for printing
   par.df <-	data.frame(
-#		walk_dens = pars$dens, # walker density
+    #		walk_dens = pars$dens, # walker density
     # cont_supop = supop["supop", ], # contribution area of super population
     # cont_sample = supop["sample", ], # contribution area of sampling area
     num_of_walkers_supop = object$sample$in.out, # number of walkers in super population
@@ -90,8 +90,9 @@ writeINP <- function(object, supop = NULL, pars, probs) {
     capture_prob = pars$prob, # probability of capturing a walker
     boots = pars$num.boots, # number of boots
     work_dir = pars$work.dir, # working directory where magic takes place
-#			num_cores = pars$num.cores, # number of cores used
+    #	num_cores = pars$num.cores, # number of cores used
     res = pars$rsln, # resolution of raster aggregation
+    sim.dist = pars$sim.dist, # which type of individual contributes was calculated, normal od empirical?
     seed = pars$seed # number of seed used
   )
   
@@ -106,18 +107,18 @@ writeINP <- function(object, supop = NULL, pars, probs) {
   # write computer-readable parameters
   cat("read start", "\n", file = file.to.write, append = TRUE)
   write.table(t(colnames(par.df)), file = file.to.write,
-    append = TRUE, col.names = FALSE, row.names = FALSE)
+              append = TRUE, col.names = FALSE, row.names = FALSE)
   write.table(par.df, file = file.to.write, row.names = FALSE,
-    col.names = FALSE, append = TRUE)
+              col.names = FALSE, append = TRUE)
   cat("read stop", "\n", file = file.to.write, append = TRUE)
   
   # write human readable data (duplicate of the par.df above)
-#  cat("Walker density:", pars$walk.dens, "\n", file = file.to.write, append = TRUE)
+  #  cat("Walker density:", pars$walk.dens, "\n", file = file.to.write, append = TRUE)
   # cat("Contribution area of super population:", supop["supop", ], "\n", file = file.to.write, append = TRUE)
   # cat("Contribution area of sampling area:", supop["sample", ], "\n", file = file.to.write, append = TRUE)
   cat("Number of walkers in super population:", object$sample$in.out, "\n", file = file.to.write, append = TRUE)
   cat("Capture history has", nchar(as.character(cap.hist[1, ])),
-    "sessions and", nrow(cap.hist), "walkers", "\n", file = file.to.write, append = TRUE)
+      "sessions and", nrow(cap.hist), "walkers", "\n", file = file.to.write, append = TRUE)
   cat("Number of initial walkers:", pars$num.walker, "\n", file = file.to.write, append = TRUE)
   cat("Number of steps per walker:", pars$n.steps, "\n", file = file.to.write, append = TRUE)
   cat("Area size:", pars$area, "\n", file = file.to.write, append = TRUE)
@@ -129,46 +130,47 @@ writeINP <- function(object, supop = NULL, pars, probs) {
   cat("Working directory:", pars$work.dir, "\n", file = file.to.write, append = TRUE)
   cat("Number of cores for parallel:", pars$num.cores, "\n", file = file.to.write, append = TRUE)
   cat("Resolution of raster:", pars$rsln, "\n", file = file.to.write, append = TRUE)
+  cat("Distribution used for individual contribution:", pars$sim.dist, "\n", file = file.to.write, append = TRUE)
   cat("Seed:", pars$seed, "\n", file = file.to.write, append = TRUE)
   cat("Comment:", pars$comment, "\n", file = file.to.write, append = TRUE)
   cat("Columns: cap.hist - group - probs */\n\n", file = file.to.write, append = TRUE)
   
-	# write capture history with individual covariates
+  # write capture history with individual covariates
   write.table(mat, file = file.to.write, append = TRUE, 
-    col.names = FALSE, row.names = FALSE, quote = FALSE)
+              col.names = FALSE, row.names = FALSE, quote = FALSE)
   
   # Write some parameters to a centralized data base to give an overview of
   # files available.
   # area - home.range - num.walker - file - comment
   write.out <- data.frame(pars$area, pars$home.range, pars$num.walker, file.name,
-    pars$comment)
+                          pars$comment)
   
   if (file.exists(summary.file)) {
     write.table(x = write.out, file = summary.file, append = TRUE, sep = "\t",
-      col.names = FALSE, row.names = FALSE)
+                col.names = FALSE, row.names = FALSE)
   } else {
     write.table(x = write.out, file = summary.file,	append = FALSE, sep = "\t",
-      col.names = TRUE, row.names = FALSE)
+                col.names = TRUE, row.names = FALSE)
   }
   
   message("Done writing MARK file ", file.name)
   
-#	out <- data.frame(
-#			area.sample = supop["sample"], # contribution area of sampling area
-#			area.supop = supop["supop"], # contribution area of super population
-#			area.sample.circ = 2 * pi * bbox(sap)[3],
-#			area.sample.area = sap@polygons[[1]]@area,
-#			r.of.sap = bbox(sap)[1, "max"], # r of sampling area
-#			sim.walkers.supop = object$calculate.walkers$walk.sample$in.out, # number of walkers in super population
-#			sim.dens = pars$walk.dens, # simulated walker density
-#			sim.dens.supop = object$calculate.walkers$walk.sample$in.out / supop["supop"], # density of walkers in the area of super population
-#			sim.catch = pars$prob, #simulated probability of capture
-#			home.range = pars$home.range, # home range of walker
-#			effect.dist = object$parameters$effect.distance, # effect distance used as a cut-off
-#			sessions = pars$sessions, # number of sessions used to capture walkers
-#			filename = file.name # file name of the MARK inp file
-#	)
-#	rownames(out) <- NULL
+  #	out <- data.frame(
+  #			area.sample = supop["sample"], # contribution area of sampling area
+  #			area.supop = supop["supop"], # contribution area of super population
+  #			area.sample.circ = 2 * pi * bbox(sap)[3],
+  #			area.sample.area = sap@polygons[[1]]@area,
+  #			r.of.sap = bbox(sap)[1, "max"], # r of sampling area
+  #			sim.walkers.supop = object$calculate.walkers$walk.sample$in.out, # number of walkers in super population
+  #			sim.dens = pars$walk.dens, # simulated walker density
+  #			sim.dens.supop = object$calculate.walkers$walk.sample$in.out / supop["supop"], # density of walkers in the area of super population
+  #			sim.catch = pars$prob, #simulated probability of capture
+  #			home.range = pars$home.range, # home range of walker
+  #			effect.dist = object$parameters$effect.distance, # effect distance used as a cut-off
+  #			sessions = pars$sessions, # number of sessions used to capture walkers
+  #			filename = file.name # file name of the MARK inp file
+  #	)
+  #	rownames(out) <- NULL
   
   return(par.df)
 }

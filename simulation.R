@@ -13,6 +13,9 @@
 #' @param prob Probability of capture, on the interval of \code{[0, 1]}.
 #' @param sw Numeric. Edge of the super world. This is far bigger than the area. Here to compensate for the edge effect when estimating density. 
 #' @param weight.switch Logical. If TRUE, pairwise data is bootstrapped and a weighted and unweighted data.frame of bins are created.
+#' @param sim.dist When simulating contribution, use (half) normal function to construct probability of occurrence. Possible
+#' values are "empirical" or "normal".
+#' Default is NULL, but accepted value is "normal".
 #' @num.boots Integer. Number of bootstraps to be used for calculating CI of the walk function.
 
 simulation <- function(
@@ -25,11 +28,13 @@ simulation <- function(
   prob,
   sw,
   rsln,
+  area,
   SD,
   sessions,
   num.boots,
   weight.switch,
   custom.walkers = NULL, # for debugging purposes
+  sim.dist,
   ...
 ) {
   
@@ -38,12 +43,16 @@ simulation <- function(
   stopifnot(is.numeric(home.range))
   stopifnot(is.numeric(seed) | is.null(seed))
   stopifnot(class(sap) == "SpatialPolygon" | class(sap) == "numeric")
+  stopifnot(any(c("normal", "empirical") %in% sim.dist))
   
   ## If work.dir missing, use current work directory.
   if (missing(work.dir)) work.dir <- getwd()
   
   ## Each simulation run can have its own seed.
-  if (!is.null(seed) & is.numeric(seed)) set.seed(seed) 
+  if (!is.null(seed) & is.numeric(seed)) {
+    message(sprintf("Settings seed to %d", seed))
+    set.seed(seed) 
+  }
   
   ## Create sampling area. This creates a circle of defined radius.
   if (is.numeric(sap)) {
@@ -52,13 +61,16 @@ simulation <- function(
     message("Creating a circular sampling area polygon.")
   }
   
-  plot(sap.poly, xlim = c(-300, 300), ylim = c(-300, 300))
-  points(xy[, 1:2])
+  # plot(sap.poly, xlim = c(-300, 300), ylim = c(-300, 300))
+  # points(xy[, 1:2])
   
+  # browser()
   ## Find the area around the sampling polygon. Add padding for comfort.
-  box.range <- apply(sap.poly@bbox, 1, range) # find range of x and y
-  box.range <- max(abs(box.range))
-  area <- home.range * 4 # since home.range is r, we need 2 * r, ergo 4 * r
+  # box.range <- apply(sap.poly@bbox, 1, range) # find range of x and y
+  # box.range <- apply(box.range, MARGIN = 2, diff)
+  # box.range <- max(abs(box.range))
+  # area <- box.range # since home.range is r, we need 2 * r, ergo 4 * r
+  # area <- box.range * 1.5
   #  area <- (1 + abs((home.range * 2) / box.range)) * box.range # add padding for 1.5 * home.range
   
   start.date <- Sys.time() # record simulation start time
@@ -99,13 +111,14 @@ simulation <- function(
   pars$custom.walkers <- ifelse(!is.null(custom.walkers), TRUE, FALSE)
   pars$num.walker <- num.walkers
   pars$num.boots <- num.boots
+  pars$sim.dist <- sim.dist
   
   ## Ok, things are ready now. Time to generate walkers and calculate their
   ## contribution area.
   walk.data <- walkerContribution(num.walkers = num.walkers, sw = sw, area = area,
                                   home.range = home.range, sap.poly = sap.poly, prob = prob,
                                   sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
-                                  custom.walkers = custom.walkers, SD = SD, ...)
+                                  custom.walkers = custom.walkers, SD = SD, sim.dist = sim.dist, ...)
   
   ## Based on the cumulative curve that we used to calculate contribution for
   ## individual walker, we will now calculate contribution for each cell inside

@@ -14,7 +14,7 @@
 #' @author Roman Luštrik
 
 individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
-                                   ring.weights, ...) {
+                                   ring.weights, sim.dist, SD, area, ...) {
   
   if (missing(effect.distance)) stop("No effect.distance argument in individualContribution")
   
@@ -43,11 +43,49 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
   
   ...object[] <- 1:ncell(...object)
   
+  if (sim.dist == "normal") {
+    message(sprintf("Starting to process contribution based on normal distribution for %d walkers.", length(medoids)))
+    
+    rres <- res(...object)[1]
+    yticks <- xticks <- seq(from = xmin(extent(...object)), to = xmax(extent(...object)) - rres, by = rres)
+    side <- max(res(...object)) # cell size
+    
+    # http://stackoverflow.com/questions/31216151/discrete-approximation-to-a-bivariate-normal-distribution
+    calcNormal2D <- Vectorize(function(x, y, side, mu1, mu2, s1, s2)
+      diff(pnorm(x+c(-1,1) * side/2, mu1, s1)) * diff(pnorm(y + c(-1,1) * side/2, mu2, s2)),
+      vectorize.args = c("x", "y"))
+    
+    # For each medoid, calculate its contribution inside the sampling area.
+    ic <- sapply(medoids, FUN = function(xy, xticks, yticks, side, sap, SD) {
+      xy <- as.numeric(xy)
+      print(system.time({
+      mat <- outer(xticks, yticks, FUN = calcNormal2D, side = side, mu1 = xy[1], mu2 = xy[2], 
+                   s1 = SD, s2 = SD)
+      mat2 <- mat
+      mat2 <- raster(x = mat2, template = raster.mask)
+      
+      cont.sum.ind <- sum(mat[])
+      cont.in.sap <- raster::mask(x = mat2, mask = raster.mask)
+      out <- cellStats(cont.in.sap, "sum")/cont.sum.ind
+      }))
+      
+      out
+      
+    }, xticks = xticks, yticks = yticks, side = side, sap = .sap.poly, SD = SD)
+    
+    # make output the same as for non-normal contribution
+    out <- vector("list", 1)
+    out[[1]] <- as.list(ic)
+    names(out) <- "weight.yes"
+    return(out)
+  }
+  
   # For weights.yes and weights.no, calculate how much each walker contributes
   # to the sampling area if different accumulation curves (lower and upper CI,
   # mean) is used.
   list.of.meco <- lapply(ring.weights, FUN = function(w, .rst = ...object, 
-                                                      .effect.distance = effect.distance, .empty.object = empty.object,
+                                                      .effect.distance = effect.distance, 
+                                                      .empty.object = empty.object,
                                                       .raster.mask = raster.mask, ...) {
     
     #			iterate.over <- c("lower", "mean", "upper")

@@ -28,8 +28,8 @@
 #'       portion of the base layer. 
 #' @return Numeric. Contribution (a proportion) of area inside the sampling area.
 #' @author Roman Luštrik, 22.11.2010
-# mask	Logical. If TRUE, raster is masked (using raster.mask)
-# contr	Logical. If TRUE, cells are summed. If you do not mask values, the re-
+#' @param mask	Logical. If TRUE, raster is masked (using raster.mask)
+#' @param contr	Logical. If TRUE, cells are summed. If you do not mask values, the re-
 #			turned values will be 1.
 #
 # Author: Roman Luštrik, 22.11.2010

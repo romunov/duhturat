@@ -85,3 +85,5 @@ sampleWorld <- function(walk, sap.poly, sessions, prob, SD, ...) {
   
   walk.sample
 }
+
+

@@ -5,28 +5,29 @@
 
 
 walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly, 
-	prob, sessions, weight.switch, .object, .num.boots, custom.walkers, SD, ...) {
-  # browser()
-	# We first need to populate our world from which we will sample.
-	walk.walkers <- populateWorld(num.walkers = num.walkers, sw = sw,
-		area = area, home.range = home.range, custom.walkers = custom.walkers, ...)
-	
-  # Sample walkers that come in contact with the sampling area with
-	# a certain probability in a number of sessions.
-	walk.sample <- sampleWorld(walk = walk.walkers, sap.poly = sap.poly,
-		sessions = sessions, prob = prob, SD = SD, ...)
-#  lapply(walk.walkers[rownames(walk.contrib$cona$weight.yes)], plot, add = T)
+                               prob, sessions, weight.switch, .object, .num.boots, custom.walkers, SD, 
+                               sim.dist, ...) {
   
-	walk.contrib <- calculateContribution(walk.pair = walk.sample$walk.pair,
-		sap.poly = sap.poly, walks = walk.sample$sample, weight.switch = weight.switch,
-		..object = .object, ..num.boots = .num.boots, ...)
-
-	# Construct output object
-	out <- list(
-		walkers = walk.walkers,
-		sample = walk.sample,
-		contribs = walk.contrib
-	)
-	
-	return(out)
+  # We first need to populate our world from which we will sample.
+  walk.walkers <- populateWorld(num.walkers = num.walkers, sw = sw,
+                                area = area, home.range = home.range, custom.walkers = custom.walkers, ...)
+  
+  # Sample walkers that come in contact with the sampling area with
+  # a certain probability in a number of sessions.
+  walk.sample <- sampleWorld(walk = walk.walkers, sap.poly = sap.poly,
+                             sessions = sessions, prob = prob, SD = SD, ...)
+  
+  walk.contrib <- calculateContribution(walk.pair = walk.sample$walk.pair,
+                                        sap.poly = sap.poly, walks = walk.sample$sample, weight.switch = weight.switch,
+                                        ..object = .object, ..num.boots = .num.boots, sim.dist = sim.dist, SD = SD, 
+                                        area = area, ...)
+  
+  # Construct output object
+  out <- list(
+    walkers = walk.walkers,
+    sample = walk.sample,
+    contribs = walk.contrib
+  )
+  
+  return(out)
 }

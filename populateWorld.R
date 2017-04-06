@@ -8,7 +8,7 @@
 #' @author Roman Luštrik
 
 populateWorld <- function(num.walkers, sw, area, home.range, sap, 
-  custom.walkers, ...) {
+                          custom.walkers, ...) {
   
   if (!is.null(custom.walkers)) {
     xy <- custom.walkers
@@ -19,34 +19,35 @@ populateWorld <- function(num.walkers, sw, area, home.range, sap,
     
     # Simulation can't handle a lot of walkers, so we'll subset only the points
     # that are close to the sampling area.
-    bf <- area + 1.5 * home.range #TODO: izracunaj kje je sampling area, dodaj malo paddinga in uporabi to za subsetanje
+    # bf <- area + 1.5 * home.range #TODO: izracunaj kje je sampling area, dodaj malo paddinga in uporabi to za subsetanje
+    bf <- area
     xy <- xy[xy$x < bf & xy$x > -bf & xy$y > -bf & xy$y < bf, ]
   }
   
   message("Walkers near the sampling area: ", nrow(xy))
-
+  
   # Create home range area for each walker.
   out <- apply(xy[, c("x", "y")], MARGIN = 1, FUN = function(xy, home.range) {
-      dot <- SpatialPoints(coordinates(matrix(c(xy[1], xy[2]), ncol = 2)))
-      random.walk <- gBuffer(spgeom = dot, width = home.range, quadsegs = home.range * 5)
-      random.walk
-    }, home.range = home.range)
+    dot <- SpatialPoints(coordinates(matrix(c(xy[1], xy[2]), ncol = 2)))
+    random.walk <- gBuffer(spgeom = dot, width = home.range, quadsegs = home.range * 5)
+    random.walk
+  }, home.range = home.range)
   
   names(out) <- paste(1:length(custom.walkers[, "capt"]), custom.walkers[, "capt"], sep = "_")
   out
   
-#  plot(0,0, type = "n", xlim = c(-300, 300), ylim = c(-300, 300), asp = 1)
-#  plot(get("sap.poly", parent.frame(2)), add = T)
-#  lapply(out, plot, add = T)
-#  plot(out[[1]], add = T)
-#  plot(wrld, add = T, border = "red") # je v sandbox.R
+  # plot(0,0, type = "n", xlim = c(-300, 300), ylim = c(-300, 300), asp = 1)
+  # plot(get("sap.poly", parent.frame(2)), add = T)
+  # lapply(out, plot, add = T)
+  # plot(out[[1]], add = T)
+  # plot(wrld, add = T, border = "red") # je v sandbox.R
   
-# > summary(out) # seznam walkerjev
-#    	Length Class        Mode
-#	2   1      SpatialLines S4  
-#	3   1      SpatialLines S4  
-#	8   1      SpatialLines S4  
-#	31  1      SpatialLines S4
+  # > summary(out) # seznam walkerjev
+  #    	Length Class        Mode
+  #	2   1      SpatialLines S4  
+  #	3   1      SpatialLines S4  
+  #	8   1      SpatialLines S4  
+  #	31  1      SpatialLines S4
   
 }
 

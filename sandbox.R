@@ -27,8 +27,7 @@ source("markAnalysis.R")
 source("readRunModels.R")
 
 hr <- 80
-N <- 200
-SD <- 1
+# N <- 200
 
 crc <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = hr/2, quadsegs = 100)
 wrld <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = 2*(hr/2), quadsegs = 100)
@@ -46,20 +45,23 @@ plot(gBuffer(SpatialPoints(xy[rd[1], 1:2, drop = FALSE], proj4string = CRS(as.ch
 
 simulation(
         sap = 200, #polmer!!!!111oneoneeleven
-        num.walkers = 1500,
+        area = 400,
+        num.walkers = 200,
         sessions = 5,
         work.dir = "./data",
-        seed = 600,
+        seed = 610,
         summary.file = "simulation_list.txt",
         home.range = hr/2, # treba uporabit polmer
-        prob = 0.2,
+        prob = 0.4,
         sw = 1000,
         rsln = 1,
         cpus = 3,
-        SD = SD,
+        SD = 20,
         type = "SOCK",
         num.boots = 1000,
-        weight.switch = TRUE #currently only weighted curve is included in the result, so switch should be TRUE
+        weight.switch = TRUE, #currently only weighted curve is included in the result, so switch should be TRUE
+        sim.dist = "normal"
+        # sim.dist = "empirical"
         # custom.walkers = NULL
 )
 
@@ -67,5 +69,3 @@ ax <- sapply(list.files("./data", pattern = ".inp"), FUN = markAnalysis,
              wd.model = "./temp", 
              wd.inp = "./data",
              simplify = FALSE)
-
-# TODO: home.range in SD se tepeta
