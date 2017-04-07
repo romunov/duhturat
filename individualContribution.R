@@ -51,23 +51,30 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
     side <- max(res(...object)) # cell size
     
     # http://stackoverflow.com/questions/31216151/discrete-approximation-to-a-bivariate-normal-distribution
-    calcNormal2D <- Vectorize(function(x, y, side, mu1, mu2, s1, s2)
-      diff(pnorm(x+c(-1,1) * side/2, mu1, s1)) * diff(pnorm(y + c(-1,1) * side/2, mu2, s2)),
-      vectorize.args = c("x", "y"))
+    # and optimized by BrodieG http://chat.stackoverflow.com/transcript/message/36529093#36529093
+    calcNormal2D2 <- function(x, y, side, mu1, mu2, s1, s2) {
+      x.lo <- pnorm(x - side/2, mu1, s1)
+      x.hi <- pnorm(x + side/2, mu1, s1)
+      x.prob <- x.hi - x.lo
+      
+      y.lo <- pnorm(y - side/2, mu2, s2)
+      y.hi <- pnorm(y + side/2, mu2, s2)
+      y.prob <- y.hi - y.lo
+      
+      outer(x.prob, y.prob, `*`)
+    }
     
     # For each medoid, calculate its contribution inside the sampling area.
     ic <- sapply(medoids, FUN = function(xy, xticks, yticks, side, sap, SD) {
       xy <- as.numeric(xy)
-      print(system.time({
-      mat <- outer(xticks, yticks, FUN = calcNormal2D, side = side, mu1 = xy[1], mu2 = xy[2], 
-                   s1 = SD, s2 = SD)
-      mat2 <- mat
-      mat2 <- raster(x = mat2, template = raster.mask)
+      
+      mat <- calcNormal2D2(x = xticks, y = yticks, side = side, mu1 = xy[1], mu2 = xy[2],
+                           s1 = SD, s2 = SD)
+      mat <- raster(x = mat, template = raster.mask)
       
       cont.sum.ind <- sum(mat[])
-      cont.in.sap <- raster::mask(x = mat2, mask = raster.mask)
+      cont.in.sap <- raster::mask(x = mat, mask = raster.mask)
       out <- cellStats(cont.in.sap, "sum")/cont.sum.ind
-      }))
       
       out
       
