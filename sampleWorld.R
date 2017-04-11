@@ -1,26 +1,4 @@
-sampleWorld <- function(walk, sap.poly, sessions, prob, SD, ...) {
-  
-  #	if (!sfIsRunning()) sfInit(parallel = TRUE, ...)
-  #	
-  #	sfLibrary(rgeos)
-  #	sfExport(list = c("sap.poly"))
-  #	
-  #  # Calculate ratio of spent time inside the sampling polygon.
-  
-  #  message("This will get heavy!")
-  #  message("Calculating ratio of spent time inside the sampling area at ", Sys.time())
-  #  actual.ratio <- sfSapply(walk, function(m = walk, s = sap.poly) {
-  ##  actual.ratio <- sapply(walk[1:10], function(m, s = sap.poly) {
-  #      mcut <- gDifference(spgeom1 = m, spgeom2 = s)
-  #      mlength <- gLength(m)
-  #      inside <- mlength - gLength(mcut)
-  #      out <- inside/mlength
-  #      return(out)
-  ##  plot(sap.poly, xlim = c(-100, 100), ylim = c(-100, 100))
-  ##  plot(m, add = T)
-  ##  plot(mcut, col = "red", add = TRUE)
-  ##  mtext(out)
-  #    })
+sampleWorld <- function(walk, sap.poly, sessions, prob, SD) {
   
   message("Performing in/out test on ", startdate <- Sys.time())
   # Román alert: Ker je računanje gCrosses kar zahtevno, smo se odločili, da bomo
@@ -68,7 +46,7 @@ sampleWorld <- function(walk, sap.poly, sessions, prob, SD, ...) {
   # browser()
   
   walk.sample <- sampleWalkers(walk = walk, sessions = sessions, prob = prob,
-                               sap = sap.poly, SD = SD, ...)
+                               sap = sap.poly, SD = SD)
   
   # Calculate pairwise distances within each walker's sampled points. 
   walk.pair <- lapply(X = walk.sample[["sample"]], FUN = function(x) {

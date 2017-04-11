@@ -1,6 +1,6 @@
 library(raster)
 library(rgeos)
-library(snowfall)
+# library(snowfall)
 library(cluster)
 library(splancs) #csr
 library(RMark)
@@ -25,45 +25,41 @@ source("writeINP.R")
 source("extractMarkResults.R")
 source("markAnalysis.R")
 source("readRunModels.R")
-
-hr <- 80
-# N <- 200
-
-crc <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = hr/2, quadsegs = 100)
-wrld <- gBuffer(SpatialPoints(matrix(c(0, 0), ncol = 2), proj4string = CRS(as.character(NA))), width = 2*(hr/2), quadsegs = 100)
-xy <- spsample(wrld, N, type = "random")
-xy <- coordinates(xy)
-xy <- cbind(xy, capt = 1)
-
-#check
-plot(crc, xlim = c(-200, 200), ylim = c(-200, 200))
-points(xy[, 1], xy[, 2], col = as.factor(xy[, 3]))
-plot(wrld, add = T, border = "red")
-rd <- order(xy[, 1], xy[, 2], decreasing = TRUE)
-#plot(gBuffer(SpatialPoints(xy[identify(xy[, 1:2]), 1:2, drop = FALSE], proj4string = CRS(as.character(NA))), width = hr, quadsegs = 100), lty = "dashed", add = T)
-plot(gBuffer(SpatialPoints(xy[rd[1], 1:2, drop = FALSE], proj4string = CRS(as.character(NA))), width = hr/2, quadsegs = 100), lty = "dashed", add = T)
+source("calcNormal2D.R")
 
 simulation(
         sap = 200, #polmer!!!!111oneoneeleven
-        area = 400,
-        num.walkers = 200,
+        area = 200, # koliko bo SAP povečan
+        num.walkers = 500,
         sessions = 5,
         work.dir = "./data",
         seed = 610,
         summary.file = "simulation_list.txt",
-        home.range = hr/2, # treba uporabit polmer
+        home.range = sqrt(qchisq(0.68, 20)), # ena SD za dano SD
         prob = 0.4,
-        sw = 1000,
-        rsln = 1,
-        cpus = 3,
+        rsln = 0.5,
         SD = 20,
-        type = "SOCK",
         num.boots = 1000,
         weight.switch = TRUE, #currently only weighted curve is included in the result, so switch should be TRUE
         sim.dist = "normal"
-        # sim.dist = "empirical"
-        # custom.walkers = NULL
 )
+
+set.seed(357)
+xy <- data.frame(sap = 200,
+                 area = 600,
+                 num.walkers = 500,
+                 sessions = rep(3:8, each = 50),
+                 work.dir = "./data",
+                 seed = sample(1:10e6, size = 300),
+                 summary.file = "simulation_list.txt",
+                 home.range = sqrt(qchisq(0.68, SD)),
+                 prob = runif(n = 40, min = 0.15, max = 0.4),
+                 rsln = 0.5,
+                 SD = sample(10:50, size = 300),
+                 num.boots = 1000,
+                 weight.switch = TRUE,
+                 sim.dist = "empirical" # ali "normal"
+                 )
 
 ax <- sapply(list.files("./data", pattern = ".inp"), FUN = markAnalysis, 
              wd.model = "./temp", 

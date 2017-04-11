@@ -2,26 +2,30 @@
 #' 
 #' See \code{simulation} for the description of other parameters.
 #' 
-#' @param ... Parameters passed on to \code{snowfall:::sfInit()}.
+#' @param num.walkers Number of walkers to generate.
+#' @param area The amount of offset (width) of the sampling area polygon (sap).
+#' @param home.range Radius of each walker's home range by which the centroid will be expanded. This is used later on
+#' to calculate if a walker is included in theoretical density or not.
+#' @param sap SpatialPolygons object which represents the area where sampling is takign place.
+#' @param custom.walkers If a data.frame (x, y coordinates) of custom walkers is being passed in, this is the place
+#' to do it.
 #' @returnType List.
 #' @return A list of walkers.
 #' @author Roman Luštrik
 
-populateWorld <- function(num.walkers, sw, area, home.range, sap, 
-                          custom.walkers, ...) {
+populateWorld <- function(num.walkers, area, home.range, sap, custom.walkers) {
   
   if (!is.null(custom.walkers)) {
     xy <- custom.walkers
   } else {
-    xy <- data.frame(x = runif(num.walkers, min = -sw/2, max = sw/2), 
-                     y = runif(num.walkers, min = -sw/2, max = sw/2),
-                     count = 1:num.walkers)
+    # Simulate walkers around SAP.
+    expand.sap <- gBuffer(sap, width = area)
+    xy <- as.data.frame(spsample(expand.sap, n = num.walkers, type = "random"))
     
-    # Simulation can't handle a lot of walkers, so we'll subset only the points
-    # that are close to the sampling area.
-    # bf <- area + 1.5 * home.range #TODO: izracunaj kje je sampling area, dodaj malo paddinga in uporabi to za subsetanje
-    bf <- area
-    xy <- xy[xy$x < bf & xy$x > -bf & xy$y > -bf & xy$y < bf, ]
+    # plot(0,0, type = "n", xlim = c(-500, 500), ylim = c(-500, 500), asp = 1)
+    # plot(sap, add = T)
+    # points(xy)
+    # plot(expand.sap, add = TRUE, border = "red")
   }
   
   message("Walkers near the sampling area: ", nrow(xy))
@@ -36,11 +40,13 @@ populateWorld <- function(num.walkers, sw, area, home.range, sap,
   names(out) <- paste(1:length(custom.walkers[, "capt"]), custom.walkers[, "capt"], sep = "_")
   out
   
-  # plot(0,0, type = "n", xlim = c(-300, 300), ylim = c(-300, 300), asp = 1)
-  # plot(get("sap.poly", parent.frame(2)), add = T)
-  # lapply(out, plot, add = T)
-  # plot(out[[1]], add = T)
-  # plot(wrld, add = T, border = "red") # je v sandbox.R
+  # plot(0,0, type = "n", xlim = c(-500, 500), ylim = c(-500, 500), asp = 1)
+  # plot(sap, add = T)
+  # points(xy)
+  # plot(expand.sap, add = TRUE, border = "red")
+  # # lapply(out, plot, add = T)
+  # # plot(out[[1]], add = T)
+  # # plot(wrld, add = T, border = "red") # je v sandbox.R
   
   # > summary(out) # seznam walkerjev
   #    	Length Class        Mode

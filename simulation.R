@@ -7,11 +7,11 @@
 #' @param work.dir A directory where all the magic happens. If missing. \code{work.dir} is used.
 #' @param	summary.file A file into which simulation results are to be written. Defaults to \code{simulation_list.txt}
 #' @param home.range Radius (r) of the walker's home range. Amount by which sampling area will be padded.
-#' @param area Numeric. Edge of the world around the sampling area. Implicitly, this is a square.
+#' @param area Numeric. By how much the sampling polygon will be enlarge. This is used to populate walkers around the sampling
+#' area of interest and not "litter" the super world.
 #' @param rsln Numeric. Grid resolution.
 #' @param SD Standard deviation (square root of variance) for walker's walk from centroid.
 #' @param prob Probability of capture, on the interval of \code{[0, 1]}.
-#' @param sw Numeric. Edge of the super world. This is far bigger than the area. Here to compensate for the edge effect when estimating density. 
 #' @param weight.switch Logical. If TRUE, pairwise data is bootstrapped and a weighted and unweighted data.frame of bins are created.
 #' @param sim.dist When simulating contribution, use (half) normal function to construct probability of occurrence. Possible
 #' values are "empirical" or "normal".
@@ -26,7 +26,6 @@ simulation <- function(
   summary.file,
   home.range,
   prob,
-  sw,
   rsln,
   area,
   SD,

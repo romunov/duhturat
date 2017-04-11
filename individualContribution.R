@@ -9,12 +9,11 @@
 #' 				distance used to calculate contribution area.
 #' @param ring.weights A vector of values of the curve used to construct the
 #' 			contribution area.
-#' @param ... Parameters passed to \code{snowfall:::sfInit}.
 #' @return A list of contribution values corresponding to individual walker.
 #' @author Roman Luštrik
 
 individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
-                                   ring.weights, sim.dist, SD, area, ...) {
+                                   ring.weights, sim.dist, SD, area) {
   
   if (missing(effect.distance)) stop("No effect.distance argument in individualContribution")
   
@@ -79,7 +78,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
   list.of.meco <- lapply(ring.weights, FUN = function(w, .rst = ...object, 
                                                       .effect.distance = effect.distance, 
                                                       .empty.object = empty.object,
-                                                      .raster.mask = raster.mask, ...) {
+                                                      .raster.mask = raster.mask) {
     
     #			iterate.over <- c("lower", "mean", "upper")
     iterate.over <- c("mean")

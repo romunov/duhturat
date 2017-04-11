@@ -9,9 +9,8 @@
 #' 				the sampling area.
 #' @param SD Standard deviation (square root of variance) for walker's walk. Used to generate
 #'        points around walker centroids.
-#' @param ... Currently unused ---Parameters passed to \code{snowfall:::sfInit}---.
 
-sampleWalkers <- function(walk, sessions, prob, sap, SD, ...) {
+sampleWalkers <- function(walk, sessions, prob, sap, SD) {
   
   st <- Sys.time()
   

@@ -50,7 +50,7 @@ calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
   # based on
   walker.contrib <- individualContribution(walk = walks, ...object = ..object,
                                            .sap.poly = sap.poly, effect.distance = my.bins$effect.distance,
-                                           ring.weights = my.bins$bins, sim.dist = sim.dist, SD = SD, ...)
+                                           ring.weights = my.bins$bins, sim.dist = sim.dist, SD = SD)
   
   #####################
   #### DIAGNOSTICS ####
