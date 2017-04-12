@@ -45,21 +45,20 @@ simulation(
 )
 
 set.seed(357)
-xy <- data.frame(sap = 200,
-                 area = 600,
-                 num.walkers = 500,
-                 sessions = rep(3:8, each = 50),
-                 work.dir = "./data",
-                 seed = sample(1:10e6, size = 300),
-                 summary.file = "simulation_list.txt",
-                 home.range = sqrt(qchisq(0.68, SD)),
-                 prob = runif(n = 40, min = 0.15, max = 0.4),
-                 rsln = 0.5,
-                 SD = sample(10:50, size = 300),
-                 num.boots = 1000,
-                 weight.switch = TRUE,
-                 sim.dist = "empirical" # ali "normal"
-                 )
+xy <- data.frame(SD = rep(seq(from = 10, to = 50, by = 2), each = 10*4*6),
+            prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
+            sessions = 4:7
+            )
+
+xy$sap <- 200
+xy$area <- 600
+xy$work.dir <- "./data"
+xy$seed <- 1:nrow(xy)
+xy$summary.file <- "simulation_list.txt"
+xy$home.range <- sqrt(qchisq(0.68, xy$SD))
+xy$rsln <- 0.5
+xy$weight.switch <- TRUE
+xy$sim.dist <- "normal"
 
 ax <- sapply(list.files("./data", pattern = ".inp"), FUN = markAnalysis, 
              wd.model = "./temp", 
