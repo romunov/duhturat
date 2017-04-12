@@ -43,6 +43,7 @@ simulation <- function(
   stopifnot(is.numeric(seed) | is.null(seed))
   stopifnot(class(sap) == "SpatialPolygon" | class(sap) == "numeric")
   stopifnot(any(c("normal", "empirical") %in% sim.dist))
+  stopifnot(!is.null(SD))
   
   ## If work.dir missing, use current work directory.
   if (missing(work.dir)) work.dir <- getwd()
