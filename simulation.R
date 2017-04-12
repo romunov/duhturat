@@ -28,7 +28,7 @@ simulation <- function(
   prob,
   rsln,
   area,
-  SD,
+  SD = NULL,
   sessions,
   num.boots,
   weight.switch,
@@ -44,6 +44,7 @@ simulation <- function(
   stopifnot(class(sap) == "SpatialPolygon" | class(sap) == "numeric")
   stopifnot(any(c("normal", "empirical") %in% sim.dist))
   stopifnot(!is.null(SD))
+  stopifnot(!is.null(num.walkers))
   
   ## If work.dir missing, use current work directory.
   if (missing(work.dir)) work.dir <- getwd()
