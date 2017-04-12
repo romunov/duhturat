@@ -37,14 +37,14 @@ weighDistances <-  function(bins, sap.poly, walk.pair, num.boots,
   boot.upper <- boot.mean + qt(0.975, df = num.boots) * boot.sd
   
 #	# Comment this out if you don't want a plot for every simulation that you run.
-  pdf(width = 7, height = 5)
-  plot(1:length(boot.mean), boot.mean, type = "n")
-  lines(apply(boot.bins, 1, lines, col = "light gray"))
-  lines(boot.mean, lwd = 2)
-  lines(boot.lower, lty = "dashed")
-  lines(boot.upper, lty = "dashed")
-  mtext("95% CI", side = 4, adj = 1)
-  dev.off()
+  # pdf(width = 7, height = 5)
+  # plot(1:length(boot.mean), boot.mean, type = "n")
+  # lines(apply(boot.bins, 1, lines, col = "light gray"))
+  # lines(boot.mean, lwd = 2)
+  # lines(boot.lower, lty = "dashed")
+  # lines(boot.upper, lty = "dashed")
+  # mtext("95% CI", side = 4, adj = 1)
+  # dev.off()
   
   # Give weight.walk weights. If weight.switch == "weights" was used, a set
   # of weights is applied, but if "raw" is used, no weights are applied. 
