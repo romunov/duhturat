@@ -4,8 +4,8 @@ library(mixtools)
 
 set.seed(2)
 
-N <- 5
-SD <- 1
+N <- 1000
+SD <- 2
 
 xy <- data.frame(x = runif(N, min = -5, max = 5),
                  y = runif(N, min = -5, max = 5))
@@ -21,6 +21,8 @@ ggplot(ss, aes(x = x, y = y)) +
   geom_density2d(h = 1.5) +
   geom_point(alpha = 0.1) +
   geom_point(data = xy, aes(x = x, y = y))
+
+#####
 
 # koliko točk je znotraj 1 SD?
 N <- 10000
