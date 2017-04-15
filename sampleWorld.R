@@ -44,6 +44,8 @@ sampleWorld <- function(walk, sap.poly, sessions, prob, SD) {
   #		sap = sap.poly, ...)
   
   # browser()
+  # plot(sap.poly, xlim = c(-500, 500), ylim = c(-500, 500))
+  # sapply(walk, plot, add = TRUE)
   
   walk.sample <- sampleWalkers(walk = walk, sessions = sessions, prob = prob,
                                sap = sap.poly, SD = SD)
