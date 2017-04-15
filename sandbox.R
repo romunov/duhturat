@@ -64,3 +64,64 @@ ax <- sapply(list.files("./data", pattern = ".inp"), FUN = markAnalysis,
              wd.model = "./temp", 
              wd.inp = "./data",
              simplify = FALSE)
+
+#######################
+set.seed(357)
+xy <- data.frame(SD = rep(seq(from = 50, to = 100, by = 5), each = 10*4*6*5),
+                 prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
+                 num.walkers = c(100, 200, 400, 800, 1000),
+                 sessions = 4:7
+)
+
+xy$sap <- 200
+xy$area <- 600
+xy$work.dir <- "./data"
+xy$seed <- 1:nrow(xy)
+xy$summary.file <- "simulation_list.txt"
+xy$home.range <- sqrt(qchisq(0.68, xy$SD))
+xy$rsln <- 0.5
+xy$weight.switch <- TRUE
+xy$sim.dist <- "normal"
+xy$num.boots <- 5000
+
+xy <- xy[1, ]
+
+rdt <- data.frame(
+  SD = as.numeric(xy["SD"]),
+  prob = as.numeric(xy["prob"]),
+  sessions = as.numeric(xy["sessions"]),
+  num.walkers = as.numeric(xy["num.walkers"]),
+  sap = as.numeric(xy["sap"]),
+  area = as.numeric(xy["area"]),
+  work.dir = xy["work.dir"],
+  seed = as.numeric(xy["seed"]),
+  summary.file = xy["summary.file"],
+  home.range = as.numeric(xy["home.range"]),
+  rsln = as.numeric(xy["rsln"]),
+  weight.switch = as.logical(xy["weight.switch"]),
+  sim.dist = xy["sim.dist"],
+  num.boots = as.numeric(xy["num.boots"]),
+  comment = "not passed",
+  stringsAsFactors = FALSE
+)
+
+out <- tryCatch({
+  simulation(
+    SD = rdt$SD,
+    prob = rdt$prob,
+    sessions = rdt$sessions,
+    num.walkers = rdt$num.walkers,
+    sap = rdt$sap,
+    area = rdt$area,
+    work.dir = rdt$work.dir,
+    seed = rdt$seed,
+    summary.file = rdt$summary.file,
+    home.range = rdt$home.range,
+    rsln = rdt$rsln,
+    weight.switch = rdt$weight.switch,
+    sim.dist = rdt$sim.dist,
+    num.boots = rdt$num.boots
+  )
+}, 
+error = function(e) e,
+warning = function(w) w)

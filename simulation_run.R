@@ -28,7 +28,7 @@ source("readRunModels.R")
 source("calcNormal2D.R")
 
 set.seed(357)
-xy <- data.frame(SD = rep(seq(from = 10, to = 50, by = 2), each = 10*4*6*5),
+xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
                  prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
                  num.walkers = c(100, 200, 400, 800, 1000),
                  sessions = 4:7
@@ -114,6 +114,7 @@ result <- parApply(cl = cl, X = xy[1:5, ], MARGIN = 1, FUN = function(x) {
   warning = function(w) w)
   
   if (any(class(out) %in% "error") | any(class(out) %in% "warning")) {
+    cat(out, file = "oow.txt")
     write.table(x = rdt, file = paste(rdt$work.dir, "/failed_attempts.txt", sep = ""), row.names = FALSE, col.names = FALSE,
                 append = TRUE, sep = ";", fileEncoding = "UTF-8")
   }
