@@ -19,7 +19,7 @@ populateWorld <- function(num.walkers, area, home.range, sap, custom.walkers) {
     xy <- custom.walkers
   } else {
     # Simulate walkers around SAP.
-    expand.sap <- gBuffer(sap, width = area)
+    expand.sap <- gBuffer(sap, width = 4 * home.range)
     xy <- as.data.frame(spsample(expand.sap, n = num.walkers, type = "random"))
     
     # plot(0,0, type = "n", xlim = c(-500, 500), ylim = c(-500, 500), asp = 1)
