@@ -133,6 +133,7 @@ writeINP <- function(object, supop = NULL, pars, probs) {
   cat("Distribution used for individual contribution:", pars$sim.dist, "\n", file = file.to.write, append = TRUE)
   cat("Seed:", pars$seed, "\n", file = file.to.write, append = TRUE)
   cat("Comment:", pars$comment, "\n", file = file.to.write, append = TRUE)
+  cat("Distribution used to calculate contribution:", pars$sim.dist, "\n", file = file.to.write, append = TRUE)
   cat("Columns: cap.hist - group - probs */\n\n", file = file.to.write, append = TRUE)
   
   # write capture history with individual covariates
