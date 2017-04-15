@@ -45,6 +45,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
   if (sim.dist == "normal") {
     message(sprintf("Starting to process contribution based on normal distribution for %d walkers.", length(medoids)))
     
+    
     rres <- res(...object)[1]
     yticks <- xticks <- seq(from = xmin(extent(...object)), to = xmax(extent(...object)) - rres, by = rres)
     side <- max(res(...object)) # cell size
@@ -54,10 +55,15 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
       xy <- as.numeric(xy)
       
       mat <- calcNormal2D(x = xticks, y = yticks, side = side, mu1 = xy[1], mu2 = xy[2],
-                           s1 = SD, s2 = SD)
+                          s1 = SD, s2 = SD)
       mat <- raster(x = mat, template = raster.mask)
       
       cont.sum.ind <- sum(mat[])
+      
+      # browser()
+      # plot(mat)
+      # plot(sap, add = TRUE)
+      
       cont.in.sap <- raster::mask(x = mat, mask = raster.mask)
       out <- cellStats(cont.in.sap, "sum")/cont.sum.ind
       
@@ -72,44 +78,34 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance,
     return(out)
   }
   
+  browser()
+  
   # For weights.yes and weights.no, calculate how much each walker contributes
   # to the sampling area if different accumulation curves (lower and upper CI,
   # mean) is used.
-  list.of.meco <- lapply(ring.weights, FUN = function(w, .rst = ...object, 
-                                                      .effect.distance = effect.distance, 
-                                                      .empty.object = empty.object,
-                                                      .raster.mask = raster.mask) {
-    
-    #			iterate.over <- c("lower", "mean", "upper")
-    iterate.over <- c("mean")
-    
-    #      sfInit(parallel = TRUE, ...)
-    #      sfExport(list = c("medoids", "...object", "calcDistance", "effect.distance",
-    #          "empty.object", "raster.mask"), local = TRUE)
-    #      sfLibrary(raster)
-    
-    #      mecos.lmu <- sfSapply(x = iterate.over, fun = function(x, .medoids = medoids,
-    #          .object = .rst, ..effect.distance = .effect.distance,
-    #          ..empty.object = .empty.object, ..raster.mask = .raster.mask,
-    #          bin.data = w) {
-    ##################
-    mecos.lmu <- sapply(X = iterate.over, FUN = function(x, .medoids = medoids,
-                                                         .object = .rst, ..effect.distance = .effect.distance,
-                                                         ..empty.object = .empty.object, ..raster.mask = .raster.mask,
-                                                         bin.data = w) {
-      ##################
-      custom.curve <- bin.data[, x]
-      meco <- lapply(X = .medoids, FUN = calcDistance, object = .object,
-                     effect.distance = ..effect.distance, ring.weights = custom.curve,
-                     empty.object = ..empty.object, raster.mask = ..raster.mask, mask = TRUE,
-                     contr = TRUE)
-      meco
-    })
-    
-    #      sfStop()
-    
-    mecos.lmu
-  })
+  list.of.meco <- lapply(ring.weights, 
+                         FUN = function(w, .rst = ...object, 
+                                        .effect.distance = effect.distance, 
+                                        .empty.object = empty.object,
+                                        .raster.mask = raster.mask) {
+                           
+                           # iterate.over <- c("lower", "mean", "upper")
+                           iterate.over <- c("mean")
+                           
+                           mecos.lmu <- sapply(X = iterate.over, FUN = function(x, .medoids = medoids,
+                                                                                .object = .rst, ..effect.distance = .effect.distance,
+                                                                                ..empty.object = .empty.object, ..raster.mask = .raster.mask,
+                                                                                bin.data = w) {
+                             custom.curve <- bin.data[, x]
+                             meco <- lapply(X = .medoids, FUN = calcDistance, object = .object,
+                                            effect.distance = ..effect.distance, empty.object = ..empty.object, 
+                                            raster.mask = ..raster.mask, mask = TRUE, contr = TRUE)
+                             meco
+                           })
+                           
+                           mecos.lmu
+                         })
   
+  message("i'm here #4")
   list.of.meco # meco = MEdoid COntribution
 }
