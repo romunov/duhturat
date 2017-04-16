@@ -91,7 +91,8 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     
     pdf("fit_check.pdf")
     plot(mean ~ bins, data = xd, main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
-    curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), from = 0, to = 200, n = 200, add = TRUE)
+    curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), 
+          from = 0, to = 200, n = 200, add = TRUE, col = "red")
     dev.off()
     
     # Calculate distance for every cell.
