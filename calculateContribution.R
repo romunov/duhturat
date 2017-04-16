@@ -49,28 +49,9 @@ calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
   # Calculate individual contribution of each walker to the sampling area
   # based on
   
-  browser()
-  # TODO: tole hazard funkcijo implementiraj v 2D kernel (verjetno kar v individualContribution.R)
-  hazardFunction <- function(x, sigma, b, mx) 1 - exp(-(x/sigma)^(-b)) * (-mx)
-  
-  xd <- data.frame(frq = my.bins$bins$weight.yes$mean)
-  xd$dst <- my.bins$bins$weight.yes$bins
-  mdl <- nls(frq ~ hazardFunction(x = dst, sigma, b, mx), data = xd, 
-             start = list(sigma = mean(xd$dst),            # variance
-                          b = max(xd$dst)/(max(xd$dst)/2), # scale parameter
-                          mx = xd$frq[1]))                 # height, since function is not scaled   
-  prs <- mdl$m$getPars()
-  plot(frq ~ dst, data = xd)
-  curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), from = 0, to = 200, n = 200, add = TRUE)
-  
-  
-  plot(1:163, my.bins$bins$weight.yes$mean)
-  curve(halfNormal(x, sigma = 50) * 18, from = 0, to = 200, n = 200, add = TRUE)
-  
-  
-  walker.contrib <- individualContribution(walk = walks, ...object = ..object,
+  walker.contrib <- individualContribution(walk = walks, ...object = ..object, bins = my.bins,
                                            .sap.poly = sap.poly, effect.distance = my.bins$effect.distance,
-                                           ring.weights = my.bins$bins, sim.dist = sim.dist, SD = SD)
+                                           sim.dist = sim.dist, SD = SD)
   
   #####################
   #### DIAGNOSTICS ####

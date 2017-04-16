@@ -84,7 +84,8 @@ xy$weight.switch <- TRUE
 xy$sim.dist <- "normal"
 xy$num.boots <- 5000
 
-xy <- xy[1, ]
+xy <- xy[1000, ]
+xy["sim.dist"] <- "empirical"
 
 rdt <- data.frame(
   SD = as.numeric(xy["SD"]),
