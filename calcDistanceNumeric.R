@@ -4,10 +4,6 @@
 #' ordinates and uses pointDistance() to calculate their value based on distance
 #' from origin point.
 #' 
-#' # This function is different from calcDistance only by the way the masking is
-#' done. calcDistance uses raster::mask while here, we just subset using vector
-#' indexing.
-#' 
 #' @param origin.point Matrix. A 1x2 matrix (can be extracted from a bigger n*2 matrix 
 #'			with [i, ] operator) denoting coordinates of the origin points from
 #'			where distances will be calculated.
