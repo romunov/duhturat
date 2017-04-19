@@ -83,25 +83,25 @@ xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$sim.dist <- "normal"
 xy$num.boots <- 5000
-
-xy <- xy[1000, ]
 xy["sim.dist"] <- "empirical"
 
+i <- sample(1:nrow(xy), size = 1, replace = FALSE)
+
 rdt <- data.frame(
-  SD = as.numeric(xy["SD"]),
-  prob = as.numeric(xy["prob"]),
-  sessions = as.numeric(xy["sessions"]),
-  num.walkers = as.numeric(xy["num.walkers"]),
-  sap = as.numeric(xy["sap"]),
-  area = as.numeric(xy["area"]),
-  work.dir = xy["work.dir"],
-  seed = as.numeric(xy["seed"]),
-  summary.file = xy["summary.file"],
-  home.range = as.numeric(xy["home.range"]),
-  rsln = as.numeric(xy["rsln"]),
-  weight.switch = as.logical(xy["weight.switch"]),
-  sim.dist = xy["sim.dist"],
-  num.boots = as.numeric(xy["num.boots"]),
+  SD = as.numeric(xy[i, "SD"]),
+  prob = as.numeric(xy[i, "prob"]),
+  sessions = as.numeric(xy[i, "sessions"]),
+  num.walkers = as.numeric(xy[i, "num.walkers"]),
+  sap = as.numeric(xy[i, "sap"]),
+  area = as.numeric(xy[i, "area"]),
+  work.dir = xy[i, "work.dir"],
+  seed = as.numeric(xy[i, "seed"]),
+  summary.file = xy[i, "summary.file"],
+  home.range = as.numeric(xy[i, "home.range"]),
+  rsln = as.numeric(xy[i, "rsln"]),
+  weight.switch = as.logical(xy[i, "weight.switch"]),
+  sim.dist = xy[i, "sim.dist"],
+  num.boots = as.numeric(xy[i, "num.boots"]),
   comment = "not passed",
   stringsAsFactors = FALSE
 )
