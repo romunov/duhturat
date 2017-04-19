@@ -81,18 +81,22 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
   }
   
   if (sim.dist == "empirical") {
+    
     # Fit a model to the distribution of paired distances.
     xd <- bins$bins$weight.yes
+    
     mdl <- nls(mean ~ hazardFunction(x = bins, sigma, b, mx), data = xd, 
                start = list(sigma = mean(xd$bins),               # variance
-                            b = max(xd$bins)/(max(xd$bins)/2),   # scale parameter
-                            mx = xd$mean[1]))                    # height, since function is not scaled   
+                            b = -max(xd$bins)/(max(xd$bins)/2),   # scale parameter
+                            mx = xd$mean[1]))                    # height, since function is not scaled  
+    
     prs <- mdl$m$getPars() # get estimated parameters, could also use prs <- summary(mdl)
     
-    pdf("fit_check.pdf")
-    plot(mean ~ bins, data = xd, main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
+    pdf(file = sprintf("./data/%s.pdf", get("seed", envir = -8)))
+    plot(mean ~ bins, data = xd, 
+         main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
     curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), 
-          from = 0, to = 200, n = 200, add = TRUE, col = "red")
+          from = 0, to = 500, n = 200, add = TRUE, col = "red")
     dev.off()
     
     # Calculate distance for every cell.
