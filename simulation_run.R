@@ -3,6 +3,8 @@ library(raster)
 library(rgeos)
 library(cluster)
 library(splancs) #csr
+library(foreach)
+library(doParallel)
 
 source("simulation.R")
 source("walkerContribution.R")
@@ -64,43 +66,51 @@ clusterEvalQ(cl = cl, expr = {
   source("writeINP.R")
 })
 
-result <- parApply(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
+cl <- makeCluster(20)
+registerDoParallel(cl)
+foreach(i = 1:nrow(xy)) %dopar% {
+  library(raster)
+  library(rgeos)
+  library(cluster)
+  library(splancs) #csr
   
-  rdt <- data.frame(
-    SD = as.numeric(x["SD"]),
-    prob = as.numeric(x["prob"]),
-    sessions = as.numeric(x["sessions"]),
-    num.walkers = as.numeric(x["num.walkers"]),
-    sap = as.numeric(x["sap"]),
-    area = as.numeric(x["area"]),
-    work.dir = x["work.dir"],
-    seed = as.numeric(x["seed"]),
-    summary.file = x["summary.file"],
-    home.range = as.numeric(x["home.range"]),
-    rsln = as.numeric(x["rsln"]),
-    weight.switch = as.logical(x["weight.switch"]),
-    sim.dist = x["sim.dist"],
-    num.boots = as.numeric(x["num.boots"]),
-    comment = "not passed",
-    stringsAsFactors = FALSE
-  )
+  source("simulation.R")
+  source("walkerContribution.R")
+  source("populateWorld.R")
+  source("sampleWorld.R")
+  source("sampleWalkers.R")
+  source("numberOfBins.R")
+  source("calculateContribution.R")
+  source("calculateBins.R")
+  source("weighDistances.R")
+  source("distWeights.R")
+  source("individualContribution.R")
+  source("calcNormal2D.R")
+  source("superPopulation.R")
+  source("stopWatch.R")
+  source("writeINP.R")
+  source("calcNormal2D.R")
+  # funkcije za analizo
+  source("extractMarkResults.R")
+  source("markAnalysis.R")
+  source("readRunModels.R")
   
   out <- tryCatch({
     simulation(
-      SD = rdt$SD,
-      prob = rdt$prob,
-      sessions = rdt$sessions,
-      num.walkers = rdt$num.walkers,
-      sap = rdt$sap,
-      area = rdt$area,
-      work.dir = rdt$work.dir,
-      seed = rdt$seed,
-      summary.file = rdt$summary.file,
-      home.range = rdt$home.range,
-      rsln = rdt$rsln,
-      weight.switch = rdt$weight.switch,
-      sim.dist = rdt$sim.dist,
-      num.boots = rdt$num.boots
+      SD = xy$SD[i],
+      prob = xy$prob[i],
+      sessions = xy$sessions[i],
+      num.walkers = xy$num.walkers[i],
+      sap = xy$sap[i],
+      area = xy$area[i],
+      work.dir = xy$work.dir[i],
+      seed = xy$seed[i],
+      summary.file = xy$summary.file[i],
+      home.range = xy$home.range[i],
+      rsln = xy$rsln[i],
+      weight.switch = xy$weight.switch[i],
+      sim.dist = xy$sim.dist[i],
+      num.boots = xy$num.boots[i]
     )
   }, 
   error = function(e) e,
@@ -112,4 +122,4 @@ result <- parApply(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
     cat(out$message, file = "./data/failed.errors.txt", append = TRUE)
   }
   out
-})
+}

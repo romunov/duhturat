@@ -31,31 +31,6 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
   sp.mdl <- object$contrib$model.contrib$weight.yes
   sp.smp <- object$contrib$cona$weight.yes
   
-  # merge sampled contributions
-  # smp.nms <- as.numeric(unlist(lapply(strsplit(rownames(sp.smp), "_"), "[", 1)))
-  #  mrg <- data.frame(real = sp.real, model = sp.mdl, sample = NA)
-  # mrg <- cbind(model = sp.mdl[smp.nms, ], sample = sp.smp)
-  #  mrg[smp.nms, "sample"] <- as.numeric(sp.smp) 
-  # plot(mrg)
-  # mrg.sorted <- mrg[order(sp.real), ]
-  
-  # pdf(paste("diagnostics_plot", paste(format(Sys.time(), format = "%Y-%m-%d_at_%H:%M"), "pdf", sep = "."), sep = "_", collapse = "_"))
-  
-  #  plot(mrg.sorted$real, mrg.sorted$mean)
-  # plot(mrg.sorted$real, mrg.sorted$sample, xlim = c(0, 1), ylim = c(0, 1))
-  # points(mrg.sorted$real, mrg.sorted$mean, pch = 1, col = "red")
-  # lines(mrg.sorted$real, mrg.sorted$mean, col = "red")
-  
-  #  plot(x = 1:length(sp.real), ylim = c(0, 1), type = "n")
-  #  lines(1:length(sp.real), mrg.sorted$real, col = "red")
-  #  lines(1:length(sp.real), mrg.sorted$mean, col = "black")
-  #  points(1:length(sp.real), mrg.sorted$sample, col = "blue")
-  #  legend("topleft", legend = c("real", "model"), col = c("red", "black"), lty = 1)
-  
-  # rl <- mrg[is.na(mrg$sample), "real"]
-  # plot(ecdf(rl))
-  # summary(ecdf(rl))
-  
   ###### COMPARE REAL, MODELED AND SAMPLED #######
   
   probs <- data.frame(unlist(probs))
@@ -77,9 +52,6 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
   
   # prepare data.frame for printing
   par.df <-	data.frame(
-    #		walk_dens = pars$dens, # walker density
-    # cont_supop = supop["supop", ], # contribution area of super population
-    # cont_sample = supop["sample", ], # contribution area of sampling area
     num_of_walkers_supop = object$sample$in.out, # number of walkers in super population
     sessions = nchar(as.character(cap.hist[1, ])), # number of sessions
     sampling_area_r = pars$sap, # r of the sampling area
@@ -91,7 +63,6 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
     capture_prob = pars$prob, # probability of capturing a walker
     boots = pars$num.boots, # number of boots
     work_dir = pars$work.dir, # working directory where magic takes place
-    #	num_cores = pars$num.cores, # number of cores used
     res = pars$rsln, # resolution of raster aggregation
     sim.dist = pars$sim.dist, # which type of individual contributes was calculated, normal od empirical?
     seed = pars$seed # number of seed used
@@ -134,7 +105,6 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
   cat("Distribution used for individual contribution:", pars$sim.dist, "\n", file = file.to.write, append = TRUE)
   cat("Seed:", pars$seed, "\n", file = file.to.write, append = TRUE)
   cat("Comment:", pars$comment, "\n", file = file.to.write, append = TRUE)
-  cat("Distribution used to calculate contribution:", pars$sim.dist, "\n", file = file.to.write, append = TRUE)
   cat("Columns: cap.hist - group - probs */\n\n", file = file.to.write, append = TRUE)
   
   # write capture history with individual covariates
