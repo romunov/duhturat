@@ -4,9 +4,9 @@
 #' @author Roman Luštrik
 
 
-walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly, 
+walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly, seed,
                                prob, sessions, weight.switch, .object, .num.boots, custom.walkers, SD, 
-                               sim.dist, ...) {
+                               sim.dist, work.dir, ...) {
   
   # We first need to populate our world from which we will sample.
   walk.walkers <- populateWorld(num.walkers = num.walkers, sap = sap.poly,
@@ -20,7 +20,7 @@ walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly,
   walk.contrib <- calculateContribution(walk.pair = walk.sample$walk.pair,
                                         sap.poly = sap.poly, walks = walk.sample$sample, weight.switch = weight.switch,
                                         ..object = .object, ..num.boots = .num.boots, sim.dist = sim.dist, SD = SD, 
-                                        area = area, ...)
+                                        area = area, work.dir = work.dir, seed = seed, ...)
   
   # Construct output object
   out <- list(

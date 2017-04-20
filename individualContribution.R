@@ -15,7 +15,7 @@
 #' @author Roman Luštrik
 
 individualContribution <- function(walk, ...object, .sap.poly, effect.distance, bins,
-                                   sim.dist, SD, area) {
+                                   sim.dist, SD, area, work.dir, seed) {
   
   if (missing(effect.distance)) stop("No effect.distance argument in individualContribution")
   
@@ -92,7 +92,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     
     prs <- mdl$m$getPars() # get estimated parameters, could also use prs <- summary(mdl)
     
-    pdf(file = sprintf("./data/%s.pdf", get("seed", envir = -8)))
+    pdf(file = sprintf("%s/%s.pdf", work.dir, seed))
     plot(mean ~ bins, data = xd, 
          main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
     curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), 

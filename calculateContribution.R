@@ -13,7 +13,7 @@
 #' 				of individual walkers.
 #' @param SD Standard deviation used to generate walkers.
 
-calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
+calculateContribution <- function(walk.pair, sap.poly, ..num.boots, work.dir, seed,
                                   weight.switch, ..object, walks, sim.dist, SD, ...) {
   
   # Calculate the number of cells in a radius of the home range and
@@ -51,7 +51,7 @@ calculateContribution <- function(walk.pair, sap.poly, ..num.boots,
   
   walker.contrib <- individualContribution(walk = walks, ...object = ..object, bins = my.bins,
                                            .sap.poly = sap.poly, effect.distance = my.bins$effect.distance,
-                                           sim.dist = sim.dist, SD = SD)
+                                           sim.dist = sim.dist, SD = SD, work.dir = work.dir, seed = seed)
   
   #####################
   #### DIAGNOSTICS ####
