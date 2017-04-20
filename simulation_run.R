@@ -64,7 +64,7 @@ clusterEvalQ(cl = cl, expr = {
   source("writeINP.R")
 })
 
-result <- parApplyLB(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
+result <- parApply(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
   
   rdt <- data.frame(
     SD = as.numeric(x["SD"]),
