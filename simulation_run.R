@@ -41,7 +41,7 @@ xy$sim.dist <- "empirical"
 xy$num.boots <- 5000
 
 # paralelno računanje
-cl <- makeCluster(3)
+cl <- makeCluster(20, type = "FORK")
 clusterEvalQ(cl = cl, expr = {
   library(raster)
   library(rgeos)
@@ -64,7 +64,7 @@ clusterEvalQ(cl = cl, expr = {
   source("writeINP.R")
 })
 
-result <- parApply(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
+result <- parApplyLB(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
   
   rdt <- data.frame(
     SD = as.numeric(x["SD"]),
