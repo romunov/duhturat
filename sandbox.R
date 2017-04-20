@@ -16,16 +16,15 @@ source("calculateBins.R")
 source("weighDistances.R")
 source("distWeights.R")
 source("individualContribution.R")
-source("calcDistance.R")
-source("calcDistanceNumeric.R")
+source("calcNormal2D.R")
 source("superPopulation.R")
 source("stopWatch.R")
 source("writeINP.R")
+source("calcNormal2D.R")
 # funkcije za analizo
 source("extractMarkResults.R")
 source("markAnalysis.R")
 source("readRunModels.R")
-source("calcNormal2D.R")
 
 simulation(
         sap = 200, #polmer!!!!111oneoneeleven

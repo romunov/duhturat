@@ -15,9 +15,6 @@ source("calculateBins.R")
 source("weighDistances.R")
 source("distWeights.R")
 source("individualContribution.R")
-source("calcDistanceNumeric.R")
-source("superPopulation.R")
-source("stopWatch.R")
 source("writeINP.R")
 # funkcije za analizo
 source("extractMarkResults.R")
@@ -57,15 +54,13 @@ clusterEvalQ(cl = cl, expr = {
   source("sampleWorld.R")
   source("sampleWalkers.R")
   source("numberOfBins.R")
+  source("calcNormal2D.R")
   source("calculateContribution.R")
   source("calculateBins.R")
   source("weighDistances.R")
   source("distWeights.R")
   source("individualContribution.R")
-  source("calcDistance.R")
-  source("calcDistanceNumeric.R")
   source("superPopulation.R")
-  source("stopWatch.R")
   source("writeINP.R")
 })
 
@@ -112,7 +107,6 @@ result <- parApply(cl = cl, X = xy[1:5, ], MARGIN = 1, FUN = function(x) {
   warning = function(w) w)
   
   if (any(class(out) %in% "error") | any(class(out) %in% "warning")) {
-    cat(out, file = "oow.txt")
     write.table(x = rdt, file = paste(rdt$work.dir, "/failed_attempts.txt", sep = ""), row.names = FALSE, col.names = FALSE,
                 append = TRUE, sep = ";", fileEncoding = "UTF-8")
   }
