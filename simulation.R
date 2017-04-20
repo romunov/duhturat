@@ -46,8 +46,8 @@ simulation <- function(
   stopifnot(!is.null(SD))
   stopifnot(!is.null(num.walkers))
   
-  ## If work.dir missing, use current work directory.
-  if (missing(work.dir)) work.dir <- getwd()
+  ## If work.dir missing, create it.
+  if (!exists(work.dir)) dir.create(work.dir)
   
   ## Each simulation run can have its own seed.
   if (!is.null(seed) & is.numeric(seed)) {
@@ -116,8 +116,8 @@ simulation <- function(
   
   ## Ok, things are ready now. Time to generate walkers and calculate their
   ## contribution area.
-  walk.data <- walkerContribution(num.walkers = num.walkers, sw = sw, area = area,
-                                  home.range = home.range, sap.poly = sap.poly, prob = prob,
+  walk.data <- walkerContribution(num.walkers = num.walkers, sw = sw, area = area, seed = seed,
+                                  home.range = home.range, sap.poly = sap.poly, prob = prob, work.dir = work.dir,
                                   sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
                                   custom.walkers = custom.walkers, SD = SD, sim.dist = sim.dist, ...)
   
