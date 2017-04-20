@@ -109,7 +109,7 @@ result <- parApply(cl = cl, X = xy, MARGIN = 1, FUN = function(x) {
   if (any(class(out) %in% "error") | any(class(out) %in% "warning")) {
     write.table(x = rdt, file = paste(rdt$work.dir, "/failed_attempts.txt", sep = ""), row.names = FALSE, col.names = FALSE,
                 append = TRUE, sep = ";", fileEncoding = "UTF-8")
-    writeLines(text = out, file = "./data/failed.errors.txt", append = TRUE)
+    cat(out, file = "./data/failed.errors.txt", append = TRUE)
   }
   out
 })
