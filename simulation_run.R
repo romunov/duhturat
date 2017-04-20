@@ -3,7 +3,6 @@ library(raster)
 library(rgeos)
 library(cluster)
 library(splancs) #csr
-library(RMark)
 
 source("simulation.R")
 source("walkerContribution.R")
