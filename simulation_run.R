@@ -31,7 +31,7 @@ xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
 
 xy$sap <- 200
 xy$area <- 600
-xy$work.dir <- "./data"
+xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$summary.file <- "simulation_list.txt"
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))

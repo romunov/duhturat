@@ -47,7 +47,7 @@ simulation <- function(
   stopifnot(!is.null(num.walkers))
   
   ## If work.dir missing, create it.
-  if (!exists(work.dir)) dir.create(work.dir)
+  if (is.na(file.info(work.dir)$isdir)) dir.create(work.dir)
   
   ## Each simulation run can have its own seed.
   if (!is.null(seed) & is.numeric(seed)) {

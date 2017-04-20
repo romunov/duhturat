@@ -92,8 +92,8 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     
     prs <- mdl$m$getPars() # get estimated parameters, could also use prs <- summary(mdl)
     
-    pdf(file = sprintf("%s/%s.pdf", work.dir, seed))
-    plot(mean ~ bins, data = xd, 
+    pdf(file = sprintf("./%s/%s.pdf", work.dir, seed))
+    plot(mean ~ bins, data = xd, xlim = c(0, 500),
          main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
     curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), 
           from = 0, to = 500, n = 200, add = TRUE, col = "red")
