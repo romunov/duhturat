@@ -11,16 +11,17 @@
 #' @param comment Character. A comment to be written to the file.
 #' @param probs A list of probabilities ("sp") for individual walker.
 #' @param pars A list of parameters used to simulate the data.
+#' @param seed This is used to construct a unique filename.
+#' 
 #' @author Roman Luštrik (\email{roman.lustrik@gmail.com})
 # roxygenize()
 
-writeINP <- function(object, supop = NULL, pars, probs) {
+writeINP <- function(object, supop = NULL, pars, probs, seed) {
   if (is.null(pars$comment)) pars$comment <- NA
   if (is.null(supop)) supop <- ""
   
   file.name <- sub(pattern = ".txt", replacement = "", x = pars$file.name) # remove .txt
-  file.name <- paste(file.name, ".inp", sep = "")
-  # file.name <- paste(paste(file.name, colnames(supop), attr(supop, "weight"), sep = "-"), "inp", sep = ".")
+  file.name <- paste(file.name,"_", seed, ".inp", sep = "")
   
   #FOR TESTING: prepare grouping variable
   # group <- object$sample$include
