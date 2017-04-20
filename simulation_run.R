@@ -37,7 +37,7 @@ xy$summary.file <- "simulation_list.txt"
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))
 xy$rsln <- 0.5
 xy$weight.switch <- TRUE
-xy$sim.dist <- "normal"
+xy$sim.dist <- "empirical"
 xy$num.boots <- 5000
 
 # paralelno računanje
