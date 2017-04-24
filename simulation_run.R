@@ -68,7 +68,14 @@ xy$num.boots <- 5000
 
 cl <- makeCluster(20)
 registerDoParallel(cl)
-foreach(i = 1:nrow(xy)) %dopar% {
+
+# exclude already processed runs
+
+fls <- list.files("./data", pattern = ".inp")
+nms <- as.numeric(gsub("^(.*_)(\\d+).inp$", "\\2", fls))
+message(sprintf("Skipping %d simulations.", length(nms)))
+
+foreach(i = (1:nrow(xy))[-nms]) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
@@ -117,7 +124,7 @@ foreach(i = 1:nrow(xy)) %dopar% {
   warning = function(w) w)
   
   if (any(class(out) %in% c("error", "warning"))) {
-    write.table(x = rdt, file = paste(rdt$work.dir, "/failed_attempts.txt", sep = ""), row.names = FALSE, col.names = FALSE,
+    write.table(x = out, file = paste(rdt$work.dir, "/failed_attempts.txt", sep = ""), row.names = FALSE, col.names = FALSE,
                 append = TRUE, sep = ";", fileEncoding = "UTF-8")
     cat(out$message, file = "./data/failed.errors.txt", append = TRUE)
   }
