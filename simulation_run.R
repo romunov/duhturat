@@ -123,6 +123,8 @@ foreach(i = (1:nrow(xy))[-nms]) %dopar% {
   error = function(e) e,
   warning = function(w) w)
   
+  # nova vrstica
+  
   if (any(class(out) %in% c("error", "warning"))) {
     write.table(x = out, file = paste(rdt$work.dir, "/failed_attempts.txt", sep = ""), row.names = FALSE, col.names = FALSE,
                 append = TRUE, sep = ";", fileEncoding = "UTF-8")
