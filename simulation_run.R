@@ -24,7 +24,8 @@ library(doParallel)
 # source("readRunModels.R")
 # source("calcNormal2D.R")
 
-set.seed(357)
+# set.seed(357) # for empirical walkers
+set.seed(9) # for normal walkers
 xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
                  prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
                  num.walkers = c(100, 200, 400, 800, 1000),
@@ -34,48 +35,31 @@ xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
 xy$sap <- 200
 xy$area <- 600
 xy$work.dir <- "data"
-xy$seed <- 1:nrow(xy)
+# xy$seed <- 1:nrow(xy) # empirical
+xy$seed <- (1:nrow(xy)) + 8400 # normal
 xy$summary.file <- "simulation_list.txt"
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))
 xy$rsln <- 0.5
 xy$weight.switch <- TRUE
-xy$sim.dist <- "empirical"
+xy$sim.dist <- "normal"
 xy$num.boots <- 5000
-
-# paralelno računanje
-# cl <- makeCluster(20, type = "FORK")
-# clusterEvalQ(cl = cl, expr = {
-#   library(raster)
-#   library(rgeos)
-#   library(cluster)
-#   library(splancs)
-#   
-#   source("simulation.R")
-#   source("walkerContribution.R")
-#   source("populateWorld.R")
-#   source("sampleWorld.R")
-#   source("sampleWalkers.R")
-#   source("numberOfBins.R")
-#   source("calcNormal2D.R")
-#   source("calculateContribution.R")
-#   source("calculateBins.R")
-#   source("weighDistances.R")
-#   source("distWeights.R")
-#   source("individualContribution.R")
-#   source("superPopulation.R")
-#   source("writeINP.R")
-# })
 
 cl <- makeCluster(20)
 registerDoParallel(cl)
 
 # exclude already processed runs
-
 fls <- list.files("./data", pattern = ".inp")
 nms <- as.numeric(gsub("^(.*_)(\\d+).inp$", "\\2", fls))
 message(sprintf("Skipping %d simulations.", length(nms)))
 
-foreach(i = (1:nrow(xy))[-nms]) %do% {
+# if there are any simulations to skip, do so
+if (length(nms) != 0) {
+  sim.seq <- (1:nrow(xy))[-nms]
+} else {
+  sim.seq <- 1:nrow(xy)
+}
+
+foreach(i = sim.seq) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
