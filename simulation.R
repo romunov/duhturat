@@ -87,10 +87,6 @@ simulation <- function(
   file.name <- paste("mark-", format(Sys.time(), "%Y-%m-%d-%H-%M"), ".txt", sep = "")
   
   ## Create an empty object of the world.
-  #	object <- raster(nrow = area, ncol = area,
-  #		xmn = -area/2, xmx = area/2,
-  #		ymn = -area/2, ymx = area/2,
-  #		crs = "+proj=NA") # no projection, can be extended to use one
   object <- raster(nrow = area * 2, ncol = area * 2,
                    xmn = -area, xmx = area,
                    ymn = -area, ymx = area,
