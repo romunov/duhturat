@@ -62,18 +62,6 @@ simulation <- function(
     message("Creating a circular sampling area polygon.")
   }
   
-  # plot(sap.poly, xlim = c(-300, 300), ylim = c(-300, 300))
-  # points(xy[, 1:2])
-  
-  # browser()
-  ## Find the area around the sampling polygon. Add padding for comfort.
-  # box.range <- apply(sap.poly@bbox, 1, range) # find range of x and y
-  # box.range <- apply(box.range, MARGIN = 2, diff)
-  # box.range <- max(abs(box.range))
-  # area <- box.range # since home.range is r, we need 2 * r, ergo 4 * r
-  # area <- box.range * 1.5
-  #  area <- (1 + abs((home.range * 2) / box.range)) * box.range # add padding for 1.5 * home.range
-  
   start.date <- Sys.time() # record simulation start time
   message(paste("Simulation started at:", start.date))
   
@@ -117,22 +105,6 @@ simulation <- function(
                                   sessions = sessions, weight.switch, .object = object, .num.boots = num.boots, 
                                   custom.walkers = custom.walkers, SD = SD, sim.dist = sim.dist, ...)
   
-  ## Based on the cumulative curve that we used to calculate contribution for
-  ## individual walker, we will now calculate contribution for each cell inside
-  ## the contribution area (inside the sampling area and a rim around it).
-  # supop <- superPopulation(.object = object, sap.poly = sap.poly,
-  #   effect.distance = walk.data$contribs$effect.distance,
-  #   ring.weights = walk.data$contrib$bins, ...)
   
   writeINP(object = walk.data, pars = pars, probs = walk.data$contribs$cona$weight.yes, seed = seed)
-  ## For weight yes/no write data for each column into an inp file.
-  # for(i in 1:length(supop)) {
-  #   for(j in 1:ncol(supop[[i]])) {
-  #     # supop.column <- supop[[i]][, j, drop = FALSE]
-  #     # attr(supop.column, "weight") <- names(supop[i])
-  #     prob.column <- walk.data$contribs$cona[[i]][, j, drop = FALSE]
-  #     
-  #     writeINP(object = walk.data, supop = supop.column, pars = pars, probs = prob.column)
-  #   }
-  # }
 }
