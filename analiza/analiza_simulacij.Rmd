@@ -1,0 +1,26 @@
+---
+title: "Analiza simulacij"
+author: "Roman Luštrik"
+date: "28 april 2017"
+output: html_document
+---
+```{r}
+source("../markAnalysis.R")
+source("../readRunModels.R")
+
+library(RMark)
+```
+
+
+```{r}
+data.n <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
+data.e <- list.files("../data/empirical/", pattern = ".inp", full.names = TRUE)
+
+length(data.n)
+length(data.e)
+```
+
+```{r}
+xy <- markAnalysis(fn = data.n[1], wd.model = "./mark_intermediate/")
+```
+

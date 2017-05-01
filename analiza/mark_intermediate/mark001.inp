@@ -1,0 +1,22 @@
+ proc title ; proc chmatrix occasions= 4 groups= 1 etype= Huggins ICMeans NoHist hist= 9 ; time
+ interval 1 1 1 ;
+glabel(1)=Group 1;
+ 0001 7;
+ 0010 4;
+ 0011 1;
+ 0100 7;
+ 0101 1;
+ 0110 2;
+ 1000 4;
+ 1010 3;
+ 1100 1;
+proc estimate link=Logit NOLOOP varest=2ndPart    ;
+model={ p(~1)c() };
+group=1 p    rows=1 cols=4 Square ;
+1 1 1 1 ;
+group=1 c    rows=1 cols=3 Square ;
+1 1 1 ;
+design matrix constraints=1 covariates=1 identity;
+blabel(1)=p:(Intercept);
+rlabel(1)=p g1 t1;
+proc stop;
