@@ -106,5 +106,5 @@ simulation <- function(
                                   custom.walkers = custom.walkers, SD = SD, sim.dist = sim.dist, ...)
   
   
-  writeINP(object = walk.data, pars = pars, probs = walk.data$contribs$cona$weight.yes, seed = seed)
+  writeINP(object = walk.data, pars = pars, seed = seed)
 }

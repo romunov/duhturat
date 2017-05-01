@@ -40,7 +40,8 @@ xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$summary.file <- "simulation_list.txt"
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))
-xy$rsln <- 0.5
+xy$rsln <- 2
+# xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$sim.dist <- "normal"
 xy$num.boots <- 5000
@@ -68,7 +69,7 @@ rdt <- data.frame(
   stringsAsFactors = FALSE
 )
 
-out <- tryCatch({
+# out <- tryCatch({
   simulation(
     SD = rdt$SD,
     prob = rdt$prob,
@@ -85,9 +86,9 @@ out <- tryCatch({
     sim.dist = rdt$sim.dist,
     num.boots = rdt$num.boots
   )
-}, 
-error = function(e) e,
-warning = function(w) w)
+# }, 
+# error = function(e) e,
+# warning = function(w) w)
 
 # paralelna verzija
 cl <- makeCluster(4)

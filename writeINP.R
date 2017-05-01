@@ -9,14 +9,14 @@
 #' @param supop		Numeric. A character of length one as a result of superPopulation
 #'			function.
 #' @param comment Character. A comment to be written to the file.
-#' @param probs A list of probabilities ("sp") for individual walker.
 #' @param pars A list of parameters used to simulate the data.
 #' @param seed This is used to construct a unique filename.
 #' 
 #' @author Roman Luštrik (\email{roman.lustrik@gmail.com})
 # roxygenize()
 
-writeINP <- function(object, supop = NULL, pars, probs, seed) {
+writeINP <- function(object, supop = NULL, pars, seed) {
+  
   if (is.null(pars$comment)) pars$comment <- NA
   if (is.null(supop)) supop <- ""
   
@@ -26,14 +26,7 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
   #FOR TESTING: prepare grouping variable
   # group <- object$sample$include
   
-  ###### COMPARE REAL, MODELED AND SAMPLED #######
-  sp.real <- object$sample$actual.ratio
-  sp.mdl <- object$contrib$model.contrib$weight.yes
-  sp.smp <- object$contrib$cona$weight.yes
-  
-  ###### COMPARE REAL, MODELED AND SAMPLED #######
-  
-  probs <- data.frame(unlist(probs))
+  probs <- data.frame(object$contribs$cona$weight.yes$probs)
   names(probs) <- NULL
   rownames(probs) <- NULL
   
@@ -48,7 +41,7 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
   })
   cap.hist <- as.data.frame(cap.hist)
   
-  mat <- cbind(cap.hist = cap.hist, probs = probs) # , group = group)
+  mat <- cbind(cap.hist = cap.hist, probs = probs)
   
   # prepare data.frame for printing
   par.df <-	data.frame(
@@ -65,7 +58,10 @@ writeINP <- function(object, supop = NULL, pars, probs, seed) {
     work_dir = pars$work.dir, # working directory where magic takes place
     res = pars$rsln, # resolution of raster aggregation
     sim.dist = pars$sim.dist, # which type of individual contributes was calculated, normal od empirical?
-    seed = pars$seed # number of seed used
+    seed = pars$seed, # number of seed used
+    hazard_fun_sigma = object$contribs$cona$weight.yes$hazard_fun_params["sigma"],
+    hazard_fun_b = object$contribs$cona$weight.yes$hazard_fun_params["b"],
+    hazard_fun_mx = object$contribs$cona$weight.yes$hazard_fun_params["mx"]
   )
   
   file.to.write <- paste(work.dir, "/", file.name, sep = "")

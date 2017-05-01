@@ -62,10 +62,6 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
       
       cont.sum.ind <- sum(mat[])
       
-      # browser()
-      # plot(mat)
-      # plot(sap, add = TRUE)
-      
       cont.in.sap <- raster::mask(x = mat, mask = raster.mask)
       out <- sum(cont.in.sap[], na.rm = TRUE)/cont.sum.ind
       
@@ -75,7 +71,8 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     
     # make output the same as for non-normal contribution
     out <- vector("list", 1)
-    out[[1]] <- as.list(ic)
+    out[[1]]$probs <- ic
+    out[[1]]$hazard_fun_params <- c(sigma = NA, b = NA, mx = NA) # function parameters, not applicable for N
     names(out) <- "weight.yes"
     return(out)
   }
@@ -95,7 +92,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     # pdf(file = sprintf("./%s/%s.pdf", work.dir, seed))
     # plot(mean ~ bins, data = xd, xlim = c(0, 500),
     #      main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
-    # curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]), 
+    # curve(hazardFunction(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]),
     #       from = 0, to = 500, n = 200, add = TRUE, col = "red")
     # dev.off()
     
@@ -121,7 +118,8 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     }, object = ...object, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"])
     
     out <- vector("list", 1)
-    out[[1]] <- as.list(ic)
+    out[[1]]$probs <- ic
+    out[[1]]$hazard_fun_params <- c(prs["sigma"], prs["b"], prs["mx"]) # function parameters
     names(out) <- "weight.yes"
     return(out)
   }
