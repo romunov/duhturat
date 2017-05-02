@@ -27,6 +27,8 @@ load("anal.e.RData")
 load("anal.n.RData")
 
 # [list element, simulation number]
+unlist(sapply(anal.n[4, ], FUN = "[", "seed"))
+# TODO: pripni seed v data.frame od simulacij
 
 # for each simulation, check list of 4 and do manipulations to
 # append input parameters with desired statistics
@@ -46,14 +48,35 @@ anal.e <- apply(anal.e, MARGIN = 2, FUN = function(x) {
   x$simulation.pars$p.target.sp <- x$simulation.pars$capture_prob - x$simulation.pars$p.sp
   
   x$simulation.pars$dAIC <- x$deltaAIC
-  # TODO: izračunaj površino SAP, le-to povečano za home_range, effect_distance... in izračunaj
-  # gostote
+
+  # naive sap area
+  x$simulation.pars$sap.area.naive <- pi * x$simulation.pars$sampling_area_r^2
+  # SAP enlarged for home range
+  x$simulation.pars$sap.area.hr <- pi * (x$simulation.pars$home_range + x$simulation.pars$sampling_area_r)^2
   x
 })
 
 apply(anal.n, MARGIN = 2, FUN = function(x) {
   browser()
-  x$simulation.pars$size.estimate <- diff(x$est.der.pars$N.Population.Size.estimate)
+  # population size estimate of ~1 model
+  x$simulation.pars$size.1 <- x$est.der.pars$N.Population.Size.estimate[1]
+  # population size estimate of ~sp model
+  x$simulation.pars$size.sp <- x$est.der.pars$N.Population.Size.estimate[2]
+  # difference in population size estimates between the two models
+  x$simulation.pars$size.est.diff <- diff(x$est.der.pars$N.Population.Size.estimate)
+  
+  # add capture probability esimates and the difference
+  x$simulation.pars$p.1 <- x$real.fun.pars$estimate[1]
+  x$simulation.pars$p.sp <- x$real.fun.pars$estimate[2]
+  x$simulation.pars$p.diff <- diff(x$real.fun.pars$estimate)
+  x$simulation.pars$p.target.1 <- x$simulation.pars$capture_prob - x$simulation.pars$p.1
+  x$simulation.pars$p.target.sp <- x$simulation.pars$capture_prob - x$simulation.pars$p.sp
+  
   x$simulation.pars$dAIC <- x$deltaAIC
+  
+  # naive sap area
+  x$simulation.pars$sap.area.naive <- pi * x$simulation.pars$sampling_area_r^2
+  # SAP enlarged for home range
+  x$simulation.pars$sap.area.hr <- pi * (x$simulation.pars$home_range + x$simulation.pars$sampling_area_r)^2
   x
 })
