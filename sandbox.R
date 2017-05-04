@@ -143,3 +143,6 @@ foreach(i = 1:5) %dopar% {
   error = function(e) e,
   warning = function(w) w)
 }
+
+# setwd("..")
+markAnalysis(fn = "./data/mark-2017-05-01-14-32_1417.inp", wd = "./data")

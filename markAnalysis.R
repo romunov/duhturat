@@ -17,11 +17,11 @@ markAnalysis <- function(fn, wd.model) {
 	data.in <- readMark(as.character(fn))
 	
 	# DO THE ANALYSIS
-	setwd(oldwd)
 	setwd(wd.model)
 	tr.process <- process.data(data.in, model = "Huggins")
 	tr.ddl <- make.design.data(tr.process)
 	
+	# https://sites.google.com/site/workshoponcmr/home/sche/10-closed-capture/huggins
 	p.cequal.dot <- list(formula = ~ 1, share = TRUE)
 	p.cequal.dot.sp <- list(formula = ~ sp, share = TRUE)
 	
@@ -49,8 +49,7 @@ markAnalysis <- function(fn, wd.model) {
 			AICc = tr.result$p.cequal.dot.sp$results$AICc)
 	real <- data.frame(rbind(cp.real, cpsp.real))
 
-	# Calculate differences in models' AIC. If value is negative, it means that the 
-	# presumably "better" model (p(~sp)c()) is inferior and a warning is issued.
+	# Calculate differences in models' AIC
 	dAIC <- tr.result$p.cequal.dot$results$AICc - tr.result$p.cequal.dot.sp$results$AICc
 	
 	# OUTPUT THE DATA
