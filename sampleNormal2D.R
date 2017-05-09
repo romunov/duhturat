@@ -79,7 +79,7 @@ sum(pins, na.rm = TRUE)/N
 x <- seq(0, 40, by = 0.1)
 
 plot(x, 1 - pweibull(q = x, shape = 8, scale = 20), type = "l", ylab = "", 
-     main = "KPV Weibullove porazdelitve \n z razli?nimi vrednostmi parametra a")
+     main = "KPV Weibullove porazdelitve \n z različnimi vrednostmi parametra a")
 lines(x, 1 - pweibull(q = x, shape = 2, scale = 20), col = "red")
 lines(x, 1 - pweibull(q = x, shape = 4, scale = 20), col = "green")
 lines(x, 1 - pweibull(q = x, shape = 6, scale = 20), col = "blue")
@@ -99,3 +99,27 @@ ggplot(xy, aes(x = x, y = wb, color = s)) +
   scale_color_brewer(palette = "Set1", name = "parameter: a")
 
 ggsave("./figures/weibull_platfon.pdf", width = 5, height = 5)
+
+# qnorm(p = 0.95, mean = 0, sd = 1)
+# plot(x, 1 - pweibull(q = x, shape = 8, scale = 20), type = "l", ylab = "", 
+#      main = "KPV Weibullove porazdelitve \n z različnimi vrednostmi parametra a")
+# abline(v = pweibull(q = 20, shape = 8, scale = 20))
+# 
+# curve(dweibull(x, shape = 8, scale = 20), from = 0, to = 30)
+# abline(v = qweibull(p = 0.95, shape = 8, scale = 20))
+# 
+# curve(dnorm(x, mean = 0, sd = 1), from = -4, to = 4)
+# abline(v = qnorm(p = 0.5, mean = 0, sd = 1))
+
+source("calcNormal2D.R")
+x <- seq(0, 30, by = 0.01)
+qnt <- 1 - hazardFunction(x, sigma = 8, b = 20, mx = 17)
+q <- quantile(cumsum(qnt), probs = c(0.5, 0.68, 0.95, 0.99))
+plot(x, cumsum(qnt))
+abline(v = q)
+
+integrate(hazardFunction, lower = 0, upper = 20, sigma = 8, b = 20, mx = 0)
+integrate(dnorm, lower = -1.96, upper = 1.95)
+integrate(dnorm, -Inf, 0)
+
+# TODO: na podlagi ocenjenih parametrov simuliraj naključne vrednosti in izračunaj kvantile

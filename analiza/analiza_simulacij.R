@@ -19,8 +19,8 @@ anal.n <- sapply(data.n, FUN = markAnalysis,
 # save(anal.n, file = "anal.n.RData")
 
 anal.e <- sapply(data.e, FUN = markAnalysis,
-                 wd.model = "./mark_intermediate2/", simplify = FALSE)
-# save(anal.e, file = "anal.e.RData")
+                 wd.model = "./mark_intermediate/", simplify = FALSE)
+save(anal.e, file = "anal.e.RData")
 
 rm(list = ls())
 load("anal.e.RData")

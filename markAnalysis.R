@@ -59,6 +59,5 @@ markAnalysis <- function(fn, wd.model) {
 	out$deltaAIC <- dAIC
 	out$simulation.pars <- extractPars(fn)
 	
-	
 	return(out)
 }

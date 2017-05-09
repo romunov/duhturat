@@ -145,4 +145,4 @@ foreach(i = 1:5) %dopar% {
 }
 
 # setwd("..")
-markAnalysis(fn = "./data/mark-2017-05-01-14-32_1417.inp", wd = "./data")
+out <- markAnalysis(fn = "./data/mark-2017-05-01-14-32_1417.inp", wd = "./data")
