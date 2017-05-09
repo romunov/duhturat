@@ -71,3 +71,31 @@ lines(pts, col = "blue", lwd = 2)
 
 pins <- over(x = sp.xy, y = sp.krog2)
 sum(pins, na.rm = TRUE)/N
+
+
+#########################
+# prikaz weibullove CDF #
+#########################
+x <- seq(0, 40, by = 0.1)
+
+plot(x, 1 - pweibull(q = x, shape = 8, scale = 20), type = "l", ylab = "", 
+     main = "KPV Weibullove porazdelitve \n z razli?nimi vrednostmi parametra a")
+lines(x, 1 - pweibull(q = x, shape = 2, scale = 20), col = "red")
+lines(x, 1 - pweibull(q = x, shape = 4, scale = 20), col = "green")
+lines(x, 1 - pweibull(q = x, shape = 6, scale = 20), col = "blue")
+
+xy <- sapply(seq(2, 8, by = 2), FUN = function(s, x) {
+  data.frame(wb = 1 - pweibull(q = x, shape = s, scale = 20), 
+             s = s, x = x)
+}, x = x, simplify = FALSE)
+
+xy <- do.call(rbind, xy)
+xy$s <- as.factor(xy$s)
+
+ggplot(xy, aes(x = x, y = wb, color = s)) +
+  theme_bw() +
+  geom_line() +
+  xlab("") + ylab("") +
+  scale_color_brewer(palette = "Set1", name = "parameter: a")
+
+ggsave("./figures/weibull_platfon.pdf", width = 5, height = 5)
