@@ -16,11 +16,11 @@ calcNormal2D <- function(x, y, side, mu1, mu2, s1, s2) {
 }
 
 #' This is a nonlinear function for fitting a half normal curve to data. It holds
-#' two extra parameters.
+#' two extra parameters. It is a CDF of Weibull distribution.
 #' sigma is the standard "dispersion" parameter.
 #' b is used to extend the initial plateau before the function starts dropping. 
 #' mx parameter is used to scale the function. This is basically the intercept.
 
-hazardFunction <- function(x, sigma, b, mx) {
+CDFWeibull <- function(x, sigma, b, mx) {
   1 - exp(-(x/sigma)^(-b)) * (-mx)
 }
