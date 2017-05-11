@@ -103,29 +103,33 @@ ggsave("./figures/weibull_platfon.pdf", width = 5, height = 5)
 
 source("calcNormal2D.R")
 # TODO: na podlagi ocenjenih parametrov simuliraj naključne vrednosti in izračunaj kvantile
+curve(weibullLikeDistribution(x, sigma = 163, b = -2, mx = 11), from = 0, to = 500)
 
 # Rejection sampling
 # https://theoreticalecology.wordpress.com/2015/04/22/a-simple-explanation-of-rejection-sampling-in-r/
 
 weibullLikeDistribution <- function(x, sigma, b, mx) {
-  1 - exp(-(x/sigma)^(-b)) * (-mx)
+  exp(-(x/sigma)^(-b)) * mx
 }
 
 xrange <- 400 # from 0 (implicit) to x
 N <- 100000 # number of samples
 
-xy <- data.frame(xrand = runif(N, min = 0, max = xrange))
-xy$seeded <- weibullLikeDistribution(x = xy$xrand, sigma = 113, b = -4, mx = 12)
-xy$proposed <- runif(N, min = 0, max = 1)
+xy <- data.frame(proposed = runif(N, min = 0, max = xrange))
+b <- -2.16
+mx <- 35.48
+sigma <-  147.17
+xy$fit <- weibullLikeDistribution(x = xy$proposed, sigma = sigma, b = b, mx = mx)
+xy$random <- runif(N, min = 0, max = 1)
 
-maxDens <- max(xy$seeded)
+maxDens <- max(xy$fit)
 
-xy$accepted <- with(xy, proposed <= seeded/maxDens)
+xy$accepted <- with(xy, random <= fit/maxDens)
 xy <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
 
-# dim(xy)
-hist(xy$xrand, freq = FALSE, breaks = 100)
-curve(weibullLikeDistribution(x, sigma = 113, b = -4, mx = 12)/(maxDens * 125), 
+hist(xy$proposed, freq = FALSE, breaks = 100, col = "light grey")
+curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/(maxDens * 130), # multiply to make it look fit nicely
       from = 0, to = 400, add = TRUE, col = "red", lwd = 2)
 
-
+abline(v = quantile(xy$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
+       lwd = 2)
