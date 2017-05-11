@@ -22,5 +22,5 @@ calcNormal2D <- function(x, y, side, mu1, mu2, s1, s2) {
 #' mx parameter is used to scale the function. This is basically the intercept.
 
 weibullLikeDistribution <- function(x, sigma, b, mx) {
-  1 - exp(-(x/sigma)^(-b)) * (-mx)
+  exp(-(x/sigma)^(-b)) * mx
 }
