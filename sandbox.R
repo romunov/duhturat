@@ -48,7 +48,6 @@ xy$num.boots <- 5000
 xy["sim.dist"] <- "empirical"
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
-# i <- 5884
 
 rdt <- data.frame(
   SD = as.numeric(xy[i, "SD"]),
