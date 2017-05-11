@@ -82,7 +82,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     # Fit a model to the distribution of paired distances.
     xd <- bins$bins$weight.yes
     
-    mdl <- nls(mean ~ CDFWeibull(x = bins, sigma, b, mx), data = xd, 
+    mdl <- nls(mean ~ weibullLikeDistribution(x = bins, sigma, b, mx), data = xd, 
                start = list(sigma = mean(xd$bins),               # variance
                             b = -max(xd$bins)/(max(xd$bins)/2),   # scale parameter
                             mx = xd$mean[1]))                    # height, since function is not scaled  
@@ -92,7 +92,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
     # pdf(file = sprintf("./%s/%s.pdf", work.dir, seed))
     # plot(mean ~ bins, data = xd, xlim = c(0, 500),
     #      main = sprintf("sigma: %f, xm = %f, b = %f", prs["sigma"], prs["mx"], prs["b"]))
-    # curve(CDFWeibull(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]),
+    # curve(weibullLikeDistribution(x, sigma = prs["sigma"], b = prs["b"], mx = prs["mx"]),
     #       from = 0, to = 500, n = 200, add = TRUE, col = "red")
     # dev.off()
     
@@ -101,7 +101,7 @@ individualContribution <- function(walk, ...object, .sap.poly, effect.distance, 
       dist.mat <- distanceFromPoints(object = object, xy = xy)
       
       # And based on the model above and distance from walker's medoid, find value of each cell.
-      dist.mat[] <- CDFWeibull(x = dist.mat[], sigma = sigma, b = b, mx = mx)
+      dist.mat[] <- weibullLikeDistribution(x = dist.mat[], sigma = sigma, b = b, mx = mx)
       
       # plot(dist.mat, asp = 1, xlim = c(-500, 500), ylim = c(-500, 500))
       # plot(.sap.poly, add = TRUE)
