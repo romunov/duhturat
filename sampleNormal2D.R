@@ -112,8 +112,9 @@ weibullLikeDistribution <- function(x, sigma, b, mx) {
   exp(-(x/sigma)^(-b)) * mx
 }
 
-xrange <- 400 # from 0 (implicit) to x
-N <- 100000 # number of samples
+set.seed(357)
+xrange <- 300 # from 0 (implicit) to x
+N <- 500 # number of samples
 
 xy <- data.frame(proposed = runif(N, min = 0, max = xrange))
 b <- -2.16
@@ -133,3 +134,11 @@ curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/(maxDens * 130),
 
 abline(v = quantile(xy$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
        lwd = 2)
+
+
+library(ggplot2)
+
+ggplot(xy, aes(x = proposed, y = fit/maxDens)) +
+  theme_bw() +
+  geom_point(alpha = 0.5) +
+  geom_point(aes(y = random, color = accepted), alpha = 0.5)
