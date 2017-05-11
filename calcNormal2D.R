@@ -24,3 +24,11 @@ calcNormal2D <- function(x, y, side, mu1, mu2, s1, s2) {
 CDFWeibull <- function(x, sigma, b, mx) {
   1 - exp(-(x/sigma)^(-b)) * (-mx)
 }
+
+# CDFWeibull <- function(x, sigma, b, mx) {
+#   exp(-(x/sigma)^(-b)) * (-mx)
+# }
+
+CDFWeibullStandard <- function(x, sigma, b) {
+  1 - exp(-(x/sigma)^(-b))
+}

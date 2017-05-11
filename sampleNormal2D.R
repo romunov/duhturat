@@ -103,25 +103,30 @@ ggsave("./figures/weibull_platfon.pdf", width = 5, height = 5)
 
 source("calcNormal2D.R")
 # TODO: na podlagi ocenjenih parametrov simuliraj naključne vrednosti in izračunaj kvantile
+# TODO: naredi rejection sampling
+# https://stats.stackexchange.com/questions/88697/sample-from-a-custom-continuous-distribution-in-r
 
+# tale ne dela dobro, ker nima mx parametra
+inverseCDFWeibull <- function(x, sigma, b) {
+  (x * ((x/sigma)^(-b))^(1/b) * pgamma(q = x, shape = (-1/b), rate = (x/b)^(-b)))/b
+}
+curve(CDFWeibullStandard(x, sigma = 113, b = 4), from = 0, to = 400)
+curve(CDFWeibull(x, sigma = 113, b = -4, mx = 12), from = 0, to = 400)
 
+abline(v = inverseCDFWeibull(0.5, sigma = 163, b = -2))
 
+inverseCDFWeibull <- function(x, sigma, b) {
+  sigma * pgamma(x, (-1/b), (x/b)^(-b))
+}
 
+x <- seq(0, 400, by = 0.1)
+y <- customDistribution(x, sigma = 163, mx = 11, b = -2)
+curve(customDistribution(x, sigma = 163, mx = 11, b = -2), from = 0, to = 400,
+      ylab = "")
 
-library(distr)
+inverse <- function (f, lower = -100, upper = 100, ...) {
+  function (y) uniroot((function (x) f(x, ...) - y), lower = lower, upper = upper)[1]
+}
 
-par(mfrow = c(1, 2))
-mydist <- AbscontDistribution(q = function(x, sigma = 163.59, mx = 11.18, b = -2.14) 1 - exp(-(x/sigma)^(-b)) * (-mx))
-rCDFWeibull <- r(mydist)
-hist(rCDFWeibull(1000))
-
-
-p    <- function(x) (2/pi) * (1/(exp(x)+exp(-x)))  # probability density function
-dist <-AbscontDistribution(d=p)  # signature for a dist with pdf ~ p
-rdist <- r(dist)                 # function to create random variates from p
-
-set.seed(1)                      # for reproduceable example
-X <- rdist(1000)                 # sample from X ~ p
-x <- seq(-10,10, .01)
-hist(X, freq=F, breaks=50, xlim=c(-5,5))
-lines(x,p(x),lty=2, col="red")
+CDI <- inverse(customDistribution, lower = 0, upper = 500, sigma = 163, mx = 11, b = -2)
+CDI(50)
