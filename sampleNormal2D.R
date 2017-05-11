@@ -103,30 +103,29 @@ ggsave("./figures/weibull_platfon.pdf", width = 5, height = 5)
 
 source("calcNormal2D.R")
 # TODO: na podlagi ocenjenih parametrov simuliraj naključne vrednosti in izračunaj kvantile
-# TODO: naredi rejection sampling
-# https://stats.stackexchange.com/questions/88697/sample-from-a-custom-continuous-distribution-in-r
 
-# tale ne dela dobro, ker nima mx parametra
-inverseCDFWeibull <- function(x, sigma, b) {
-  (x * ((x/sigma)^(-b))^(1/b) * pgamma(q = x, shape = (-1/b), rate = (x/b)^(-b)))/b
-}
-curve(CDFWeibullStandard(x, sigma = 113, b = 4), from = 0, to = 400)
-curve(CDFWeibull(x, sigma = 113, b = -4, mx = 12), from = 0, to = 400)
+# Rejection sampling
+# https://theoreticalecology.wordpress.com/2015/04/22/a-simple-explanation-of-rejection-sampling-in-r/
 
-abline(v = inverseCDFWeibull(0.5, sigma = 163, b = -2))
-
-inverseCDFWeibull <- function(x, sigma, b) {
-  sigma * pgamma(x, (-1/b), (x/b)^(-b))
+weibullLikeDistribution <- function(x, sigma, b, mx) {
+  1 - exp(-(x/sigma)^(-b)) * (-mx)
 }
 
-x <- seq(0, 400, by = 0.1)
-y <- customDistribution(x, sigma = 163, mx = 11, b = -2)
-curve(customDistribution(x, sigma = 163, mx = 11, b = -2), from = 0, to = 400,
-      ylab = "")
+xrange <- 400 # from 0 (implicit) to x
+N <- 100000 # number of samples
 
-inverse <- function (f, lower = -100, upper = 100, ...) {
-  function (y) uniroot((function (x) f(x, ...) - y), lower = lower, upper = upper)[1]
-}
+xy <- data.frame(xrand = runif(N, min = 0, max = xrange))
+xy$seeded <- weibullLikeDistribution(x = xy$xrand, sigma = 113, b = -4, mx = 12)
+xy$proposed <- runif(N, min = 0, max = 1)
 
-CDI <- inverse(customDistribution, lower = 0, upper = 500, sigma = 163, mx = 11, b = -2)
-CDI(50)
+maxDens <- max(xy$seeded)
+
+xy$accepted <- with(xy, proposed <= seeded/maxDens)
+xy <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
+
+# dim(xy)
+hist(xy$xrand, freq = FALSE, breaks = 100)
+curve(weibullLikeDistribution(x, sigma = 113, b = -4, mx = 12)/(maxDens * 125), 
+      from = 0, to = 400, add = TRUE, col = "red", lwd = 2)
+
+
