@@ -114,7 +114,7 @@ weibullLikeDistribution <- function(x, sigma, b, mx) {
 
 set.seed(357)
 xrange <- 300 # from 0 (implicit) to x
-N <- 500 # number of samples
+N <- 50000 # number of samples
 
 xy <- data.frame(proposed = runif(N, min = 0, max = xrange))
 b <- -2.16
@@ -126,19 +126,25 @@ xy$random <- runif(N, min = 0, max = 1)
 maxDens <- max(xy$fit)
 
 xy$accepted <- with(xy, random <= fit/maxDens)
-xy <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
+xy.out <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
 
-hist(xy$proposed, freq = FALSE, breaks = 100, col = "light grey")
+hist(xy.out$proposed, freq = FALSE, breaks = 100, col = "light grey")
 curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/(maxDens * 130), # multiply to make it look fit nicely
       from = 0, to = 400, add = TRUE, col = "red", lwd = 2)
 
-abline(v = quantile(xy$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
+abline(v = quantile(xy.out$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
        lwd = 2)
 
 
 library(ggplot2)
 
+xys <- xy[order(xy$proposed), ]
+xys <- xys[seq(1, nrow(xys), by = 11), ]
+
 ggplot(xy, aes(x = proposed, y = fit/maxDens)) +
   theme_bw() +
-  geom_point(alpha = 0.5) +
-  geom_point(aes(y = random, color = accepted), alpha = 0.5)
+  scale_color_brewer(palette = "Set1") +
+  geom_line(alpha = 0.5) +
+  geom_point(data = xys, aes(y = random, color = accepted), alpha = 0.5) +
+  geom_point(data = xys, aes(x = proposed, y = fit/maxDens), alpha = 0.5) +
+  geom_segment(data = xys, aes(x = proposed, y = random, xend = proposed, yend = fit/maxDens), alpha = 0.3)
