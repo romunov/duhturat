@@ -121,6 +121,7 @@ b <- -2.16
 mx <- 35.48
 sigma <-  147.17
 xy$fit <- weibullLikeDistribution(x = xy$proposed, sigma = sigma, b = b, mx = mx)
+xy$fit <- (xy$fit - min(xy$fit))/(max(xy$fit) - min(xy$fit))
 xy$random <- runif(N, min = 0, max = 1)
 
 maxDens <- max(xy$fit)
@@ -129,8 +130,8 @@ xy$accepted <- with(xy, random <= fit/maxDens)
 xy.out <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
 
 hist(xy.out$proposed, freq = FALSE, breaks = 100, col = "light grey")
-curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/(maxDens * 130), # multiply to make it look fit nicely
-      from = 0, to = 400, add = TRUE, col = "red", lwd = 2)
+curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/4500, # multiply to make it look fit nicely
+      from = 0, to = 300, add = TRUE, col = "red", lwd = 2)
 
 abline(v = quantile(xy.out$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
        lwd = 2)
@@ -148,3 +149,9 @@ ggplot(xy, aes(x = proposed, y = fit/maxDens)) +
   geom_point(data = xys, aes(y = random, color = accepted), alpha = 0.5) +
   geom_point(data = xys, aes(x = proposed, y = fit/maxDens), alpha = 0.5) +
   geom_segment(data = xys, aes(x = proposed, y = random, xend = proposed, yend = fit/maxDens), alpha = 0.3)
+
+getQcustom(fun = weibullLikeDistribution, sigma = 147, mx = 35, b = -2, N = 50000,
+           xrange = list(0, 400))
+
+getQnormal(mu = 0, sd = 1)
+qnorm(c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99), mean = 0, sd = 1)
