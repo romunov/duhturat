@@ -45,7 +45,7 @@ writeINP <- function(object, supop = NULL, pars, seed) {
   
   # prepare data.frame for printing
   par.df <-	data.frame(
-    num_of_walkers_supop = object$sample$in.out, # number of walkers in super population
+    num_of_walkers_supop = object$sample$in.out, # number of walkers generated in super population
     sessions = nchar(as.character(cap.hist[1, ])), # number of sessions
     sampling_area_r = pars$sap, # r of the sampling area
     num_of_sampled_walkers = nrow(cap.hist), # number of sampled walkers

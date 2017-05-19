@@ -3,7 +3,6 @@ source("../markAnalysis.R")
 source("../readRunModels.R")
 
 library(RMark)
-library(parallel)
 
 # Chunk 2 import data
 data.n <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
