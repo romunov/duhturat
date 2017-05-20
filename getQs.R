@@ -47,12 +47,12 @@ getQcustom <- function(fun, ..., xrange = NULL, N = 10000, probs = c(0.5, 0.6, 0
   xy$accepted <- with(xy, random <= fit)
   xy.out <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
   
-  hist(xy.out$proposed, freq = FALSE, breaks = 100, col = "light grey")
-  curve(fun(x, sigma = sigma, b = b, mx = mx)/(maxDens * 130), # multiply to make it look fit nicely
-        from = xrange[[1]], to = xrange[[2]], add = TRUE, col = "red", lwd = 2)
+  # hist(xy.out$proposed, freq = FALSE, breaks = 100, col = "light grey")
+  # curve(fun(x, sigma = sigma, b = b, mx = mx)/(maxDens * 130), # multiply to make it look fit nicely
+        # from = xrange[[1]], to = xrange[[2]], add = TRUE, col = "red", lwd = 2)
   
-  abline(v = quantile(xy.out$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
-         lwd = 2)
+  # abline(v = quantile(xy.out$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
+         # lwd = 2)
   
   quantile(xy.out$proposed, probs = probs)
 }
