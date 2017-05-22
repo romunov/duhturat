@@ -4,7 +4,7 @@
 #' @param fun Function to extract quantiles. Can be getQcustom and getQnormal.
 #' @param ... Parameters passed to fun.
 
-calculateIndices <- function(x) {
+calculateIndices <- function(x, xy = NULL) {
   
   # add population size estimates and the difference
   size.1 <- x$est.der.pars$N.Population.Size.estimate[1]
@@ -38,8 +38,8 @@ calculateIndices <- function(x) {
   }
   
   if (x$simulation.pars$sim.dist == "normal") {
-    mu <- unlist(x$simulation.pars$)
-    # qs <- getQnormal()
+    SD <- xy[xy$seed %in% x$simulation.pars$seed, "SD"]
+    qs <- getQnormal(mu = 0, sd = SD)
   }
   
   area.50 <- pi * (x$simulation.pars$sampling_area_r + qs["50%"])^2

@@ -2,9 +2,9 @@ library(raster)
 library(rgeos)
 library(cluster)
 library(splancs) #csr
-library(RMark)
-library(foreach)
-library(doParallel)
+# library(RMark)
+# library(foreach)
+# library(doParallel)
 
 source("simulation.R")
 source("walkerContribution.R")
@@ -45,7 +45,7 @@ xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$sim.dist <- "normal"
 xy$num.boots <- 5000
-xy["sim.dist"] <- "empirical"
+xy["sim.dist"] <- "normal"
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
 

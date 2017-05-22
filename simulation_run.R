@@ -41,7 +41,7 @@ xy$summary.file <- "simulation_list.txt"
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))
 xy$rsln <- 0.5
 xy$weight.switch <- TRUE
-xy$sim.dist <- "empirical"
+xy$sim.dist <- "normal"
 xy$num.boots <- 5000
 
 cl <- makeCluster(20)

@@ -67,5 +67,25 @@ ggplot(xy1, aes(x = hr, y = index, group = variable)) +
 # ********************************************** normal *******************************************
 load("anal.n.RData")
 an <- anal.n
+rm(anal.n)
 
+# TODO: ne izračuna qs za normalno
+an[[1]]
+length(list.files("../data/normal"))
+length(an)
 
+an.seed <- data.frame(seed = apply(an, MARGIN = 2, FUN = function(x) x$simulation.pars$seed))
+head(an.seed)
+
+set.seed(9) # for normal walkers
+xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
+                 prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
+                 num.walkers = c(100, 200, 400, 800, 1000),
+                 sessions = 4:7
+)
+
+xy$seed <- (1:nrow(xy)) + 8400 # normal
+
+an.seed <- merge(xy, an.seed)
+
+ann <- apply(an, MARGIN = 2, FUN = calculateIndices, xy = an.seed)
