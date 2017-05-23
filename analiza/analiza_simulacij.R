@@ -93,11 +93,19 @@ xc$correction <- ".1"
 xc$correction[grepl(".sp$", xc$variable)] <- ".sp"
 xc$correction.type <- sapply(strsplit(as.character(xc$variable), "\\."), "[", 2)
 
-xc1 <- xc[xc$index > -1000, ]
+head(xc)
+xc <- xc[xc$index > -1, ]
 
-ggplot(xc1, aes(x = hr, y = index, group = variable)) +
+ggplot(xc, aes(x = hr, y = index, group = variable)) +
   theme_bw() +
   geom_point(alpha = 0.5) +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
   # facet_grid(correction ~ correction.type)
+  facet_wrap(~ correction.type)
+
+ggplot(xc, aes(x = num.generated.walkers, y = index, color = correction)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  # geom_jitter(alpha = 0.5) +
   facet_wrap(~ correction.type)

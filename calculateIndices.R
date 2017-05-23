@@ -78,6 +78,7 @@ calculateIndices <- function(x, xy = NULL) {
   
   # calculate index ((D - D^)/D) * 100
   calIn <- function(Dh, D = dens.true) ((D - Dh)/D) * 100
+  calIn <- function(Dh, D = dens.true) ((D-Dh))
   
   dens.naive.1 <- calIn(Dh = dens.naive.1)
   dens.hr.1 <- calIn(dens.hr.1)
