@@ -12,7 +12,9 @@
 #' qnorm(0.5) # at probability of 0.5, the quantile is 0
 
 getQnormal <- function(mu, sd, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)) {
-  qnorm(p = probs, mean = mu, sd = sd)
+  out <- qnorm(p = probs, mean = mu, sd = sd)
+  names(out) <- sprintf("%0.f%%", probs * 100)
+  out
 }
 
 

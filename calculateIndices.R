@@ -122,5 +122,7 @@ calculateIndices <- function(x, xy = NULL) {
                     dens.naive.sp, dens.hr.sp, dens.effect.sp, dens.50.sp, dens.60.sp, dens.70.sp, dens.80.sp,
                     dens.90.sp, dens.95.sp, dens.99.sp
   )
+  
+  rownames(out) <- NULL
   out
 }

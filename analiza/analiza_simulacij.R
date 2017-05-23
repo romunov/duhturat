@@ -69,13 +69,7 @@ load("anal.n.RData")
 an <- anal.n
 rm(anal.n)
 
-# TODO: ne izračuna qs za normalno
-an[[1]]
-length(list.files("../data/normal"))
-length(an)
-
 an.seed <- data.frame(seed = apply(an, MARGIN = 2, FUN = function(x) x$simulation.pars$seed))
-head(an.seed)
 
 set.seed(9) # for normal walkers
 xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
@@ -89,3 +83,21 @@ xy$seed <- (1:nrow(xy)) + 8400 # normal
 an.seed <- merge(xy, an.seed)
 
 ann <- apply(an, MARGIN = 2, FUN = calculateIndices, xy = an.seed)
+ann <- do.call(rbind, ann)
+rownames(ann) <- NULL
+
+xc <- gather(ann, key = variable, value = index, starts_with("dens."))
+xc$variable <- factor(xc$variable)
+
+xc$correction <- ".1"
+xc$correction[grepl(".sp$", xc$variable)] <- ".sp"
+xc$correction.type <- sapply(strsplit(as.character(xc$variable), "\\."), "[", 2)
+
+xc1 <- xc[xc$index > -1000, ]
+
+ggplot(xc1, aes(x = hr, y = index, group = variable)) +
+  theme_bw() +
+  geom_point(alpha = 0.5) +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  # facet_grid(correction ~ correction.type)
+  facet_wrap(~ correction.type)
