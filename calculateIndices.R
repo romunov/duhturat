@@ -6,6 +6,7 @@
 
 calculateIndices <- function(x, xy = NULL) {
   
+  
   # add population size estimates and the difference
   size.1 <- x$est.der.pars$N.Population.Size.estimate[1]
   size.sp <- x$est.der.pars$N.Population.Size.estimate[2]
@@ -20,13 +21,14 @@ calculateIndices <- function(x, xy = NULL) {
   p <- x$simulation.pars$capture_prob
   
   dAIC <- x$deltaAIC # negative value means .sp bigger than .1
+  area <- x$simulation.pars$sampling_area_r
   
   # naive sap area
-  area.naive <- pi * x$simulation.pars$sampling_area_r^2
+  area.naive <- pi * area^2
   # SAP enlarged for home range
-  area.hr <- pi * (x$simulation.pars$home_range + x$simulation.pars$sampling_area_r)^2
+  area.hr <- pi * (x$simulation.pars$home_range + area)^2
   # sap enlarged for max walked distance
-  area.effect <- pi * (x$simulation.pars$sampling_area_r + x$simulation.pars$effect_distance)^2
+  area.effect <- pi * (x$simulation.pars$effect_distance + area)^2
   
   # based on quantile function, calculate distance for given quantiles
   if (x$simulation.pars$sim.dist == "empirical") {
@@ -42,13 +44,13 @@ calculateIndices <- function(x, xy = NULL) {
     qs <- getQnormal(mu = 0, sd = SD)
   }
   
-  area.50 <- pi * (x$simulation.pars$sampling_area_r + qs["50%"])^2
-  area.60 <- pi * (x$simulation.pars$sampling_area_r + qs["60%"])^2
-  area.70 <- pi * (x$simulation.pars$sampling_area_r + qs["70%"])^2
-  area.80 <- pi * (x$simulation.pars$sampling_area_r + qs["80%"])^2
-  area.90 <- pi * (x$simulation.pars$sampling_area_r + qs["90%"])^2
-  area.95 <- pi * (x$simulation.pars$sampling_area_r + qs["95%"])^2
-  area.99 <- pi * (x$simulation.pars$sampling_area_r + qs["99%"])^2
+  area.50 <- pi * (area + qs["50%"])^2
+  area.60 <- pi * (area + qs["60%"])^2
+  area.70 <- pi * (area + qs["70%"])^2
+  area.80 <- pi * (area + qs["80%"])^2
+  area.90 <- pi * (area + qs["90%"])^2
+  area.95 <- pi * (area + qs["95%"])^2
+  area.99 <- pi * (area + qs["99%"])^2
   
   # true density
   dens.true <- pi * x$simulation.pars$area_size^2
