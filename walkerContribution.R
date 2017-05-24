@@ -20,7 +20,7 @@ walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly, seed
   walk.contrib <- calculateContribution(walk.pair = walk.sample$walk.pair,
                                         sap.poly = sap.poly, walks = walk.sample$sample, weight.switch = weight.switch,
                                         ..object = .object, ..num.boots = .num.boots, sim.dist = sim.dist, SD = SD, 
-                                        area = area, work.dir = work.dir, seed = seed, ...)
+                                        work.dir = work.dir, seed = seed, ...)
   
   # Construct output object
   out <- list(

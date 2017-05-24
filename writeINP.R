@@ -123,22 +123,5 @@ writeINP <- function(object, supop = NULL, pars, seed) {
   
   message("Done writing MARK file ", file.name)
   
-  #	out <- data.frame(
-  #			area.sample = supop["sample"], # contribution area of sampling area
-  #			area.supop = supop["supop"], # contribution area of super population
-  #			area.sample.circ = 2 * pi * bbox(sap)[3],
-  #			area.sample.area = sap@polygons[[1]]@area,
-  #			r.of.sap = bbox(sap)[1, "max"], # r of sampling area
-  #			sim.walkers.supop = object$calculate.walkers$walk.sample$in.out, # number of walkers in super population
-  #			sim.dens = pars$walk.dens, # simulated walker density
-  #			sim.dens.supop = object$calculate.walkers$walk.sample$in.out / supop["supop"], # density of walkers in the area of super population
-  #			sim.catch = pars$prob, #simulated probability of capture
-  #			home.range = pars$home.range, # home range of walker
-  #			effect.dist = object$parameters$effect.distance, # effect distance used as a cut-off
-  #			sessions = pars$sessions, # number of sessions used to capture walkers
-  #			filename = file.name # file name of the MARK inp file
-  #	)
-  #	rownames(out) <- NULL
-  
   return(par.df)
 }
