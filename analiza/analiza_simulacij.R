@@ -92,8 +92,10 @@ xc$variable <- factor(xc$variable)
 xc$correction <- ".1"
 xc$correction[grepl(".sp$", xc$variable)] <- ".sp"
 xc$correction.type <- sapply(strsplit(as.character(xc$variable), "\\."), "[", 2)
+xc$sap.hr.ratio <- with(xc, area.naive/hr)
 
 head(xc)
+hist(xc$index)
 xc <- xc[xc$index > -1, ]
 
 ggplot(xc, aes(x = hr, y = index, group = variable)) +
@@ -108,4 +110,11 @@ ggplot(xc, aes(x = num.generated.walkers, y = index, color = correction)) +
   scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
   # geom_jitter(alpha = 0.5) +
+  facet_wrap(~ correction.type)
+
+ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_point() +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
   facet_wrap(~ correction.type)
