@@ -112,9 +112,14 @@ ggplot(xc, aes(x = num.generated.walkers, y = index, color = correction)) +
   # geom_jitter(alpha = 0.5) +
   facet_wrap(~ correction.type)
 
+# bias due to decreasing hr (ratio increases)
 ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   scale_color_brewer(palette = "Set1") +
-  geom_point() +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
   facet_wrap(~ correction.type)
+
+# density plot of p bias
+ggplot(xc, aes(x = as.factor(p), y = p + p.diff)) +
+  theme_bw() +
+  geom_violin()
