@@ -96,30 +96,74 @@ xc$sap.hr.ratio <- with(xc, area.naive/hr)
 
 head(xc)
 hist(xc$index)
-xc <- xc[xc$index > -1, ]
+xc <- xc[xc$index > -0.01, ]
+xc.orig <- xc
+xc <- xc.orig[sample(1:nrow(xc.orig), size = round(nrow(xc.orig)/10)), ]
 
-ggplot(xc, aes(x = hr, y = index, group = variable)) +
+ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
+  theme_bw() +
+  geom_jitter(alpha = 0.5) +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  scale_color_brewer(palette = "Set1") +
+  facet_wrap(~ correction.type)
+ggsave("./figures/gostota glede na razmerje hr_sap.jpg")
+
+ggplot(xc, aes(x = sap.hr.ratio, y = index, group = variable)) +
   theme_bw() +
   geom_point(alpha = 0.5) +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  # facet_grid(correction ~ correction.type)
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
+
+# density plot of p bias
+ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_wrap(~ sessions)
+
+ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_wrap(~ num.generated.walkers)
+# več je vzorcev, bolj točno so ocenjeni parametri
+
+
+#### AIC
+
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC, group = variable)) +
+  theme_bw() +
+  geom_jitter(alpha = 0.5) +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
   facet_wrap(~ correction.type)
 
-ggplot(xc, aes(x = num.generated.walkers, y = index, color = correction)) +
+# correction izgleda, da ne vpliva na dAIC
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC, color = p.diff)) +
   theme_bw() +
-  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.5) +
+  geom_smooth(method = "gam", k = 5) +
+  facet_wrap(~ correction.type)
+
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC, group = variable)) +
+  theme_bw() +
+  geom_point(alpha = 0.5) +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  # geom_jitter(alpha = 0.5) +
   facet_wrap(~ correction.type)
 
 # bias due to decreasing hr (ratio increases)
-ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
   scale_color_brewer(palette = "Set1") +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  geom_violin() +
   facet_wrap(~ correction.type)
 
 # density plot of p bias
-ggplot(xc, aes(x = as.factor(p), y = p + p.diff)) +
+ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
-  geom_violin()
+  geom_violin() +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  facet_wrap(~ sessions)
+
+ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_wrap(~ num.generated.walkers)
