@@ -108,7 +108,7 @@ ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   facet_wrap(~ correction.type)
 ggsave("./figures/gostota glede na razmerje hr_sap.jpg")
 
-ggplot(xc, aes(x = sap.hr.ratio, y = index, group = variable)) +
+ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   geom_point(alpha = 0.5) +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
@@ -120,50 +120,27 @@ ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
   facet_wrap(~ sessions)
+ggsave("./figures/razlika v p glede na simuliran p po stevilu sessionov.jpg")
 
 ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
   facet_wrap(~ num.generated.walkers)
+ggsave("./figures/razlika v p glede na simuliran p po stevilu sim. walkerjev.jpg")
 # več je vzorcev, bolj točno so ocenjeni parametri
 
-
 #### AIC
-
-ggplot(xc, aes(x = sap.hr.ratio, y = dAIC, group = variable)) +
-  theme_bw() +
-  geom_jitter(alpha = 0.5) +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_wrap(~ correction.type)
-
-# correction izgleda, da ne vpliva na dAIC
-ggplot(xc, aes(x = sap.hr.ratio, y = dAIC, color = p.diff)) +
-  theme_bw() +
-  geom_jitter(alpha = 0.5) +
-  geom_smooth(method = "gam", k = 5) +
-  facet_wrap(~ correction.type)
-
-ggplot(xc, aes(x = sap.hr.ratio, y = dAIC, group = variable)) +
-  theme_bw() +
-  geom_point(alpha = 0.5) +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_wrap(~ correction.type)
-
-# bias due to decreasing hr (ratio increases)
 ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
-  scale_color_brewer(palette = "Set1") +
-  geom_violin() +
-  facet_wrap(~ correction.type)
-
-# density plot of p bias
-ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
-  theme_bw() +
-  geom_violin() +
+  geom_jitter(alpha = 0.5) +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_wrap(~ sessions)
+  scale_color_brewer(palette = "Set1") +
+  facet_wrap(~ correction.type)
+ggsave("./figures/dAIC glede na razmerje hr_sap.jpg")
 
-ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
-  geom_violin() +
-  facet_wrap(~ num.generated.walkers)
+  geom_jitter(alpha = 0.5) +
+  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
