@@ -113,7 +113,7 @@ ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   geom_point(alpha = 0.5) +
   scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_grid(num.generated.walkers ~ correction.type)
+  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
 ggsave("./figures/gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
 
 # density plot of p bias
@@ -144,5 +144,10 @@ ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   geom_jitter(alpha = 0.5) +
   scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_grid(num.generated.walkers ~ correction.type)
+  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
 ggsave("./figures/dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
+
+# TODO: kako bi predstavil kater model je boljši, .1 ali .sp?
+# v dAIC se tega ne vidi, ampak se vidi samo razliko, kar je OK, če veš kater model je najboljši
+# ... kar pa ne vem
+# mogoče dodati nov stolpec, kjer bo pisalo kater model je boljši?
