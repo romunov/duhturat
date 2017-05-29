@@ -111,6 +111,7 @@ ggsave("./figures/gostota glede na razmerje hr_sap.jpg")
 ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   geom_point(alpha = 0.5) +
+  scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
@@ -141,6 +142,7 @@ ggsave("./figures/dAIC glede na razmerje hr_sap.jpg")
 ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
   geom_jitter(alpha = 0.5) +
+  scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
