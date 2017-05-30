@@ -100,54 +100,63 @@ xc <- xc[xc$index > -0.01, ]
 xc.orig <- xc
 xc <- xc.orig[sample(1:nrow(xc.orig), size = round(nrow(xc.orig)/10)), ]
 
-ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
-  theme_bw() +
-  geom_jitter(alpha = 0.5) +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  scale_color_brewer(palette = "Set1") +
-  facet_wrap(~ correction.type)
-ggsave("./figures/gostota glede na razmerje hr_sap.jpg")
+# ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
+#   theme_bw() +
+#   geom_jitter(alpha = 0.5, shape = 1) +
+#   geom_smooth(aes(color = correction), method = "gam", k = 5) +
+#   scale_color_brewer(palette = "Set1") +
+#   facet_wrap(~ correction.type)
+# ggsave("./figures/gostota glede na razmerje hr_sap.jpg")
 
 ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
-  geom_point(alpha = 0.5) +
+  geom_jitter(alpha = 0.5, shape = 1) +
   scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
+  facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
 
 # density plot of p bias
 ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
-  facet_wrap(~ sessions)
-ggsave("./figures/razlika v p glede na simuliran p po stevilu sessionov.jpg")
+  facet_grid(num.generated.walkers ~ sessions)
+ggsave("./figures/razlika v p glede na simuliran p po stevilu sessionov in st. gen. walk.jpg")
 
 ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
-  facet_wrap(~ num.generated.walkers)
-ggsave("./figures/razlika v p glede na simuliran p po stevilu sim. walkerjev.jpg")
-# več je vzorcev, bolj točno so ocenjeni parametri
+  facet_grid(correction.type ~ sessions)
+ggsave("./figures/razlika v p glede na simuliran p po stevilu sessionov in popravek.jpg")
+
+ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/razlika v p glede na simuliran p po stevilu sim. walkerjev in modelu.jpg")
+# več je vzorcev, bolj točno so ocenjeni parametri?
 
 #### AIC
-ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
-  theme_bw() +
-  geom_jitter(alpha = 0.5) +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  scale_color_brewer(palette = "Set1") +
-  facet_wrap(~ correction.type)
-ggsave("./figures/dAIC glede na razmerje hr_sap.jpg")
+# ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
+#   theme_bw() +
+#   geom_jitter(alpha = 0.5) +
+#   geom_smooth(aes(color = correction), method = "gam", k = 5) +
+#   scale_color_brewer(palette = "Set1") +
+#   facet_wrap(~ correction.type)
+# ggsave("./figures/dAIC glede na razmerje hr_sap.jpg")
 
 ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
-  geom_jitter(alpha = 0.5) +
+  geom_jitter(alpha = 0.5, shape = 1) +
   scale_color_brewer(palette = "Set1") +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
+  geom_smooth(aes(color = correction), method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
 
-# TODO: kako bi predstavil kater model je boljši, .1 ali .sp?
-# v dAIC se tega ne vidi, ampak se vidi samo razliko, kar je OK, če veš kater model je najboljši
-# ... kar pa ne vem
-# mogoče dodati nov stolpec, kjer bo pisalo kater model je boljši?
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
+  theme_bw() +
+  geom_jitter(alpha = 0.5, shape = 1) +
+  scale_color_brewer(palette = "Set1") +
+  geom_smooth(aes(color = better.model), method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.jpg")

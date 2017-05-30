@@ -81,7 +81,7 @@ calculateIndices <- function(x, xy = NULL) {
   dens.99.sp <- size.sp / area.99
   
   # calculate index ((D - D^)/D) * 100
-  calIn <- function(Dh, D = dens.true) ((D - Dh)/D) * 100
+  # calIn <- function(Dh, D = dens.true) ((D - Dh)/D) * 100
   calIn <- function(Dh, D = dens.true) ((D-Dh))
   
   dens.naive.1 <- calIn(Dh = dens.naive.1)
