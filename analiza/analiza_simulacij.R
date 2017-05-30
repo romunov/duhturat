@@ -31,36 +31,115 @@ save(anal.e, file = "anal.e.RData")
 
 # ======================== END VANTAJM =======================================================
 
-rm(list = ls())
+# ********************************************** empirical *******************************************
 load("anal.e.RData")
-
 ae <- anal.e
+rm(anal.e)
 
-# for each simulation, check list of 4 and do manipulations to
-# append input parameters with desired statistics
+set.seed(357)
+xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
+                 prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
+                 num.walkers = c(100, 200, 400, 800, 1000),
+                 sessions = 4:7
+)
 
-ane <- sapply(ae, FUN = calculateIndices, simplify = FALSE)
+xy$seed <- (1:nrow(xy)) # empirical
+ae.seed <- data.frame(seed = sapply(ae, FUN = function(x) x$simulation.pars$seed))
+ae.seed <- merge(xy, ae.seed)
 
-ane <- do.call(rbind, ane)
-rownames(ane) <- NULL
+aee <- sapply(ae, FUN = calculateIndices, xy = ae.seed, simplify = FALSE)
+aee <- do.call(rbind, aee)
+rownames(aee) <- NULL
 
-xy <- gather(ane, key = variable, value = index, starts_with("dens."))
-xy$variable <- factor(xy$variable)
+xe <- gather(aee, key = variable, value = index, starts_with("dens."))
+rownames(xe) <- NULL
+xe$variable <- factor(xe$variable)
 
-# insert some identifications
-xy$correction <- ".1"
-xy$correction[grepl(".sp$", xy$variable)] <- ".sp"
-xy$correction.type <- sapply(strsplit(as.character(xy$variable), "\\."), "[", 2)
+xe$correction <- ".1"
+xe$correction[grepl(".sp$", xe$variable)] <- ".sp"
+xe$correction.type <- sapply(strsplit(as.character(xe$variable), "\\."), "[", 2)
+xe$sap.hr.ratio <- with(xe, area.naive/hr)
 
-xy <- xy[xy$index > -1e+10, ]
-xy1 <- xy[sample(1:nrow(xy), size = 1000), ]
+xe <- xe[xe$index > -2.0e+07, ]
+xe.orig <- xe
+xe <- xe.orig[sample(1:nrow(xe.orig), size = round(nrow(xe.orig)/10)), ]
 
-ggplot(xy1, aes(x = hr, y = index, group = variable)) +
+# ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
+#   theme_bw() +
+#   geom_jitter(alpha = 0.5, shape = 1) +
+#   geom_smooth(aes(color = correction), method = "loess") +
+#   scale_color_brewer(palette = "Set1") +
+#   facet_wrap(~ correction.type)
+# ggsave("./figures/E-gostota glede na razmerje hr_sap.jpg")
+
+ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
-  geom_point(alpha = 0.5) +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
-  facet_wrap(~ correction.type)
-  # facet_grid(correction ~ correction.type)
+  geom_jitter(alpha = 0.5, shape = 1) +
+  scale_color_brewer(palette = "Set1") +
+  geom_smooth(aes(color = correction), method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
+
+# density plot of p bias
+ggplot(xe, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_grid(num.generated.walkers ~ sessions)
+ggsave("./figures/E-razlika v p glede na simuliran p po stevilu sessionov in st. gen. walk.jpg")
+
+ggplot(xe, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_grid(correction.type ~ sessions)
+ggsave("./figures/E-razlika v p glede na simuliran p po stevilu sessionov in popravek.jpg")
+
+ggplot(xe, aes(x = as.factor(p), y = p.diff)) +
+  theme_bw() +
+  geom_violin() +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-razlika v p glede na simuliran p po stevilu sim. walkerjev in modelu.jpg")
+# več je vzorcev, bolj točno so ocenjeni parametri?
+
+#### AIC
+# ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
+#   theme_bw() +
+#   geom_jitter(alpha = 0.5) +
+#   geom_smooth(aes(color = correction), method = "gam", k = 5) +
+#   scale_color_brewer(palette = "Set1") +
+#   facet_wrap(~ correction.type)
+# ggsave("./figures/E-dAIC glede na razmerje hr_sap.jpg")
+
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
+  theme_bw() +
+  geom_jitter(alpha = 0.5, shape = 1) +
+  scale_color_brewer(palette = "Set1") +
+  geom_smooth(aes(color = correction), method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
+
+ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
+  theme_bw() +
+  geom_jitter(alpha = 0.5, shape = 1) +
+  scale_color_brewer(palette = "Set1") +
+  geom_smooth(aes(color = better.model), method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.jpg")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -87,6 +166,7 @@ ann <- do.call(rbind, ann)
 rownames(ann) <- NULL
 
 xc <- gather(ann, key = variable, value = index, starts_with("dens."))
+rownames(xc) <- NULL
 xc$variable <- factor(xc$variable)
 
 xc$correction <- ".1"
@@ -103,37 +183,37 @@ xc <- xc.orig[sample(1:nrow(xc.orig), size = round(nrow(xc.orig)/10)), ]
 # ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
 #   theme_bw() +
 #   geom_jitter(alpha = 0.5, shape = 1) +
-#   geom_smooth(aes(color = correction), method = "gam", k = 5) +
+#   geom_smooth(aes(color = correction), method = "loess", se = FALSE) +
 #   scale_color_brewer(palette = "Set1") +
 #   facet_wrap(~ correction.type)
-# ggsave("./figures/gostota glede na razmerje hr_sap.jpg")
+# ggsave("./figures/N-gostota glede na razmerje hr_sap.jpg")
 
 ggplot(xc, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   geom_jitter(alpha = 0.5, shape = 1) +
   scale_color_brewer(palette = "Set1") +
-  geom_smooth(aes(color = correction), method = "gam", k = 5) +
+  geom_smooth(aes(color = correction), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
+ggsave("./figures/N-gostota gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
 
 # density plot of p bias
 ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
   facet_grid(num.generated.walkers ~ sessions)
-ggsave("./figures/razlika v p glede na simuliran p po stevilu sessionov in st. gen. walk.jpg")
+ggsave("./figures/N-razlika v p glede na simuliran p po stevilu sessionov in st. gen. walk.jpg")
 
 ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
   facet_grid(correction.type ~ sessions)
-ggsave("./figures/razlika v p glede na simuliran p po stevilu sessionov in popravek.jpg")
+ggsave("./figures/N-razlika v p glede na simuliran p po stevilu sessionov in popravek.jpg")
 
 ggplot(xc, aes(x = as.factor(p), y = p.diff)) +
   theme_bw() +
   geom_violin() +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/razlika v p glede na simuliran p po stevilu sim. walkerjev in modelu.jpg")
+ggsave("./figures/N-razlika v p glede na simuliran p po stevilu sim. walkerjev in modelu.jpg")
 # več je vzorcev, bolj točno so ocenjeni parametri?
 
 #### AIC
@@ -151,7 +231,7 @@ ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = correction), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
+ggsave("./figures/N-dAIC gled na razmerje hr_sap po correction type in st. gen.walk.jpg")
 
 ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
@@ -159,4 +239,4 @@ ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   scale_color_brewer(palette = "Set1") +
   geom_smooth(aes(color = better.model), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.jpg")
+ggsave("./figures/N-dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.jpg")
