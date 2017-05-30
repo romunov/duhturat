@@ -20,7 +20,9 @@ calculateIndices <- function(x, xy = NULL) {
   p.target.sp <- x$simulation.pars$capture_prob - x$simulation.pars$p.sp
   p <- x$simulation.pars$capture_prob
   
-  dAIC <- x$deltaAIC # negative value means .sp bigger than .1
+  # dAIC <- x$deltaAIC # negative value means .sp bigger than .1
+  better.model <- ifelse(x$real.fun.pars$AICc[1] > x$real.fun.pars$AICc[2], ".1", ".sp")
+  dAIC <- x$deltaAIC
   area <- x$simulation.pars$sampling_area_r
   
   # naive sap area
@@ -108,7 +110,8 @@ calculateIndices <- function(x, xy = NULL) {
                     size.est.diff, # difference in estimated population sizes
                     p.diff, # difference in estimated p
                     p, # true p
-                    dAIC, # difference in AIC
+                    better.model, # which model performs better
+                    dAIC, # difference in AICc between models
                     area.naive, # area of sap
                     area.hr, # area of sap enlarged for home range
                     area.effect, # area of sap enlarged for max pairwise distance recorded
