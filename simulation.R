@@ -97,6 +97,7 @@ simulation <- function(
   pars$num.walker <- num.walkers
   pars$num.boots <- num.boots
   pars$sim.dist <- sim.dist
+  pars$SD <- SD
   
   ## Ok, things are ready now. Time to generate walkers and calculate their
   ## contribution area.
