@@ -2,12 +2,13 @@
 library(ggplot2)
 library(tidyr)
 library(dplyr)
+library(capwire)
 
 source("../markAnalysis.R")
 source("../readRunModels.R")
 source("../getQs.R")
 source("../calcNormal2D.R")
-source("../calculateIndices.R")
+source("calculateIndices.R")
 
 # ======================== VANTAJM ===========================================================
 library(RMark)
@@ -27,7 +28,7 @@ anal.n <- sapply(data.n, FUN = markAnalysis,
 
 anal.e <- sapply(data.e, FUN = markAnalysis,
                  wd.model = "./mark_intermediate/", simplify = FALSE)
-save(anal.e, file = "anal.e.RData")
+# save(anal.e, file = "anal.e.RData")
 
 # ======================== END VANTAJM =======================================================
 
@@ -36,18 +37,8 @@ load("anal.e.RData")
 ae <- anal.e
 rm(anal.e)
 
-set.seed(357)
-xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
-                 prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
-                 num.walkers = c(100, 200, 400, 800, 1000),
-                 sessions = 4:7
-)
-
-xy$seed <- (1:nrow(xy)) # empirical
-ae.seed <- data.frame(seed = sapply(ae, FUN = function(x) x$simulation.pars$seed))
-ae.seed <- merge(xy, ae.seed)
-
-aee <- sapply(ae, FUN = calculateIndices, xy = ae.seed, simplify = FALSE)
+lf <- list.files("../data/empirical/", pattern = ".inp", full.names = TRUE)
+aee <- sapply(ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
 aee <- do.call(rbind, aee)
 rownames(aee) <- NULL
 
@@ -148,20 +139,8 @@ load("anal.n.RData")
 an <- anal.n
 rm(anal.n)
 
-an.seed <- data.frame(seed = apply(an, MARGIN = 2, FUN = function(x) x$simulation.pars$seed))
-
-set.seed(9) # for normal walkers
-xy <- data.frame(SD = rep(seq(from = 20, to = 50, by = 5), each = 10*4*6*5),
-                 prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
-                 num.walkers = c(100, 200, 400, 800, 1000),
-                 sessions = 4:7
-)
-
-xy$seed <- (1:nrow(xy)) + 8400 # normal
-
-an.seed <- merge(xy, an.seed)
-
-ann <- apply(an, MARGIN = 2, FUN = calculateIndices, xy = an.seed)
+lf <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
+ann <- sapply(ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
 ann <- do.call(rbind, ann)
 rownames(ann) <- NULL
 
@@ -240,3 +219,9 @@ ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   geom_smooth(aes(color = better.model), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/N-dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.jpg")
+
+
+
+# ******* CAPWIRE ********
+library(capwire)
+

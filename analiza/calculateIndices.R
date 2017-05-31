@@ -1,16 +1,25 @@
 #' Extract results from markAnalysis()
 #' 
 #' @param x List. As returned by the markAnalysis() function.
-#' @param fun Function to extract quantiles. Can be getQcustom and getQnormal.
+#' @param lf List of capture history/metadata files as produced by writeINP() function.
 #' @param ... Parameters passed to fun.
 
-calculateIndices <- function(x, xy = NULL) {
+calculateIndices <- function(x, lf) {
+  # calculate TIRM model by Miller 2005 and add it to the mix
+  mrk <- lf[grepl(x$simulation.pars$seed, lf)]
+  ch <- readMark(mrk)
+  info <- read.table(mrk, skip = 3, nrows = 1, header = TRUE)
+  ch$count <- sapply(strsplit(ch$ch, ""), FUN = function(y) sum(as.numeric(y)))
   
+  mdl <- fitTirm(data = buildClassTable(ch$count), max.pop = info$generated_walkers)
+  info$N.tirm <- mdl$ml.pop.size
+  x$simulation.pars <- info
   
   # add population size estimates and the difference
   size.1 <- x$est.der.pars$N.Population.Size.estimate[1]
   size.sp <- x$est.der.pars$N.Population.Size.estimate[2]
   size.est.diff <- diff(x$est.der.pars$N.Population.Size.estimate)
+  size.tirm <- x$simulation.pars$N.tirm
   
   # add capture probability esimates and the difference
   p.1 <- x$real.fun.pars$estimate[1]
@@ -42,7 +51,7 @@ calculateIndices <- function(x, xy = NULL) {
   }
   
   if (x$simulation.pars$sim.dist == "normal") {
-    SD <- xy[xy$seed %in% x$simulation.pars$seed, "SD"]
+    SD <- x$simulation.pars$SD # preveir, da dela
     qs <- getQnormal(mu = 0, sd = SD)
   }
   
@@ -69,6 +78,7 @@ calculateIndices <- function(x, xy = NULL) {
   dens.90.1 <- size.1 / area.90
   dens.95.1 <- size.1 / area.95
   dens.99.1 <- size.1 / area.99
+  
   dens.naive.sp <- size.sp / area.naive
   dens.hr.sp <- size.sp / area.hr
   dens.effect.sp <- size.sp / area.effect
@@ -79,6 +89,17 @@ calculateIndices <- function(x, xy = NULL) {
   dens.90.sp <- size.sp / area.90
   dens.95.sp <- size.sp / area.95
   dens.99.sp <- size.sp / area.99
+  
+  dens.naive.tirm <- size.tirm / area.naive
+  dens.hr.tirm <- size.tirm / area.hr
+  dens.effect.tirm <- size.tirm / area.effect
+  dens.50.tirm <- size.tirm / area.50
+  dens.60.tirm <- size.tirm / area.60
+  dens.70.tirm <- size.tirm / area.70
+  dens.80.tirm <- size.tirm / area.80
+  dens.90.tirm <- size.tirm / area.90
+  dens.95.tirm <- size.tirm / area.95
+  dens.99.tirm <- size.tirm / area.99
   
   # calculate index ((D - D^)/D) * 100
   # calIn <- function(Dh, D = dens.true) ((D - Dh)/D) * 100
@@ -106,6 +127,17 @@ calculateIndices <- function(x, xy = NULL) {
   dens.95.sp <- calIn(dens.95.sp)
   dens.99.sp <- calIn(dens.99.sp)
   
+  dens.naive.tirm <- calIn(dens.naive.tirm)
+  dens.hr.tirm <- calIn(dens.hr.tirm)
+  dens.effect.tirm <- calIn(dens.effect.tirm)
+  dens.50.tirm <- calIn(dens.50.tirm)
+  dens.60.tirm <- calIn(dens.60.tirm)
+  dens.70.tirm <- calIn(dens.70.tirm)
+  dens.80.tirm <- calIn(dens.80.tirm)
+  dens.90.tirm <- calIn(dens.90.tirm)
+  dens.95.tirm <- calIn(dens.95.tirm)
+  dens.99.tirm <- calIn(dens.99.tirm)
+  
   out <- data.frame(size.1, size.sp, # estimated sizes
                     size.est.diff, # difference in estimated population sizes
                     p.diff, # difference in estimated p
@@ -126,7 +158,9 @@ calculateIndices <- function(x, xy = NULL) {
                     dens.naive.1, dens.hr.1, dens.effect.1, dens.50.1, dens.60.1, dens.70.1, dens.80.1,
                     dens.90.1, dens.95.1, dens.99.1,
                     dens.naive.sp, dens.hr.sp, dens.effect.sp, dens.50.sp, dens.60.sp, dens.70.sp, dens.80.sp,
-                    dens.90.sp, dens.95.sp, dens.99.sp
+                    dens.90.sp, dens.95.sp, dens.99.sp,
+                    dens.naive.tirm, dens.hr.tirm, dens.effect.tirm, dens.50.tirm, dens.60.tirm, dens.70.tirm,
+                    dens.80.tirm, dens.90.tirm, dens.95.tirm, dens.99.tirm
   )
   
   rownames(out) <- NULL
