@@ -140,7 +140,7 @@ an <- anal.n
 rm(anal.n)
 
 lf <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
-ann <- sapply(ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
+ann <- apply(an, MARGIN = 2, FUN = calculateIndices, lf = lf)
 ann <- do.call(rbind, ann)
 rownames(ann) <- NULL
 

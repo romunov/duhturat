@@ -6,6 +6,8 @@
 
 calculateIndices <- function(x, lf) {
   # calculate TIRM model by Miller 2005 and add it to the mix
+  SD <- x$simulation.pars$SD
+  
   mrk <- lf[grepl(x$simulation.pars$seed, lf)]
   ch <- readMark(mrk)
   info <- read.table(mrk, skip = 3, nrows = 1, header = TRUE)
@@ -51,7 +53,6 @@ calculateIndices <- function(x, lf) {
   }
   
   if (x$simulation.pars$sim.dist == "normal") {
-    SD <- x$simulation.pars$SD # preveir, da dela
     qs <- getQnormal(mu = 0, sd = SD)
   }
   
