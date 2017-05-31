@@ -42,7 +42,8 @@ aee <- sapply(ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
 aee <- do.call(rbind, aee)
 rownames(aee) <- NULL
 
-save(aee, file = "aee.RData")
+# save(aee, file = "aee.RData")
+load("aee.RData")
 
 xe <- gather(aee, key = variable, value = index, starts_with("dens."))
 rownames(xe) <- NULL
@@ -50,6 +51,7 @@ xe$variable <- factor(xe$variable)
 
 xe$correction <- ".1"
 xe$correction[grepl(".sp$", xe$variable)] <- ".sp"
+xe$correction[grepl(".tirm", xe$variable)] <- ".tirm"
 xe$correction.type <- sapply(strsplit(as.character(xe$variable), "\\."), "[", 2)
 xe$sap.hr.ratio <- with(xe, area.naive/hr)
 
@@ -153,6 +155,7 @@ xc$variable <- factor(xc$variable)
 
 xc$correction <- ".1"
 xc$correction[grepl(".sp$", xc$variable)] <- ".sp"
+xc$correction[grepl(".tirm", xc$variable)] <- ".tirm"
 xc$correction.type <- sapply(strsplit(as.character(xc$variable), "\\."), "[", 2)
 xc$sap.hr.ratio <- with(xc, area.naive/hr)
 
@@ -222,9 +225,3 @@ ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   geom_smooth(aes(color = better.model), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/N-dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.jpg")
-
-
-
-# ******* CAPWIRE ********
-library(capwire)
-
