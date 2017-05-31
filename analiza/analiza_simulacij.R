@@ -42,6 +42,8 @@ aee <- sapply(ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
 aee <- do.call(rbind, aee)
 rownames(aee) <- NULL
 
+save(aee, file = "aee.RData")
+
 xe <- gather(aee, key = variable, value = index, starts_with("dens."))
 rownames(xe) <- NULL
 xe$variable <- factor(xe$variable)
@@ -143,6 +145,7 @@ lf <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
 ann <- apply(an, MARGIN = 2, FUN = calculateIndices, lf = lf)
 ann <- do.call(rbind, ann)
 rownames(ann) <- NULL
+save(ann, file = "ann.RData")
 
 xc <- gather(ann, key = variable, value = index, starts_with("dens."))
 rownames(xc) <- NULL
