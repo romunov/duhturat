@@ -27,9 +27,10 @@ calculateIndices <- function(x, lf) {
   p.1 <- x$real.fun.pars$estimate[1]
   p.sp <- x$real.fun.pars$estimate[2]
   p.diff <- diff(x$real.fun.pars$estimate)
-  p.target.1 <- x$simulation.pars$capture_prob - x$simulation.pars$p.1
-  p.target.sp <- x$simulation.pars$capture_prob - x$simulation.pars$p.sp
-  p <- x$simulation.pars$capture_prob
+  true.p <- x$simulation.pars$capture_prob
+  p <- x$simulation.pars$capture_prob - x$real.fun.pars$estimate
+  p.target.1 <- p[grepl("~1", x$real.fun.pars$model.name)]
+  p.target.sp <- p[grepl("~sp", x$real.fun.pars$model.name)]
   
   # dAIC <- x$deltaAIC # negative value means .sp bigger than .1
   better.model <- ifelse(x$real.fun.pars$AICc[1] > x$real.fun.pars$AICc[2], ".1", ".sp")
@@ -141,8 +142,10 @@ calculateIndices <- function(x, lf) {
   
   out <- data.frame(size.1, size.sp, # estimated sizes
                     size.est.diff, # difference in estimated population sizes
+                    true.p, # true p
+                    p.target.1, # bias in estimated p for ~1
+                    p.target.sp, # bias in estimated p for ~sp
                     p.diff, # difference in estimated p
-                    p, # true p
                     better.model, # which model performs better
                     dAIC, # difference in AICc between models
                     area.naive, # area of sap
