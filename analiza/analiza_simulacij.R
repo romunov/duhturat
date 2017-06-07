@@ -4,6 +4,8 @@ library(tidyr)
 library(dplyr)
 library(capwire)
 
+library(parallel) # only if relcalculating aee/ann
+
 source("../markAnalysis.R")
 source("../readRunModels.R")
 source("../getQs.R")
@@ -36,9 +38,16 @@ anal.e <- sapply(data.e, FUN = markAnalysis,
 # load("anal.e.RData")
 # ae <- anal.e
 # rm(anal.e)
+
+# cl <- makeCluster(4)
+# clusterEvalQ(cl, source("../calcNormal2D.R"))
+# clusterEvalQ(cl, source("../getQs.R"))
+# clusterEvalQ(cl, source("../readRunModels.R"))
+# clusterEvalQ(cl, library(capwire))
 # 
 # lf <- list.files("../data/empirical/", pattern = ".inp", full.names = TRUE)
-# aee <- sapply(ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
+# aee <- parSapply(cl = cl, X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
+# # aee <- sapply(X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
 # aee <- do.call(rbind, aee)
 # rownames(aee) <- NULL
 
@@ -62,12 +71,21 @@ xe <- xe[xe$index > -2.0e+06, ]
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
-  theme(legend.position = "top") +
+  theme(legend.position = "top", axis.text.x = element_text(angle = 90)) +
   geom_jitter(alpha = 0.5, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = FALSE) +
   scale_color_brewer(palette = "Set1") +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png")
+
+ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
+  theme_bw() +
+  theme(legend.position = "top", axis.text.x = element_text(angle = 90)) +
+  geom_jitter(alpha = 0.5, shape = 1) +
+  geom_smooth(aes(color = model), method = "loess", se = FALSE) +
+  scale_color_brewer(palette = "Set1") +
+  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
+ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk free_y.png")
 
 # density plot of p bias, do not include tirm model since we don't have p for it
 ggplot(droplevels(xe[!(xe$model %in% ".tirm"), ]), aes(x = as.factor(p), y = p.diff, fill = model)) +
@@ -84,8 +102,26 @@ ggplot(droplevels(xe[!(xe$model %in% ".tirm"), ]), aes(x = as.factor(p), y = p.d
   scale_color_brewer(palette = "Set1") +
   theme(legend.position = "top") +
   geom_violin() +
+  facet_grid(num.generated.walkers ~ sessions, scales = "free_y")
+ggsave("./figures/E-2.razlika v p glede na simuliran p po stevilu sessionov in st. gen. walk free_y.png", 
+       width = 25, height = 18, units = "cm")
+
+ggplot(droplevels(xe[!(xe$model %in% ".tirm"), ]), aes(x = as.factor(p), y = p.diff, fill = model)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "top") +
+  geom_violin() +
   facet_grid(correction.type ~ sessions)
 ggsave("./figures/E-3.razlika v p glede na simuliran p po stevilu sessionov in popravek.png",
+       width = 25, height = 18, units = "cm")
+
+ggplot(droplevels(xe[!(xe$model %in% ".tirm"), ]), aes(x = as.factor(p), y = p.diff, fill = model)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  theme(legend.position = "top") +
+  geom_violin() +
+  facet_grid(correction.type ~ sessions, scales = "free_y")
+ggsave("./figures/E-3.razlika v p glede na simuliran p po stevilu sessionov in popravek free_y.png",
        width = 25, height = 18, units = "cm")
 
 ggplot(droplevels(xe[!(xe$model %in% ".tirm"), ]), aes(x = as.factor(p), y = p.diff, fill = model)) +
@@ -129,8 +165,15 @@ ggsave("./figures/E-6.dAIC glede na razmerje hr_sap po correction type in st.gen
 # load("anal.n.RData")
 # an <- anal.n
 # rm(anal.n)
+
+# cl <- makeCluster(4)
+# clusterEvalQ(cl, source("../calcNormal2D.R"))
+# clusterEvalQ(cl, source("../getQs.R"))
+# clusterEvalQ(cl, source("../readRunModels.R"))
+# clusterEvalQ(cl, library(capwire))
 # 
 # lf <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
+# ann <- parApply(cl = cl, X = an, MARGIN = 2, FUN = calculateIndices, lf = lf)
 # ann <- apply(an, MARGIN = 2, FUN = calculateIndices, lf = lf)
 # ann <- do.call(rbind, ann)
 # rownames(ann) <- NULL
@@ -215,4 +258,4 @@ ggplot(xc, aes(x = sap.hr.ratio, y = dAIC)) +
   geom_jitter(alpha = 0.5, shape = 1) +
   geom_smooth(aes(color = better.model), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figuresNE-6.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png")
+ggsave("./figures/N-6.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png")
