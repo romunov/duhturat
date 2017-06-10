@@ -84,9 +84,16 @@ ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/E-0 pristranskost p.1 in p.sp glede na st. walkerjev in correction type")
+ggsave("./figures/E-0 pristranskost p.1 in p.sp glede na st. walkerjev in correction type.png")
 
-summary(glm(p.val ~ true.p * p.var, data = xep))
+ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ .)
+ggsave("./figures/E0- pristranskost p glede na model in st. generiranih walkerjev.png")
+summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xep))
 
 # xe.orig <- xe
 # xe <- xe.orig
