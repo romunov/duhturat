@@ -65,11 +65,12 @@ xe$correction.type <- sapply(strsplit(as.character(xe$variable), "\\."), "[", 2)
 xe$sap.hr.ratio <- with(xe, area.naive/hr)
 
 # first examine p
-xep <- gather(aee, key = p.var, value = p.val, p.target.1, p.target.sp)
-xep <- gather(xe[, c("true.p", "p.target.1", "p.target.sp", "num.generated.walkers", "variable", "index")],
+xep <- gather(xe[, c("true.p", "p.target.1", "p.target.sp", "num.generated.walkers", "variable", "index", "sap.hr.ratio")],
                  key = p.var, value = p.val, p.target.1, p.target.sp)
 xep$correction.type <- gsub("dens\\.(.*)\\.(.*)$", "\\1", x = xep$variable)
 xep <- xep[!duplicated(xep[, c("p.val", "p.var", "num.generated.walkers", "true.p", "correction.type")]), ]
+# xep.orig <- xep
+xep <- xep.orig[sample(1:nrow(xep.orig), size = round(0.2 * nrow(xep.orig))), ]
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
@@ -92,8 +93,24 @@ ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ .)
-ggsave("./figures/E0- pristranskost p glede na model in st. generiranih walkerjev.png")
+ggsave("./figures/E-0 pristranskost p glede na model in st. generiranih walkerjev.png")
 summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xep))
+
+ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(. ~ correction.type)
+ggsave("./figures/E0- pristranskost p glede na model in tip popravka.png")
+
+ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-0 pristranskot p glede na sap.hr ratio po st. gen. walkerjih in popravku.png")
 
 # xe.orig <- xe
 # xe <- xe.orig
@@ -221,6 +238,55 @@ xc$model[grepl(".tirm", xc$variable)] <- ".tirm"
 xc$correction.type <- sapply(strsplit(as.character(xc$variable), "\\."), "[", 2)
 xc$sap.hr.ratio <- with(xc, area.naive/hr)
 
+####
+xnp <- gather(xc[, c("true.p", "p.target.1", "p.target.sp", "num.generated.walkers", "variable", "index", "sap.hr.ratio")],
+              key = p.var, value = p.val, p.target.1, p.target.sp)
+xnp$correction.type <- gsub("dens\\.(.*)\\.(.*)$", "\\1", x = xnp$variable)
+xnp <- xnp[!duplicated(xnp[, c("p.val", "p.var", "num.generated.walkers", "true.p", "correction.type")]), ]
+# xnp.orig <- xnp
+xnp <- xnp.orig[sample(1:nrow(xnp.orig), size = round(0.2 * nrow(xnp))), ]
+
+ggplot(xnp, aes(x = true.p, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE)
+ggsave("./figures/N-0 pristranskost .1 in .sp ocene ulovljivosti.png")
+
+ggplot(xnp, aes(x = true.p, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/N-0 pristranskost p.1 in p.sp glede na st. walkerjev in correction type.png")
+
+ggplot(xnp, aes(x = true.p, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ .)
+ggsave("./figures/N-0 pristranskost p glede na model in st. generiranih walkerjev.png")
+summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xnp))
+
+ggplot(xnp, aes(x = true.p, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(. ~ correction.type)
+ggsave("./figures/N0- pristranskost p glede na model in tip popravka.png")
+
+ggplot(xnp, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/N-0 pristranskot p glede na sap.hr ratio po st. gen. walkerjih in popravku.png")
+
+########
 # xc.orig <- xc
 # xc <- xc.orig
 xc <- xc.orig[sample(1:nrow(xc.orig), size = round(nrow(xc.orig)/10)), ]
