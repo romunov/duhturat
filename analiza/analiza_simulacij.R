@@ -68,15 +68,13 @@ xe$sap.hr.ratio <- with(xe, area.naive/hr)
 xep <- gather(aee, key = p.var, value = p.val, p.target.1, p.target.sp)
 xep <- gather(xe[, c("true.p", "p.target.1", "p.target.sp", "num.generated.walkers", "variable", "index")],
                  key = p.var, value = p.val, p.target.1, p.target.sp)
-xep$correction.type <- gsub("dens\\.naive(.*)$", "\\1", x = xep$variable)
-xep$variable <- NULL
-xep$index <- NULL
-xep <- xep[!duplicated(xep), ]
+xep$correction.type <- gsub("dens\\.(.*)\\.(.*)$", "\\1", x = xep$variable)
+xep <- xep[!duplicated(xep[, c("p.val", "p.var", "num.generated.walkers", "true.p", "correction.type")]), ]
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
   scale_color_brewer(palette = "Set1") +
-  # geom_jitter(alpha = 0.1) +
+  geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE)
 ggsave("./figures/E-0 pristranskost .1 in .sp ocene ulovljivosti.png")
 
@@ -86,6 +84,7 @@ ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-0 pristranskost p.1 in p.sp glede na st. walkerjev in correction type")
 
 summary(glm(p.val ~ true.p * p.var, data = xep))
 
