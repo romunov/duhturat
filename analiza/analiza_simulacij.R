@@ -38,7 +38,7 @@ anal.e <- sapply(data.e, FUN = markAnalysis,
 # load("anal.e.RData")
 # ae <- anal.e
 # rm(anal.e)
-
+# 
 # cl <- makeCluster(4)
 # clusterEvalQ(cl, source("../calcNormal2D.R"))
 # clusterEvalQ(cl, source("../getQs.R"))
@@ -50,9 +50,9 @@ anal.e <- sapply(data.e, FUN = markAnalysis,
 # # aee <- sapply(X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
 # aee <- do.call(rbind, aee)
 # rownames(aee) <- NULL
-
+# 
 # save(aee, file = "aee.RData")
-load("aee.RData")
+load("aee - D-Dh.RData")
 
 xe <- gather(aee, key = variable, value = index, starts_with("dens."))
 rownames(xe) <- NULL
@@ -136,11 +136,23 @@ ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
   geom_smooth(method = "loess", se = FALSE) +
   facet_grid(sessions ~ correction.type)
 ggsave("./figures/E-0h pristranskost p glede sap.hr razmerje glede na model.png")
+summary(glm(p.val ~ sap.hr.ratio * sessions * p.var, data = xep))
+
+ggplot(xep, aes(x = sap.hr.ratio, y = p.val)) +
+  theme_bw() +
+  scale_color_brewer(palette = "Set1") +
+  geom_jitter(alpha = 0.1) +
+  geom_smooth(aes(color = sessions), method = "loess", se = FALSE) +
+  facet_grid(correction.type ~ .)
+ggsave("./figures/E-0i pristranskost p glede na sap.hr.ratio in glede na popravek brez sessions.png",
+       units = "mm", width = 100, height = 250)
+
 # analyse density
-# xe.orig <- xe
-# xe <- xe.orig
+xe.orig <- xe
+xe <- xe.orig
 xe <- xe.orig[sample(1:nrow(xe.orig), size = round(nrow(xe.orig)/10)), ]
-xe <- xe[xe$index > -2.0e+06, ]
+xe <- xe[xe$index > -2.0e+06, ] # D-Dh
+# xe <- xe[xe$index > -20, ]
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
@@ -150,6 +162,16 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   scale_color_brewer(palette = "Set1") +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png")
+
+
+ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
+  theme_bw() +
+  theme(legend.position = "top", axis.text.x = element_text(angle = 90)) +
+  geom_jitter(alpha = 0.5, shape = 1) +
+  geom_smooth(aes(color = model), method = "loess", se = FALSE) +
+  scale_color_brewer(palette = "Set1") +
+  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
+ggsave("./figures/E-1b.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png")
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
