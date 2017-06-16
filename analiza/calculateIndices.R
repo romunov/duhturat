@@ -66,7 +66,8 @@ calculateIndices <- function(x, lf) {
   area.99 <- pi * (area + qs["99%"])^2
   
   # true density
-  dens.true <- pi * x$simulation.pars$area_size^2
+  # dens.true <- pi * x$simulation.pars$area_size^2
+  dens.true <- pi * (x$home.range * 4)^2 # see populateWorld, line 22
   dens.true <- x$simulation.pars$generated_walkers / dens.true
   
   # calculate density given (enlarged) sampling area
