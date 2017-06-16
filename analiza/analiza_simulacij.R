@@ -12,6 +12,7 @@ source("../getQs.R")
 source("../calcNormal2D.R")
 source("calculateIndices.R")
 
+if (FALSE) {
 # ======================== VANTAJM ===========================================================
 library(RMark)
 
@@ -33,12 +34,13 @@ anal.e <- sapply(data.e, FUN = markAnalysis,
 # save(anal.e, file = "anal.e.RData")
 
 # ======================== END VANTAJM =======================================================
+}
 
 # ********************************************** empirical *******************************************
-# load("anal.e.RData")
-# ae <- anal.e
-# rm(anal.e)
-# 
+load("anal.e.RData")
+ae <- anal.e
+rm(anal.e)
+
 # cl <- makeCluster(4)
 # clusterEvalQ(cl, source("../calcNormal2D.R"))
 # clusterEvalQ(cl, source("../getQs.R"))
@@ -51,7 +53,7 @@ anal.e <- sapply(data.e, FUN = markAnalysis,
 # aee <- do.call(rbind, aee)
 # rownames(aee) <- NULL
 # 
-# save(aee, file = "aee.RData")
+# save(aee, file = "aee - D-Dh.RData")
 load("aee - D-Dh.RData")
 
 xe <- gather(aee, key = variable, value = index, starts_with("dens."))
@@ -148,8 +150,8 @@ ggsave("./figures/E-0i pristranskost p glede na sap.hr.ratio in glede na poprave
        units = "mm", width = 100, height = 250)
 
 # analyse density
-xe.orig <- xe
-xe <- xe.orig
+# xe.orig <- xe
+# xe <- xe.orig
 xe <- xe.orig[sample(1:nrow(xe.orig), size = round(nrow(xe.orig)/10)), ]
 xe <- xe[xe$index > -2.0e+06, ] # D-Dh
 # xe <- xe[xe$index > -20, ]
