@@ -5,6 +5,12 @@ library(splancs) #csr
 library(foreach)
 library(doParallel)
 
+if (Sys.info()["sysname"] == "Windows") {
+  ncores <- 4
+} else {
+  ncores <- 46
+}
+
 #############
 # empirical #
 #############
@@ -30,20 +36,8 @@ xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
-cl <- makeCluster(3)
+cl <- makeCluster(ncores)
 registerDoParallel(cl)
-
-# exclude already processed runs
-fls <- list.files("./data", pattern = ".inp")
-nms <- as.numeric(gsub("^(.*_)(\\d+).inp$", "\\2", fls))
-message(sprintf("Skipping %d simulations.", length(nms)))
-
-# if there are any simulations to skip, do so
-if (length(nms) != 0) {
-  sim.seq <- (1:nrow(xy))[-nms]
-} else {
-  sim.seq <- 1:nrow(xy)
-}
 
 foreach(i = sim.seq) %dopar% {
   library(raster)
@@ -97,8 +91,6 @@ foreach(i = sim.seq) %dopar% {
     message(out$message)
     cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
   }
-  
-  # cat(sprintf("%s/%s", xy$seed[i], nrow(xy)), file = "progress.txt", append = TRUE) # print progress
   out
 }
 
@@ -109,20 +101,8 @@ foreach(i = sim.seq) %dopar% {
 # all parameters remain the same, fitted distribution changes
 xy$sim.dist <- "normal"
 
-cl <- makeCluster(20)
-registerDoParallel(cl)
-
-# exclude already processed runs
-fls <- list.files("./data", pattern = ".inp")
-nms <- as.numeric(gsub("^(.*_)(\\d+).inp$", "\\2", fls))
-message(sprintf("Skipping %d simulations.", length(nms)))
-
-# if there are any simulations to skip, do so
-if (length(nms) != 0) {
-  sim.seq <- (1:nrow(xy))[-nms]
-} else {
-  sim.seq <- 1:nrow(xy)
-}
+# cl <- makeCluster(ncores)
+# registerDoParallel(cl)
 
 foreach(i = sim.seq) %dopar% {
   library(raster)

@@ -21,7 +21,7 @@ writeINP <- function(object, supop = NULL, pars, seed) {
   if (is.null(supop)) supop <- ""
   
   file.name <- sub(pattern = ".txt", replacement = "", x = pars$file.name) # remove .txt
-  file.name <- paste(file.name,"_", seed, ".inp", sep = "")
+  file.name <- paste(file.name,"_", pars$sim.dist, "_", seed, ".inp", sep = "")
   
   #FOR TESTING: prepare grouping variable
   # group <- object$sample$include
