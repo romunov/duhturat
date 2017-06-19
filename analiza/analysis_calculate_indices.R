@@ -1,8 +1,8 @@
 # Chunk 1 load packages and scripts
 library(parallel)
 
-source("../markAnalysis.R")
-source("../readRunModels.R")
+source("markAnalysis.R")
+source("readRunModels.R")
 source("../getQs.R")
 source("../calcNormal2D.R")
 source("calculateIndices.R")
