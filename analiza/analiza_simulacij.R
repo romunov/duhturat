@@ -18,7 +18,7 @@ library(RMark)
 
 # Chunk 2 import data
 data.n <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
-data.e <- list.files("../data/empirical/", pattern = ".inp", full.names = TRUE)
+data.e <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 
 length(data.n)
 length(data.e)
@@ -31,7 +31,7 @@ anal.n <- sapply(data.n, FUN = markAnalysis,
 
 anal.e <- sapply(data.e, FUN = markAnalysis,
                  wd.model = "./mark_intermediate/", simplify = FALSE)
-# save(anal.e, file = "anal.e.RData")
+save(anal.e, file = "anal.e.RData")
 
 # ======================== END VANTAJM =======================================================
 }
@@ -41,17 +41,17 @@ load("anal.e.RData")
 ae <- anal.e
 rm(anal.e)
 
-# cl <- makeCluster(4)
-# clusterEvalQ(cl, source("../calcNormal2D.R"))
-# clusterEvalQ(cl, source("../getQs.R"))
-# clusterEvalQ(cl, source("../readRunModels.R"))
-# clusterEvalQ(cl, library(capwire))
-# 
-# lf <- list.files("../data/empirical/", pattern = ".inp", full.names = TRUE)
+cl <- makeCluster(4)
+clusterEvalQ(cl, source("../calcNormal2D.R"))
+clusterEvalQ(cl, source("../getQs.R"))
+clusterEvalQ(cl, source("../readRunModels.R"))
+clusterEvalQ(cl, library(capwire))
+
+lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 # aee <- parSapply(cl = cl, X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
-# # aee <- sapply(X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
-# aee <- do.call(rbind, aee)
-# rownames(aee) <- NULL
+aee <- sapply(X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
+aee <- do.call(rbind, aee)
+rownames(aee) <- NULL
 # 
 # save(aee, file = "aee - D-Dh.RData")
 load("aee - D-Dh.RData")

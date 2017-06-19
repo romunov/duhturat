@@ -57,6 +57,7 @@ writeINP <- function(object, supop = NULL, pars, seed) {
     boots = pars$num.boots, # number of boots
     work_dir = pars$work.dir, # working directory where magic takes place
     res = pars$rsln, # resolution of raster aggregation
+    SD = pars$SD, # standard deviation used in simulation
     sim.dist = pars$sim.dist, # which type of individual contributes was calculated, normal od empirical?
     seed = pars$seed, # number of seed used
     hazard_fun_sigma = object$contribs$cona$weight.yes$hazard_fun_params["sigma"],

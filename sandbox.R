@@ -27,25 +27,26 @@ source("extractMarkResults.R")
 source("markAnalysis.R")
 source("readRunModels.R")
 
-set.seed(357)
-xy <- data.frame(SD = rep(seq(from = 50, to = 100, by = 5), each = 10*4*6*5),
-                 prob = rep(seq(from = 0.15, to = 0.4, by = 0.05), each = 4),
-                 num.walkers = c(100, 200, 400, 800, 1000),
-                 sessions = 4:7
+set.seed(357) # use seed for reproducibility of generating starting values
+nsim <- 2000
+xy <- data.frame(SD = round(runif(nsim, min = 20, max = 50)),
+                 prob = runif(nsim, min = 0.15, max = 0.4),
+                 num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
+                 # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 3 fold increase
+                 # if not enough walkers, sampling fails
+                 sessions = sample(4:8, size = nsim, replace = TRUE)
 )
 
 xy$sap <- 200
-xy$area <- 600
+xy$area <- 400
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
-xy$summary.file <- "simulation_list.txt"
+xy$sim.dist <- "empirical"
+xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))
-xy$rsln <- 2
-# xy$rsln <- 0.5
+xy$rsln <- 0.5
 xy$weight.switch <- TRUE
-xy$sim.dist <- "normal"
 xy$num.boots <- 5000
-xy["sim.dist"] <- "normal"
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
 

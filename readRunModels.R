@@ -35,8 +35,7 @@ runModels <- function(obj, wd, ...) {
 }
 
 extractPars <- function(inp) {
-  #	browser() #BROWSER
-  
+
   # extract if pars written in humanoid readable form
   inp.raw <- readLines(inp)
   

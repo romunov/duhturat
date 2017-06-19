@@ -12,12 +12,15 @@ set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
 xy <- data.frame(SD = round(runif(nsim, min = 20, max = 50)),
                  prob = runif(nsim, min = 0.15, max = 0.4),
-                 num.walkers = sample(c(100, 200, 400, 800, 1000), size = nsim, replace = TRUE),
+                 num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
+                 # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 
+                 # 3 fold increase for sap 200 and area 400
+                 # if not enough walkers, sampling fails. why 3-fold? because a 3 fold increase in a population could be considered a lot
                  sessions = sample(4:7, size = nsim, replace = TRUE)
 )
 
 xy$sap <- 200
-xy$area <- 600
+xy$area <- 400
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
@@ -94,6 +97,8 @@ foreach(i = sim.seq) %dopar% {
     message(out$message)
     cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
   }
+  
+  cat(sprintf("%s/%s", xy$seed[i], nrow(xy)), file = "progress.txt", append = TRUE) # print progress
   out
 }
 
