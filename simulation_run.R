@@ -98,7 +98,7 @@ foreach(i = sim.seq) %dopar% {
     cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
   }
   
-  cat(sprintf("%s/%s", xy$seed[i], nrow(xy)), file = "progress.txt", append = TRUE) # print progress
+  # cat(sprintf("%s/%s", xy$seed[i], nrow(xy)), file = "progress.txt", append = TRUE) # print progress
   out
 }
 
