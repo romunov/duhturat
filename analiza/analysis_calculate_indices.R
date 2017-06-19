@@ -17,10 +17,11 @@ if (Sys.info()["sysname"] == "Windows") {
 }
 
 cl <- makeCluster(ncores)
+on.exit(stopCluster(cl))
 
 clusterEvalQ(cl, source("../calcNormal2D.R"))
 clusterEvalQ(cl, source("../getQs.R"))
-clusterEvalQ(cl, source("../readRunModels.R"))
+clusterEvalQ(cl, source("readRunModels.R"))
 clusterEvalQ(cl, library(capwire))
 
 lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
