@@ -4,7 +4,7 @@ library(tidyr)
 library(dplyr)
 library(capwire)
 
-library(parallel) # only if relcalculating aee/ann
+library(parallel)
 
 source("../markAnalysis.R")
 source("../readRunModels.R")
