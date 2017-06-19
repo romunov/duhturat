@@ -28,4 +28,4 @@ lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 aee <- parSapply(cl = cl, X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
 aee <- do.call(rbind, aee)
 rownames(aee) <- NULL
-save("simulations_calculated_indices.RData")
+save(aee, file = "simulations_calculated_indices.RData")
