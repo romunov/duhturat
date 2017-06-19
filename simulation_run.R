@@ -38,8 +38,9 @@ xy$num.boots <- 5000
 
 cl <- makeCluster(ncores)
 registerDoParallel(cl)
+on.exit(stopCluster(cl))
 
-foreach(i = sim.seq) %dopar% {
+foreach(i = 1:nrow(xy)) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
@@ -101,10 +102,7 @@ foreach(i = sim.seq) %dopar% {
 # all parameters remain the same, fitted distribution changes
 xy$sim.dist <- "normal"
 
-# cl <- makeCluster(ncores)
-# registerDoParallel(cl)
-
-foreach(i = sim.seq) %dopar% {
+foreach(i = 1:nrow(xy)) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
