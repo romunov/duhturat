@@ -6,14 +6,13 @@
 
 calculateIndices <- function(x, lf) {
   # calculate TIRM model by Miller 2005 and add it to the mix
-  
-  findseed <- sprintf("_%s\\.inp$", x$simulation.pars$seed)
+  findseed <- sprintf("%s_%s\\.inp$", x$simulation.pars$sim.dist, x$simulation.pars$seed)
   mrk <- lf[grepl(findseed, lf)]
   ch <- readMark(mrk)
   info <- read.table(mrk, skip = 3, nrows = 1, header = TRUE)
   ch$count <- sapply(strsplit(ch$ch, ""), FUN = function(y) sum(as.numeric(y)))
   
-  SD <- info$SD
+  SD <- x$simulation.pars$SD
   
   mdl <- fitTirm(data = buildClassTable(ch$count), max.pop = info$generated_walkers)
   info$N.tirm <- mdl$ml.pop.size

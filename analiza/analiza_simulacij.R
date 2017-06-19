@@ -17,29 +17,25 @@ if (FALSE) {
 library(RMark)
 
 # Chunk 2 import data
-data.n <- list.files("../data/normal/", pattern = ".inp", full.names = TRUE)
-data.e <- list.files("../data/", pattern = ".inp", full.names = TRUE)
+xy <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 
-length(data.n)
-length(data.e)
+length(xy)
 
+if (!dir.exists("mark_intermediate")) {
+  dir.create("mark_intermediate")
+}
 # analyse simulations using MARK
-anal.n <- sapply(data.n, FUN = markAnalysis,
+xy.mark <- sapply(xy, FUN = markAnalysis,
                  wd.model = "./mark_intermediate/", simplify = FALSE)
 
-# save(anal.n, file = "anal.n.RData")
-
-anal.e <- sapply(data.e, FUN = markAnalysis,
-                 wd.model = "./mark_intermediate/", simplify = FALSE)
-save(anal.e, file = "anal.e.RData")
+# save(xy.mark, file = "simulations.RData")
 
 # ======================== END VANTAJM =======================================================
 }
 
 # ********************************************** empirical *******************************************
-load("anal.e.RData")
-ae <- anal.e
-rm(anal.e)
+load("simulations.RData")
+xy <- xy.mark
 
 cl <- makeCluster(4)
 clusterEvalQ(cl, source("../calcNormal2D.R"))
@@ -49,7 +45,7 @@ clusterEvalQ(cl, library(capwire))
 
 lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 # aee <- parSapply(cl = cl, X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
-aee <- sapply(X = ae, FUN = calculateIndices, lf = lf, simplify = FALSE)
+aee <- sapply(X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
 aee <- do.call(rbind, aee)
 rownames(aee) <- NULL
 # 
