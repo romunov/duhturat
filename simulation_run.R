@@ -65,10 +65,6 @@ foreach(i = 1:nrow(xy)) %dopar% {
   source("stopWatch.R")
   source("writeINP.R")
   source("calcNormal2D.R")
-  # funkcije za analizo
-  source("extractMarkResults.R")
-  source("markAnalysis.R")
-  source("readRunModels.R")
   
   out <- tryCatch({
     simulation(
