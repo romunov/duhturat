@@ -1,10 +1,7 @@
 library(raster)
 library(rgeos)
 library(cluster)
-library(splancs) #csr
-# library(RMark)
-# library(foreach)
-# library(doParallel)
+library(splancs)
 
 source("simulation.R")
 source("walkerContribution.R")
@@ -22,14 +19,10 @@ source("superPopulation.R")
 source("stopWatch.R")
 source("writeINP.R")
 source("calcNormal2D.R")
-# funkcije za analizo
-source("extractMarkResults.R")
-source("markAnalysis.R")
-source("readRunModels.R")
 
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
-xy <- data.frame(SD = round(runif(nsim, min = 20, max = 50)),
+xy <- data.frame(SD = round(runif(nsim, min = 400, max = 1600)),
                  prob = runif(nsim, min = 0.15, max = 0.4),
                  num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
                  # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 3 fold increase
@@ -44,6 +37,7 @@ xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 xy$home.range <- sqrt(qchisq(0.68, xy$SD))
+xy$SD <- xy$home.range
 xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000

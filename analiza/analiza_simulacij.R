@@ -1,14 +1,13 @@
 # Chunk 1 load packages and scripts
 library(ggplot2)
 library(tidyr)
-library(dplyr)
+library(dplyr) # starts_with, used in gather
 
 # Uncomment to rerun the analysis from the beginning. You might be waiting a while...
 # source("analysis_run_mark.R")
 # source("analysis_calculate_indices.R") # TODO: recalculate this because area_size was not correct
 load("simulations_calculated_indices.RData")
-xy <- aee
-xy <- droplevels(aee[aee$fun == "empirical", ])
+xy <- droplevels(xy[xy$fun == "empirical", ])
 
 xe <- gather(xy, key = variable, value = index, starts_with("dens."))
 rownames(xe) <- NULL
@@ -123,6 +122,7 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   geom_jitter(alpha = 0.5, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = FALSE) +
   scale_color_brewer(palette = "Set1") +
+  geom_hline(aes(yintercept = 0)) +
   facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
 ggsave("./figures/E-1b.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png")
 
@@ -135,12 +135,12 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures")
 
+# AICc
 ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
   theme(legend.position = "top") +
   geom_jitter(alpha = 0.5, shape = 1) +
   scale_color_brewer(palette = "Set1") +
-  geom_smooth(aes(color = model), method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-5.dAIC gled na razmerje hr_sap po correction type in st. gen.walk.png")
 
@@ -153,7 +153,11 @@ ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = sap.hr.ratio, y =
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-6.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png")
 
-
+ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = model, y = dAIC)) +
+  theme_bw() +
+  geom_jitter(alpha = 0.5) +
+  facet_grid(num.generated.walkers ~ correction.type)
+  
 # # # normal # # #
 
 xz <- droplevels(aee[aee$fun == "normal", ])
