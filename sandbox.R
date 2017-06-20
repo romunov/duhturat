@@ -63,7 +63,6 @@ rdt <- data.frame(
   stringsAsFactors = FALSE
 )
 
-# out <- tryCatch({
   simulation(
     SD = rdt$SD,
     prob = rdt$prob,
@@ -80,9 +79,6 @@ rdt <- data.frame(
     sim.dist = rdt$sim.dist,
     num.boots = rdt$num.boots
   )
-# }, 
-# error = function(e) e,
-# warning = function(w) w)
 
 # paralelna verzija
 cl <- makeCluster(4)
@@ -93,7 +89,7 @@ foreach(i = 1:5) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
-  library(splancs) #csr
+  library(splancs)
   
   source("simulation.R")
   source("walkerContribution.R")
@@ -111,10 +107,6 @@ foreach(i = 1:5) %dopar% {
   source("stopWatch.R")
   source("writeINP.R")
   source("calcNormal2D.R")
-  # funkcije za analizo
-  source("extractMarkResults.R")
-  source("markAnalysis.R")
-  source("readRunModels.R")
   
   out <- tryCatch({
     simulation(
