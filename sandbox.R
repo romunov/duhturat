@@ -141,5 +141,9 @@ foreach(i = 1:5) %dopar% {
 # setwd("..")
 out <- markAnalysis(fn = "./data/mark-2017-05-01-14-32_1417.inp", wd = "./data")
 
-sapply(c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99), FUN = function(x) getQnormal(SD = 20, p = x))
-qnorm(0.6, sd = 20)
+sapply(0.5, FUN = getQnormal, SD = 20)
+qnorm(seq(0.5, 1, by = 0.1), sd = 20)
+qnorm(0.7, sd = 20)
+pnorm(5.07, sd = 20)
+curve(dnorm(x, sd = 20), from = 0, to = 100)
+1 - pnorm(40, sd = 20, lower.tail = FALSE)
