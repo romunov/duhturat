@@ -33,8 +33,9 @@ calculateIndices <- function(x, lf) {
   p.target.1 <- p[grepl("~1", x$real.fun.pars$model.name)]
   p.target.sp <- p[grepl("~sp", x$real.fun.pars$model.name)]
   
-  # dAIC <- x$deltaAIC # negative value means .sp bigger than .1
-  better.model <- ifelse(x$real.fun.pars$AICc[1] > x$real.fun.pars$AICc[2], ".1", ".sp")
+  better.model <- ifelse(x$real.fun.pars$AICc[1] > x$real.fun.pars$AICc[2], ".sp", ".1")
+  AICc.1 <- x$real.fun.pars$AICc[1]
+  AICc.sp <- x$real.fun.pars$AICc[2]
   dAIC <- x$deltaAIC
   area <- x$simulation.pars$sampling_area_r
   
@@ -150,6 +151,8 @@ calculateIndices <- function(x, lf) {
                     p.diff, # difference in estimated p
                     better.model, # which model performs better
                     dAIC, # difference in AICc between models
+                    AICc.1, # AICc of model ~ .1
+                    AICc.sp, # AICc of model ~ .sp
                     area.naive, # area of sap
                     area.hr, # area of sap enlarged for home range
                     area.effect, # area of sap enlarged for max pairwise distance recorded

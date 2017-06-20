@@ -26,7 +26,7 @@ clusterEvalQ(cl, library(capwire))
 
 lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 xy <- parSapply(cl = cl, X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
-# xy <- sapply(X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
+# xy <- sapply(X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE) # for debugging
 xy <- do.call(rbind, xy)
 rownames(xy) <- NULL
 save(xy, file = "simulations_calculated_indices.RData")
