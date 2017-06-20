@@ -27,8 +27,8 @@ ggplot(ss, aes(x = x, y = y)) +
 # koliko točk je znotraj 1 SD?
 N <- 10000
 set.seed(357)
-xy <- data.frame(x = rnorm(n = N, mean = 0, sd = 1),
-                 y = rnorm(n = N, mean = 0, sd = 1))
+xy <- data.frame(x = rnorm(n = N, mean = 10, sd = 1),
+                 y = rnorm(n = N, mean = 10, sd = 1))
 
 # SD ni preprosto SD_x ali SD_y, ampak SD_x + SD_y + 2*korelacija(x,y) * cov_x * cov_y
 # https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php
@@ -54,9 +54,11 @@ points(sp.xy[pins == 1, ], col = "green")
 
 # poskus s tole kodo iz mixtools::ellipse:
 # http://stats.stackexchange.com/a/36023/144
+# https://stats.stackexchange.com/a/127486/144
 # plot(sp.xy, asp = 1)
 # plot(sp.krog, lwd = 2, border = "red", add = TRUE, col = NA)
 
+# https://en.wikipedia.org/wiki/Multivariate_normal_distribution
 es <- eigen(cov(xy))
 e1 <- es$vec %*% diag(sqrt(es$val))
 r1 <- sqrt(qchisq(0.68, 2)) # 1 SD
@@ -66,8 +68,10 @@ pts <- t(colMeans(xy) - (e1 %*% t(v1)))
 colnames(pts) <- c("x", "y")
 sp.krog2 <- SpatialPolygons(list(Polygons(list(Polygon(pts)), ID = 1)))
 
-# plot(sp.xy, asp = 1)
+plot(xy, asp = 1, axes = TRUE)
 lines(pts, col = "blue", lwd = 2)
+abline(v = range(pts[, "x"]), col = "red")
+abline(h = range(pts[, "y"]), col = "red")
 
 pins <- over(x = sp.xy, y = sp.krog2)
 sum(pins, na.rm = TRUE)/N
