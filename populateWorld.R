@@ -14,17 +14,16 @@
 #' @author Roman Luštrik
 
 populateWorld <- function(num.walkers, area, home.range, sap, custom.walkers) {
-  
   if (!is.null(custom.walkers)) {
     xy <- custom.walkers
   } else {
     # Simulate walkers around SAP.
     expand.sap <- gBuffer(sap, width = area)
     xy <- as.data.frame(spsample(expand.sap, n = num.walkers, type = "random"))
-    plot(0,0, type = "n", xlim = c(-800, 800), ylim = c(-800, 800), asp = 1)
-    points(xy)
-    plot(sap, add = TRUE, border = "blue", lwd = 2)
-    plot(expand.sap, add = TRUE, border = "red")
+    # plot(0,0, type = "n", xlim = c(-800, 800), ylim = c(-800, 800), asp = 1)
+    # points(xy)
+    # plot(sap, add = TRUE, border = "blue", lwd = 2)
+    # plot(expand.sap, add = TRUE, border = "red")
   }
   
   message("Walkers near the sampling area: ", nrow(xy))
@@ -43,7 +42,7 @@ populateWorld <- function(num.walkers, area, home.range, sap, custom.walkers) {
   # plot(sap, add = T)
   # points(xy)
   # plot(expand.sap, add = TRUE, border = "red")
-  # # lapply(out, plot, add = T)
+  # lapply(out, plot, add = T)
   # # plot(out[[1]], add = T)
   # # plot(wrld, add = T, border = "red") # je v sandbox.R
   

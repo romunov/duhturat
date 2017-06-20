@@ -27,8 +27,6 @@ sampleWorld <- function(walk, sap.poly, sessions, prob, SD) {
     ifelse(out, return(TRUE), return(FALSE))
   }, shape = sap.poly)
   
-  #	sfStop()
-  
   # A little benchmark.
   duration <- Sys.time() - startdate
   message(paste("In/out test done in", duration, attr(duration, "units"), sep = " "))

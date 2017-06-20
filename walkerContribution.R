@@ -3,7 +3,6 @@
 #' functions.
 #' @author Roman Luštrik
 
-
 walkerContribution <- function(num.walkers, sw, area, home.range, sap.poly, seed,
                                prob, sessions, weight.switch, .object, .num.boots, custom.walkers, SD, 
                                sim.dist, work.dir, ...) {
