@@ -25,8 +25,8 @@ clusterEvalQ(cl, source("readRunModels.R"))
 clusterEvalQ(cl, library(capwire))
 
 lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
-aee <- parSapply(cl = cl, X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
-# aee <- sapply(X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
-aee <- do.call(rbind, aee)
-rownames(aee) <- NULL
-save(aee, file = "simulations_calculated_indices.RData")
+xy <- parSapply(cl = cl, X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
+# xy <- sapply(X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
+xy <- do.call(rbind, xy)
+rownames(xy) <- NULL
+save(xy, file = "simulations_calculated_indices.RData")
