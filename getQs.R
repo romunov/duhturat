@@ -1,19 +1,31 @@
-#' Get quantiles from Normal distribution
+#' Get (simulated) quantiles from two dimensional normal distribution.
 #' 
-#' @param mu Parameter of mean of the distribution.
-#' @param sd Parameter of standard deviation of the distribution.
-#' @param probs Vector of probabilities of desired quantiles.
+#' @param SD Numeric. Based on what standard deviations the 2D quantile is to be calculated.
+#' @param p Numeric. Probability at which the 2D normal distribution quantile is to be calculated.
 #' 
-#' @author Roman Luštrik (\email{roman.lustrik@@biolitika.si}).
-#' 
-#' @return A vector of quantiles corresponding to the requested `probs`.
-#' 
-#' @examples
-#' qnorm(0.5) # at probability of 0.5, the quantile is 0
-
-getQnormal <- function(mu, sd, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)) {
-  out <- qnorm(p = probs, mean = mu, sd = sd)
-  names(out) <- sprintf("%0.f%%", probs * 100)
+#' http://stats.stackexchange.com/a/36023/144
+#' https://stats.stackexchange.com/a/127486/144
+getQnormal <- function(probs, SD) {
+  N <- 10000
+  xy <- data.frame(x = rnorm(N, mean = 0, sd = SD),
+                   y = rnorm(N , mean = 0, sd = SD))
+  
+  es <- eigen(cov(xy))
+  e1 <- es$vec %*% diag(sqrt(es$val))
+  r1 <- sqrt(qchisq(probs, 2)) # 1 SD
+  theta <- seq(0, 2 * pi, len = 2000)
+  v1 <- cbind(r1 * cos(theta), r1 * sin(theta))
+  pts <- t(colMeans(xy) - (e1 %*% t(v1)))
+  
+  # colnames(pts) <- c("x", "y")
+  # sp.krog2 <- SpatialPolygons(list(Polygons(list(Polygon(pts)), ID = 1)))
+  # plot(xy, asp = 1, axes = TRUE)
+  # lines(pts, col = "blue", lwd = 2)
+  # abline(v = range(pts[, "x"]), col = "red")
+  # abline(h = range(pts[, "y"]), col = "red")
+  
+  out <- diff(range(pts[, 1]))/2 # assumes symmetrical 2D normal distribution
+  names(out) <- paste(p * 100, "%", sep = "")
   out
 }
 
@@ -36,8 +48,6 @@ getQnormal <- function(mu, sd, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)) {
 #' @return A vector of quantiles corresponding to the requested `probs`.
 #' 
 #' @examples
-#' 
-
 getQcustom <- function(fnc, ..., xrange = NULL, N = 10000, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)) {
   if (is.null(xrange)) stop("xrange argument missing")
   

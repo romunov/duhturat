@@ -16,7 +16,7 @@ if (Sys.info()["sysname"] == "Windows") {
 #############
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
-xy <- data.frame(SD = round(runif(nsim, min = 400, max = 1600)),
+xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
                  prob = runif(nsim, min = 0.15, max = 0.4),
                  num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
                  # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 
@@ -25,16 +25,18 @@ xy <- data.frame(SD = round(runif(nsim, min = 400, max = 1600)),
                  sessions = sample(4:7, size = nsim, replace = TRUE)
 )
 
+# SD=60, home range extends from 0 to about 200, see
+# curve(dnorm(x, sd = 60), from = 0, to = 400)
+# SD=20, home range extends from 0 to about 50
+# curve(dnorm(x, sd = 20), from = 0, to = 400)
+
 xy$sap <- 200
+xy$home.range <- xy$SD
 xy$area <- 400
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
-xy$home.range <- sqrt(qchisq(0.68, xy$SD))
-# mogoče zaradi tega ne dela simulacija, ker sta SD in home.range različno velika?
-# glej sqrt(qchisq(0.68, seq(400, 1600, by = 50)))
-xy$SD <- xy$home.range 
 xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
