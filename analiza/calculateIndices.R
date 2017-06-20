@@ -52,11 +52,13 @@ calculateIndices <- function(x, lf) {
     b <- unlist(x$simulation.pars$hazard_fun_b)
     mx <- unlist(x$simulation.pars$hazard_fun_mx)
     set.seed(x$simulation.pars$seed)
-    qs <- getQcustom(fnc = weibullLikeDistribution, sigma = sigma, b = b, mx = mx, xrange = c(0, sigma * 3))
+    qs <- getQcustom(fnc = weibullLikeDistribution, 
+                     sigma = sigma, b = b, mx = mx, xrange = c(0, sigma * 3),
+                     probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99))
   }
   
   if (x$simulation.pars$sim.dist == "normal") {
-    qs <- getQnormal(mu = 0, sd = SD)
+    qs <- sapply(0.5, FUN = getQnormal, SD = SD, p = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99))
   }
   
   area.50 <- pi * (area + qs["50%"])^2
@@ -68,7 +70,6 @@ calculateIndices <- function(x, lf) {
   area.99 <- pi * (area + qs["99%"])^2
   
   # true density
-  # dens.true <- pi * x$simulation.pars$area_size^2
   dens.true <- pi * (x$simulation.pars$area_size)^2 # see populateWorld(), line 22
   dens.true <- x$simulation.pars$generated_walkers / dens.true
   
