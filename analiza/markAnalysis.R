@@ -5,19 +5,19 @@
 #' 
 #' @param fn Character. A (absolute) path to an .inp file. If relative, it
 #'  looks for it in the working directory.
-#' @param wd.model Character. Working directory where model files (\code{wd.model} 
-#'  will be deposited and the source of \code{.inp} files.
-#'  
 
-markAnalysis <- function(fn, wd.model) {
-	
-	# READ IN RAW FILE
-	oldwd <- getwd()
-	# setwd(wd.inp)
-	data.in <- readMark(as.character(fn))
-	
+markAnalysis <- function(fn) {
+  # Create temporary folder and remove it after the analysis is done.	
+  oldwd <- getwd()
+  x <- tempdir()
+  on.exit(setwd(oldwd))
+  on.exit(unlink(x), add = TRUE)
+  
+  # READ IN RAW FILE
+  data.in <- readMark(as.character(fn))
+  
 	# DO THE ANALYSIS
-	setwd(wd.model)
+	setwd(x)
 	tr.process <- process.data(data.in, model = "Huggins")
 	tr.ddl <- make.design.data(tr.process)
 	
