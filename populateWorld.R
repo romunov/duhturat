@@ -36,15 +36,14 @@ populateWorld <- function(num.walkers, area, home.range, sap, custom.walkers) {
   }, home.range = home.range)
   
   names(out) <- paste(1:length(custom.walkers[, "capt"]), custom.walkers[, "capt"], sep = "_")
-  out
   
+  # browser()
   # plot(0,0, type = "n", xlim = c(-500, 500), ylim = c(-500, 500), asp = 1)
   # plot(sap, add = T)
   # points(xy)
   # plot(expand.sap, add = TRUE, border = "red")
-  # lapply(out, plot, add = T)
+  # lapply(out[1:100], plot, add = T)
   # # plot(out[[1]], add = T)
-  # # plot(wrld, add = T, border = "red") # je v sandbox.R
   
   # > summary(out) # seznam walkerjev
   #    	Length Class        Mode
@@ -52,6 +51,6 @@ populateWorld <- function(num.walkers, area, home.range, sap, custom.walkers) {
   #	3   1      SpatialLines S4  
   #	8   1      SpatialLines S4  
   #	31  1      SpatialLines S4
-  
+  out
 }
 

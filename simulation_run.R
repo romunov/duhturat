@@ -26,9 +26,9 @@ xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
 )
 
 # SD=60, home range extends from 0 to about 200, see
-# curve(dnorm(x, sd = 60), from = 0, to = 400)
+curve(dnorm(x, sd = 60), from = 0, to = 400)
 # SD=20, home range extends from 0 to about 50
-# curve(dnorm(x, sd = 20), from = 0, to = 400)
+curve(dnorm(x, sd = 20), from = 0, to = 400)
 
 xy$sap <- 200
 xy$home.range <- xy$SD
@@ -45,55 +45,55 @@ cl <- makeCluster(ncores)
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-# foreach(i = 1:nrow(xy)) %dopar% {
-#   library(raster)
-#   library(rgeos)
-#   library(cluster)
-#   library(splancs) #csr
-#   
-#   source("simulation.R")
-#   source("walkerContribution.R")
-#   source("populateWorld.R")
-#   source("sampleWorld.R")
-#   source("sampleWalkers.R")
-#   source("numberOfBins.R")
-#   source("calculateContribution.R")
-#   source("calculateBins.R")
-#   source("weighDistances.R")
-#   source("distWeights.R")
-#   source("individualContribution.R")
-#   source("calcNormal2D.R")
-#   source("superPopulation.R")
-#   source("writeINP.R")
-#   source("calcNormal2D.R")
-#   
-#   out <- tryCatch({
-#     simulation(
-#       SD = xy$SD[i],
-#       prob = xy$prob[i],
-#       sessions = xy$sessions[i],
-#       num.walkers = xy$num.walkers[i],
-#       sap = xy$sap[i],
-#       area = xy$area[i],
-#       work.dir = xy$work.dir[i],
-#       seed = xy$seed[i],
-#       summary.file = xy$summary.file[i],
-#       home.range = xy$home.range[i],
-#       rsln = xy$rsln[i],
-#       weight.switch = xy$weight.switch[i],
-#       sim.dist = xy$sim.dist[i],
-#       num.boots = xy$num.boots[i]
-#     )
-#   }, 
-#   error = function(e) e,
-#   warning = function(w) w)
-#   
-#   if (any(class(out) %in% c("error", "warning"))) {
-#     message(out$message)
-#     cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
-#   }
-#   out
-# }
+foreach(i = 1:nrow(xy)) %dopar% {
+  library(raster)
+  library(rgeos)
+  library(cluster)
+  library(splancs) #csr
+
+  source("simulation.R")
+  source("walkerContribution.R")
+  source("populateWorld.R")
+  source("sampleWorld.R")
+  source("sampleWalkers.R")
+  source("numberOfBins.R")
+  source("calculateContribution.R")
+  source("calculateBins.R")
+  source("weighDistances.R")
+  source("distWeights.R")
+  source("individualContribution.R")
+  source("calcNormal2D.R")
+  source("superPopulation.R")
+  source("writeINP.R")
+  source("calcNormal2D.R")
+
+  out <- tryCatch({
+    simulation(
+      SD = xy$SD[i],
+      prob = xy$prob[i],
+      sessions = xy$sessions[i],
+      num.walkers = xy$num.walkers[i],
+      sap = xy$sap[i],
+      area = xy$area[i],
+      work.dir = xy$work.dir[i],
+      seed = xy$seed[i],
+      summary.file = xy$summary.file[i],
+      home.range = xy$home.range[i],
+      rsln = xy$rsln[i],
+      weight.switch = xy$weight.switch[i],
+      sim.dist = xy$sim.dist[i],
+      num.boots = xy$num.boots[i]
+    )
+  },
+  error = function(e) e,
+  warning = function(w) w)
+
+  if (any(class(out) %in% c("error", "warning"))) {
+    message(out$message)
+    cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
+  }
+  out
+}
 
 ##########
 # normal #

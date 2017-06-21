@@ -25,7 +25,7 @@ getQnormal <- function(probs, SD) {
   # abline(h = range(pts[, "y"]), col = "red")
   
   out <- diff(range(pts[, 1]))/2 # assumes symmetrical 2D normal distribution
-  names(out) <- paste(p * 100, "%", sep = "")
+  names(out) <- paste(probs * 100, "%", sep = "")
   out
 }
 

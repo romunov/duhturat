@@ -5,11 +5,10 @@
 #' @param ... Parameters passed to fun.
 
 calculateIndices <- function(x, lf) {
+  
   # calculate TIRM model by Miller 2005 and add it to the mix
-  findseed <- sprintf("%s_%s\\.inp$", x$simulation.pars$sim.dist, x$simulation.pars$seed)
-  mrk <- lf[grepl(findseed, lf)]
-  ch <- readMark(mrk)
-  info <- read.table(mrk, skip = 3, nrows = 1, header = TRUE)
+  ch <- readMark(lf)
+  info <- read.table(lf, skip = 3, nrows = 1, header = TRUE)
   ch$count <- sapply(strsplit(ch$ch, ""), FUN = function(y) sum(as.numeric(y)))
   
   SD <- x$simulation.pars$SD
@@ -18,6 +17,7 @@ calculateIndices <- function(x, lf) {
   info$N.tirm <- mdl$ml.pop.size
   x$simulation.pars <- info
   
+  browser()
   # add population size estimates and the difference
   size.1 <- x$est.der.pars$N.Population.Size.estimate[1]
   size.sp <- x$est.der.pars$N.Population.Size.estimate[2]
@@ -30,6 +30,7 @@ calculateIndices <- function(x, lf) {
   p.diff <- diff(x$real.fun.pars$estimate)
   true.p <- x$simulation.pars$capture_prob
   p <- x$simulation.pars$capture_prob - x$real.fun.pars$estimate
+  # by how far off p is compared to simulated probability
   p.target.1 <- p[grepl("~1", x$real.fun.pars$model.name)]
   p.target.sp <- p[grepl("~sp", x$real.fun.pars$model.name)]
   
@@ -51,6 +52,9 @@ calculateIndices <- function(x, lf) {
     sigma <- unlist(x$simulation.pars$hazard_fun_sigma)
     b <- unlist(x$simulation.pars$hazard_fun_b)
     mx <- unlist(x$simulation.pars$hazard_fun_mx)
+    
+    # curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx), from = 0, to = 300)
+    
     set.seed(x$simulation.pars$seed)
     qs <- getQcustom(fnc = weibullLikeDistribution, 
                      sigma = sigma, b = b, mx = mx, xrange = c(0, sigma * 3),
@@ -109,7 +113,8 @@ calculateIndices <- function(x, lf) {
   
   # calculate index ((D - D^)/D) * 100
   # calIn <- function(Dh, D = dens.true) ((D - Dh)/D) * 100
-  calIn <- function(Dh, D = dens.true) ((D-Dh))
+  # calIn <- function(Dh, D = dens.true) ((D - Dh))
+  calIn <- function(Dh, D = dens.true) ((Dh/D))
   
   dens.naive.1 <- calIn(Dh = dens.naive.1)
   dens.hr.1 <- calIn(dens.hr.1)

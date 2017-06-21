@@ -101,7 +101,6 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
     y[, "capt"]
   })
   capture.df <- do.call(cbind, walker.data)
-  # table(rowSums(capture.df)) # TODO: WTF, kam grejo vsi ulovi iste živali?
   
   #> capture.df
   #	     [,1] [,2] [,3] [,4] [,5]
@@ -112,7 +111,6 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
   
   # Create a list where each element is a walker with each
   # line in a data.frame representing data from sampling sessions.
-  
   captured.walkers <- as.data.frame(do.call(rbind, session.data))
   captured.walkers$walker <- unlist(sapply(strsplit(
     rownames(captured.walkers), "_"), "[", 1))
@@ -169,6 +167,9 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
     capture = capture.df, # a matrix of captures/non-captures
     sample = captured.walkers # a list of data.frames of walkers. each data.frame holds locations to captures/non-captures
   )
+  
+  # plot(sap, xlim = c(-500, 500), ylim = c(-500, 500), axes = TRUE)
+  # sapply(result$sample, points)
   
   # result is a list of two (or just capture if there are no missing walkers (unlikely but possible)
   # $capture (a matrix, columns are sessions, rows are walkers)

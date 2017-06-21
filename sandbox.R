@@ -16,28 +16,24 @@ source("distWeights.R")
 source("individualContribution.R")
 source("calcNormal2D.R")
 source("superPopulation.R")
-source("stopWatch.R")
 source("writeINP.R")
 source("calcNormal2D.R")
 
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
-xy <- data.frame(SD = round(runif(nsim, min = 400, max = 1600)),
+xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
                  prob = runif(nsim, min = 0.15, max = 0.4),
                  num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
-                 # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 3 fold increase
-                 # if not enough walkers, sampling fails
-                 sessions = sample(4:8, size = nsim, replace = TRUE)
+                 sessions = sample(4:7, size = nsim, replace = TRUE)
 )
 
 xy$sap <- 200
+xy$home.range <- xy$SD
 xy$area <- 400
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
-xy$home.range <- sqrt(qchisq(0.68, xy$SD))
-xy$SD <- xy$home.range
 xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
@@ -63,22 +59,22 @@ rdt <- data.frame(
   stringsAsFactors = FALSE
 )
 
-  simulation(
-    SD = rdt$SD,
-    prob = rdt$prob,
-    sessions = rdt$sessions,
-    num.walkers = rdt$num.walkers,
-    sap = rdt$sap,
-    area = rdt$area,
-    work.dir = rdt$work.dir,
-    seed = rdt$seed,
-    summary.file = rdt$summary.file,
-    home.range = rdt$home.range,
-    rsln = rdt$rsln,
-    weight.switch = rdt$weight.switch,
-    sim.dist = rdt$sim.dist,
-    num.boots = rdt$num.boots
-  )
+simulation(
+  SD = rdt$SD,
+  prob = rdt$prob,
+  sessions = rdt$sessions,
+  num.walkers = rdt$num.walkers,
+  sap = rdt$sap,
+  area = rdt$area,
+  work.dir = rdt$work.dir,
+  seed = rdt$seed,
+  summary.file = rdt$summary.file,
+  home.range = rdt$home.range,
+  rsln = rdt$rsln,
+  weight.switch = rdt$weight.switch,
+  sim.dist = rdt$sim.dist,
+  num.boots = rdt$num.boots
+)
 
 # paralelna verzija
 cl <- makeCluster(4)
@@ -133,7 +129,11 @@ foreach(i = 1:5) %dopar% {
 # setwd("..")
 out <- markAnalysis(fn = "./data/mark-2017-05-01-14-32_1417.inp", wd = "./data")
 
-sapply(0.5, FUN = getQnormal, SD = 20)
+# By how much should cut-off of home range be expanded to encompass practically all sampled points?
+# ~ 4
+source("getQs.R")
+sapply(0.999, FUN = getQnormal, SD = 20)/20
+sapply(0.999, FUN = getQnormal, SD = 60)/60
 qnorm(seq(0.5, 1, by = 0.1), sd = 20)
 qnorm(0.7, sd = 20)
 pnorm(5.07, sd = 20)

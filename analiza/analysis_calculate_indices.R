@@ -1,5 +1,6 @@
 # Chunk 1 load packages and scripts
 library(parallel)
+library(capwire)
 
 source("markAnalysis.R")
 source("readRunModels.R")
@@ -8,7 +9,7 @@ source("../calcNormal2D.R")
 source("calculateIndices.R")
 
 load("simulations.RData")
-xy <- xy.mark
+load("simulations_test.RData")
 
 if (Sys.info()["sysname"] == "Windows") {
   ncores <- 8
@@ -25,8 +26,9 @@ clusterEvalQ(cl, source("readRunModels.R"))
 clusterEvalQ(cl, library(capwire))
 
 lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
-xy <- parSapply(cl = cl, X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE)
-# xy <- sapply(X = xy, FUN = calculateIndices, lf = lf, simplify = FALSE) # for debugging
+xy <- parSapply(cl = cl, X = xy.mark, FUN = calculateIndices, lf = lf, simplify = FALSE)
+# xy <- sapply(X = xy.mark, FUN = calculateIndices, lf = lf, simplify = FALSE) # for debugging
+xy <- mapply(FUN = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE)
 xy <- do.call(rbind, xy)
 rownames(xy) <- NULL
 save(xy, file = "simulations_calculated_indices.RData")
