@@ -62,12 +62,27 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
   #  [[1]]$`5_1`
   #  x         y capt
   #  [1,] 55.71639 -25.37155    0
-  
+
   # Do "rbind" for each session
   session.data <- lapply(out.sampled, function(x) do.call(rbind, x))
   
-  # plot(sap, xlim = c(-300, 300), ylim = c(-300, 300), border = "red")
-  # sapply(walk, plot, add = TRUE)
+  # # DEBUGGING: check densities
+  # plot(sap, xlim = c(-500, 500), ylim = c(-500, 500), border = "blue")
+  # pts <- do.call(rbind, sapply(walk, coordinates, simplify = FALSE)) # create points from walkers
+  # rownames(pts) <- NULL
+  # pts <- SpatialPoints(pts)
+  # 
+  # pts$inout <- (rowSums(capture.df) != 0) + 1 # 2 = sampled walker, 1 = not sampled
+  # points(pts, col = pts$inout) # these were caught inside the sampling area
+  # points(pts) # all walkers
+  # # check density within sap/true density
+  # ptsin <- over(pts, sap)
+  # ptsin[is.na(ptsin)] <- 0
+  # points(pts[ptsin == 1, ], col = "red")
+  # sum(ptsin == 1)/gArea(sap) # true density based on sap
+  # 
+  # expand.sap <- gBuffer(sap, width = rdt$area)
+  # length(walk)/gArea(expand.sap) # true simulated density
   
   #  > head(session.data)
   #  [[1]]
