@@ -4,8 +4,9 @@ library(tidyr)
 library(dplyr) # starts_with, used in gather
 
 # Uncomment to rerun the analysis from the beginning. You might be waiting a while...
-# source("analysis_run_mark.R")
-# source("analysis_calculate_indices.R") # TODO: recalculate this because area_size was not correct
+source("analysis_run_mark.R")
+source("analysis_calculate_indices.R")
+
 load("simulations_calculated_indices.RData")
 xy <- droplevels(xy[xy$fun == "empirical", ])
 

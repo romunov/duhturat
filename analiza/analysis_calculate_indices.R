@@ -11,7 +11,7 @@ load("simulations.RData")
 xy <- xy.mark
 
 if (Sys.info()["sysname"] == "Windows") {
-  ncores <- 4
+  ncores <- 8
 } else {
   ncores <- 46
 }
