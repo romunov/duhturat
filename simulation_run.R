@@ -17,7 +17,7 @@ if (Sys.info()["sysname"] == "Windows") {
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
 xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
-                 prob = runif(nsim, min = 0.15, max = 0.4),
+                 prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(1000, 2000, 3000, 4000, 5000), size = nsim, replace = TRUE),
                  # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 
                  # 3 fold increase for sap 200 and area 400
