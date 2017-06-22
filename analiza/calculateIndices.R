@@ -17,7 +17,6 @@ calculateIndices <- function(x, lf) {
   info$N.tirm <- mdl$ml.pop.size
   x$simulation.pars <- info
   
-  browser()
   # add population size estimates and the difference
   size.1 <- x$est.der.pars$N.Population.Size.estimate[1]
   size.sp <- x$est.der.pars$N.Population.Size.estimate[2]

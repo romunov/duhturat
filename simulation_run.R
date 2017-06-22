@@ -18,7 +18,7 @@ set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
 xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
                  prob = runif(nsim, min = 0.15, max = 0.4),
-                 num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
+                 num.walkers = sample(c(1000, 2000, 3000, 4000, 5000), size = nsim, replace = TRUE),
                  # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 
                  # 3 fold increase for sap 200 and area 400
                  # if not enough walkers, sampling fails. why 3-fold? because a 3 fold increase in a population could be considered a lot
@@ -26,13 +26,13 @@ xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
 )
 
 # SD=60, home range extends from 0 to about 200, see
-# curve(dnorm(x, sd = 60), from = 0, to = 400)
+# curve(dnorm(x, sd = 60), from = 0, to = 600)
 # SD=20, home range extends from 0 to about 50
-# curve(dnorm(x, sd = 20), from = 0, to = 400)
+# curve(dnorm(x, sd = 20), from = 0, to = 600)
 
 xy$sap <- 200
 xy$home.range <- xy$SD
-xy$area <- 400
+xy$area <- 700
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
@@ -45,7 +45,7 @@ cl <- makeCluster(ncores)
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = (1:nrow(xy))[1:500]) %dopar% {
+foreach(i = (1:nrow(xy))) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
@@ -102,7 +102,7 @@ foreach(i = (1:nrow(xy))[1:500]) %dopar% {
 # all parameters remain the same, fitted distribution changes
 xy$sim.dist <- "normal"
 
-foreach(i = (1:nrow(xy))[1:500]) %dopar% {
+foreach(i = (1:nrow(xy))) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
