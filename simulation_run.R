@@ -26,9 +26,9 @@ xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
 )
 
 # SD=60, home range extends from 0 to about 200, see
-curve(dnorm(x, sd = 60), from = 0, to = 400)
+# curve(dnorm(x, sd = 60), from = 0, to = 400)
 # SD=20, home range extends from 0 to about 50
-curve(dnorm(x, sd = 20), from = 0, to = 400)
+# curve(dnorm(x, sd = 20), from = 0, to = 400)
 
 xy$sap <- 200
 xy$home.range <- xy$SD
@@ -45,11 +45,11 @@ cl <- makeCluster(ncores)
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = 1:nrow(xy)) %dopar% {
+foreach(i = 1:nrow(xy)[1:500]) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
-  library(splancs) #csr
+  library(splancs)
 
   source("simulation.R")
   source("walkerContribution.R")
@@ -102,7 +102,7 @@ foreach(i = 1:nrow(xy)) %dopar% {
 # all parameters remain the same, fitted distribution changes
 xy$sim.dist <- "normal"
 
-foreach(i = 1:nrow(xy)) %dopar% {
+foreach(i = 1:nrow(xy)[1:500]) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
