@@ -29,7 +29,7 @@ markAnalysis <- function(fn) {
 	cml <- create.model.list("Huggins")
 	tr.result <- mark.wrapper(cml, data = tr.process, ddl = tr.ddl, adjust = FALSE,
 			invisible = TRUE)
-	
+	setwd(oldwd)
 	# EXTRACT DATA FROM THE ANALYSIS
 	cp.der <- data.frame(tr.result$p.cequal.dot$results$derived,
 			model.name = tr.result$p.cequal.dot$model.name,
