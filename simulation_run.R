@@ -45,7 +45,7 @@ cl <- makeCluster(ncores)
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = 1:nrow(xy)[1:500]) %dopar% {
+foreach(i = (1:nrow(xy))[1:500]) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
@@ -102,7 +102,7 @@ foreach(i = 1:nrow(xy)[1:500]) %dopar% {
 # all parameters remain the same, fitted distribution changes
 xy$sim.dist <- "normal"
 
-foreach(i = 1:nrow(xy)[1:500]) %dopar% {
+foreach(i = (1:nrow(xy))[1:500]) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
