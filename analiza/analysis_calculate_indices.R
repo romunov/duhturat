@@ -12,7 +12,7 @@ load("simulations.RData")
 load("simulations_test.RData")
 
 if (Sys.info()["sysname"] == "Windows") {
-  ncores <- 8
+  ncores <- 4
 } else {
   ncores <- 46
 }
@@ -25,11 +25,8 @@ clusterEvalQ(cl, source("../getQs.R"))
 clusterEvalQ(cl, source("readRunModels.R"))
 clusterEvalQ(cl, library(capwire))
 
-# lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
-lf <- list.files("../data", pattern = "sim", full.names = TRUE)
-xy <- parSapply(cl = cl, X = xy.mark, FUN = calculateIndices, lf = lf, simplify = FALSE)
-# xy <- sapply(X = xy.mark, FUN = calculateIndices, lf = lf, simplify = FALSE) # for debugging
-xy <- mapply(FUN = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE)
+lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
+system.time(xy <- clusterMap(cl = cl, fun = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE))
 xy <- do.call(rbind, xy)
 rownames(xy) <- NULL
 save(xy, file = "simulations_calculated_indices.RData")
