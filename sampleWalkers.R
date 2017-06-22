@@ -111,6 +111,7 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
   # pts <- do.call(rbind, sapply(walk, coordinates, simplify = FALSE)) # create points from walkers
   # rownames(pts) <- NULL
   # pts <- SpatialPoints(pts)
+  # points(pts, col = "light grey")
   # 
   # pts$inout <- (rowSums(capture.df) != 0) + 1 # 2 = sampled walker, 1 = not sampled
   # points(pts, col = pts$inout) # these were caught inside the sampling area
