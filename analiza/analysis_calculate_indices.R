@@ -25,7 +25,8 @@ clusterEvalQ(cl, source("../getQs.R"))
 clusterEvalQ(cl, source("readRunModels.R"))
 clusterEvalQ(cl, library(capwire))
 
-lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
+# lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
+lf <- list.files("../data", pattern = "sim", full.names = TRUE)
 xy <- parSapply(cl = cl, X = xy.mark, FUN = calculateIndices, lf = lf, simplify = FALSE)
 # xy <- sapply(X = xy.mark, FUN = calculateIndices, lf = lf, simplify = FALSE) # for debugging
 xy <- mapply(FUN = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE)

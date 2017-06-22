@@ -66,24 +66,6 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
   # Do "rbind" for each session
   session.data <- lapply(out.sampled, function(x) do.call(rbind, x))
   
-  # # DEBUGGING: check densities
-  # plot(sap, xlim = c(-500, 500), ylim = c(-500, 500), border = "blue")
-  # pts <- do.call(rbind, sapply(walk, coordinates, simplify = FALSE)) # create points from walkers
-  # rownames(pts) <- NULL
-  # pts <- SpatialPoints(pts)
-  # 
-  # pts$inout <- (rowSums(capture.df) != 0) + 1 # 2 = sampled walker, 1 = not sampled
-  # points(pts, col = pts$inout) # these were caught inside the sampling area
-  # points(pts) # all walkers
-  # # check density within sap/true density
-  # ptsin <- over(pts, sap)
-  # ptsin[is.na(ptsin)] <- 0
-  # points(pts[ptsin == 1, ], col = "red")
-  # sum(ptsin == 1)/gArea(sap) # true density based on sap
-  # 
-  # expand.sap <- gBuffer(sap, width = rdt$area)
-  # length(walk)/gArea(expand.sap) # true simulated density
-  
   #  > head(session.data)
   #  [[1]]
   #                  x           y capt
@@ -123,6 +105,34 @@ sampleWalkers <- function(walk, sessions, prob, sap, SD) {
   #	[2,]    0    0    0    0    0
   #	[3,]    0    1    0    1    1
   #	[4,]    0    0    0    0    0
+  
+  # # DEBUGGING: check densities
+  # plot(sap, xlim = c(-600, 600), ylim = c(-600, 600), border = "blue", axes = TRUE)
+  # pts <- do.call(rbind, sapply(walk, coordinates, simplify = FALSE)) # create points from walkers
+  # rownames(pts) <- NULL
+  # pts <- SpatialPoints(pts)
+  # 
+  # pts$inout <- (rowSums(capture.df) != 0) + 1 # 2 = sampled walker, 1 = not sampled
+  # points(pts, col = pts$inout) # these were caught inside the sampling area
+  # # points(pts) # all walkers
+  # # check density within sap/true density
+  # ptsin <- over(pts, sap)
+  # ptsin[is.na(ptsin)] <- 0
+  # # points(pts[ptsin == 1, ], col = "red")
+  # sum(ptsin == 1)/gArea(sap) # true density based on sap
+  # 
+  # supop <- gBuffer(sap, width = SD * 3.96)
+  # plot(supop, add = TRUE)
+  # pts.supop <- over(pts, supop)
+  # points(pts[!is.na(pts.supop), ], col = "green")
+  # sum(pts.supop, na.rm = TRUE)/gArea(sap)
+  # 
+  # curve(dnorm(x, sd = SD), from = 0, to = 500)
+  # 
+  # expand.sap <- gBuffer(sap, width = rdt$area)
+  # plot(expand.sap, add = TRUE)
+  # length(walk)/gArea(expand.sap) # true simulated density
+  # length(walk)/(pi * 400^2)
   
   # Create a list where each element is a walker with each
   # line in a data.frame representing data from sampling sessions.

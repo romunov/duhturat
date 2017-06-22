@@ -39,7 +39,7 @@ xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
-
+i <- 1852
 rdt <- data.frame(
   SD = as.numeric(xy[i, "SD"]),
   prob = as.numeric(xy[i, "prob"]),
@@ -139,3 +139,49 @@ qnorm(0.7, sd = 20)
 pnorm(5.07, sd = 20)
 curve(dnorm(x, sd = 20), from = 0, to = 100)
 1 - pnorm(40, sd = 20, lower.tail = FALSE)
+
+
+# test density
+library(sp)
+library(rgeos)
+
+N <- 1400
+area.sap <- 200
+area.world <- 400
+SD <- 24
+
+sap <- SpatialPoints(matrix(c(0,0), nrow = 1))
+sap <- gBuffer(sap, width = area.sap)
+
+world <- SpatialPoints(matrix(c(0,0), nrow = 1))
+world <- gBuffer(world, width = area.world)
+
+xy <- spsample(x = world, n = N, type = "random")
+pts <- SpatialPoints(xy)
+
+plot(sap, xlim = c(-600, 600), ylim = c(-600, 600), border = "blue", axes = TRUE, lwd = 2)
+points(pts, col = "light grey")
+
+# true density
+plot(world, add = TRUE, lwd = 2)
+length(pts)/gArea(world) # true simulated density
+(td <- length(pts)/(pi * area.world^2))
+
+for (i in seq(0, 8, by = 1)) {
+  supop <- gBuffer(sap, width = SD * i)
+  # plot(supop, add = TRUE, lwd = 2)
+  pts.supop <- over(pts, supop)
+  nw <- sum(pts.supop == 1, na.rm = TRUE)
+  estD <- sum(pts.supop, na.rm = TRUE)/gArea(sap)
+  # points(pts[!is.na(pts.supop), ], col = "dark grey")
+  message(sprintf("i: %s; nwalkers: %s; estD: %s, bias: %s; trueD: %s", 
+                  i, 
+                  nw,
+                  round(estD, 5),
+                  round(estD/td, 5),
+                  round(nw/gArea(supop), 5)
+                  )
+          )
+}
+
+curve(dnorm(x, sd = SD), from = 0, to = 500)
