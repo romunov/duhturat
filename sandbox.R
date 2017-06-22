@@ -39,7 +39,7 @@ xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
-i <- 1852
+
 rdt <- data.frame(
   SD = as.numeric(xy[i, "SD"]),
   prob = as.numeric(xy[i, "prob"]),
