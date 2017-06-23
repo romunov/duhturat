@@ -145,13 +145,13 @@ curve(dnorm(x, sd = 20), from = 0, to = 100)
 library(sp)
 library(rgeos)
 
-c(1000, 2000, 3000, 4000, 5000)/(pi * 700^2)
+c(1000, 2000, 3000, 4000, 5000)/(pi * 1000^2)
 
-N <- 1000
+N <- 2000
 # N <- 5000
 area.sap <- 200
-area.world <- 700
-SD <- 60
+area.world <- 1000
+SD <- 200
 
 sap <- SpatialPoints(matrix(c(0,0), nrow = 1))
 sap <- gBuffer(sap, width = area.sap)
@@ -187,4 +187,4 @@ for (i in seq(0, 8, by = 1)) {
           )
 }
 
-curve(dnorm(x, sd = SD), from = 0, to = 500)
+curve(dnorm(x, sd = 200), from = 0, to = 1000)

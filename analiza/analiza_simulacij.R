@@ -31,6 +31,7 @@ xep <- xep[!duplicated(xep[, c("p.val", "p.var", "num.generated.walkers", "true.
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.05) +
   scale_y_continuous(limits = c(0, 0.4)) +
@@ -39,6 +40,7 @@ ggsave("./figures/E-0a pristranskost .1 in .sp ocene ulovljivosti.png")
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
@@ -47,6 +49,7 @@ ggsave("./figures/E-0b pristranskost p.1 in p.sp glede na st. walkerjev in corre
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
@@ -56,6 +59,7 @@ summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xep))
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
@@ -64,6 +68,7 @@ ggsave("./figures/E-0d pristranskost p glede na model in tip popravka.png")
 
 ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
@@ -72,6 +77,7 @@ ggsave("./figures/E-0e pristranskot p glede na sap.hr ratio po st. gen. walkerji
 
 ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
@@ -80,6 +86,7 @@ ggsave("./figures/E-0f pristranskost p glede na sap.hr ratio po st. gen walkerje
 
 ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
@@ -97,6 +104,7 @@ summary(glm(p.val ~ sap.hr.ratio * sessions * p.var, data = xep))
 
 ggplot(xep, aes(x = sap.hr.ratio, y = p.val)) +
   theme_bw() +
+  ylab("p underestimation") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(aes(color = sessions), method = "loess", se = FALSE) +
@@ -119,6 +127,7 @@ ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. 
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
+  geom_hline(yintercept = 1) +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90)) +
   geom_jitter(alpha = 0.5, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = FALSE) +
@@ -162,3 +171,5 @@ ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = model, y = dAIC))
 # # # normal # # #
 
 xz <- droplevels(aee[aee$fun == "normal", ])
+
+# TODO: naredi preprosto simulacijo, kjer ne bo problem edge efekt in primerjaj mark in tirm modele

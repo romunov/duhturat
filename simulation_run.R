@@ -16,7 +16,7 @@ if (Sys.info()["sysname"] == "Windows") {
 #############
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
-xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
+xy <- data.frame(SD = round(runif(nsim, min = 5, max = 200)),
                  prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(1000, 2000, 3000, 4000, 5000), size = nsim, replace = TRUE),
                  # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 
@@ -32,7 +32,7 @@ xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
 
 xy$sap <- 200
 xy$home.range <- xy$SD
-xy$area <- 700
+xy$area <- 1000
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
