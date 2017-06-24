@@ -33,9 +33,9 @@ calculateMarkFast <- function(x) {
 
 #' @param p Numeric. Detection probability.
 #' @param K Integer. Number of sessions.
-#' @param N.fudge Integer. How many walkers to "fudge" - take out some capture and simulate heterogeneity.
-#' @param rm.1 Integer. From \code{N.fudge}, how many 1s to remove.
-rs <- sapply(rep(seq(200, 1000, by = 100), each = 5), FUN = function(N, p, K, N.fudge, rm.1) {
+#' @param N.fudge Numeric. Proportion of N to introduce heterogeneity to.
+#' @param rm.1 Numeric. Proportion of \code{N.fudge} to remove.
+rs <- sapply(rep(seq(50, 500, by = 50), each = 5), FUN = function(N, p, K, N.fudge = 1, rm.1) {
   
   # Simulate some fine and dandy CMR data.
   xy <- replicate(N, {
@@ -46,7 +46,7 @@ rs <- sapply(rep(seq(200, 1000, by = 100), each = 5), FUN = function(N, p, K, N.
   xy <- data.frame(ch = apply(xy, MARGIN = 1, paste, collapse = ""), stringsAsFactors = FALSE)
   xy$count <- count
   xy <- xy[count > 0, ]
-  
+
   # Estimate population sizes using Huggins' model and  TIRM.
   tr.result <- calculateMarkFast(x = xy)
   mdl <- fitTirm(data = buildClassTable(xy$count), max.pop = N * 3)
@@ -65,37 +65,41 @@ rs <- sapply(rep(seq(200, 1000, by = 100), each = 5), FUN = function(N, p, K, N.
                          p.est.se = NA,
                          model = "tirm", method = "closureOK")
   
-  # decrease p due to edge effect
-  l.fudge <- (nrow(xy) - N.fudge + 1):nrow(xy)
-  
-  fudged <- do.call(rbind, strsplit(xy[l.fudge, "ch"], ""))
-  fudged[sample(which(fudged == 1), rm.1, replace = FALSE)] <- 0
-  fudged.count <- apply(fudged, MARGIN = 1, FUN = function(x) sum(as.numeric(x)))
-  fudged <- data.frame(ch = apply(fudged, MARGIN = 1, FUN = paste, collapse = ""), 
-                       count = fudged.count, stringsAsFactors = FALSE)
-  xy[l.fudge, ] <- fudged
-  xy <- xy[xy$count > 0, ]
-  
-  # Estimate population sizes using Huggins' model and  TIRM for fudged data.
-  tr.result <- calculateMarkFast(x = xy)
-  mdl <- fitTirm(data = buildClassTable(xy$count), max.pop = N * 3)
-  
-  out$huggins.fudge <- data.frame(N = N,
-                                  pop.size = tr.result$p.cequal.dot$results$derived$`N Population Size`$estimate,
-                                  se = tr.result$p.cequal.dot$results$derived$`N Population Size`$se,
-                                  p.est = tr.result$p.cequal.dot$results$real$estimate,
-                                  p.est.se = tr.result$p.cequal.dot$results$real$se,
-                                  model = "huggins", method = "closureViolated")
-  out$tirm.fudge <- data.frame(N = N,
-                               pop.size = mdl$ml.pop.size, 
-                               se = NA,
-                               p.est = NA,
-                               p.est.se = NA,
-                               model = "tirm", method = "closureViolated")
+  # If you want to fudge the data (introduce heterogeneity due to violation of closure), specify
+  # N.fudge > 0.
+  if (N.fudge < 1) {
+    # decrease p due to edge effect
+    l.fudge <- sample(1:nrow(xy), size = round(nrow(xy) * N.fudge), replace = FALSE)
+    
+    fudged <- do.call(rbind, strsplit(xy[l.fudge, "ch"], ""))
+    fudged[sample(which(fudged == 1), round(nrow(xy) * N.fudge * rm.1), replace = FALSE)] <- 0
+    fudged.count <- apply(fudged, MARGIN = 1, FUN = function(x) sum(as.numeric(x)))
+    fudged <- data.frame(ch = apply(fudged, MARGIN = 1, FUN = paste, collapse = ""), 
+                         count = fudged.count, stringsAsFactors = FALSE)
+    xy[l.fudge, ] <- fudged
+    xy <- xy[xy$count > 0, ]
+    
+    # Estimate population sizes using Huggins' model and  TIRM for fudged data.
+    tr.result <- calculateMarkFast(x = xy)
+    mdl <- fitTirm(data = buildClassTable(xy$count), max.pop = N * 3)
+    
+    out$huggins.fudge <- data.frame(N = N,
+                                    pop.size = tr.result$p.cequal.dot$results$derived$`N Population Size`$estimate,
+                                    se = tr.result$p.cequal.dot$results$derived$`N Population Size`$se,
+                                    p.est = tr.result$p.cequal.dot$results$real$estimate,
+                                    p.est.se = tr.result$p.cequal.dot$results$real$se,
+                                    model = "huggins", method = "closureViolated")
+    out$tirm.fudge <- data.frame(N = N,
+                                 pop.size = mdl$ml.pop.size, 
+                                 se = NA,
+                                 p.est = NA,
+                                 p.est.se = NA,
+                                 model = "tirm", method = "closureViolated")
+  }
   
   out <- as.data.frame(do.call(rbind, out))
   out
-}, p = p, K = K, N.fudge = 100, rm.1 = 50, simplify = FALSE)
+}, p = p, K = K, N.fudge = 0.4, rm.1 = 0.5, simplify = FALSE)
 
 rs <- do.call(rbind, rs)
 
