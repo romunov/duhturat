@@ -35,8 +35,7 @@ calculateMarkFast <- function(x) {
 #' @param K Integer. Number of sessions.
 #' @param N.fudge Numeric. Proportion of N to introduce heterogeneity to.
 #' @param rm.1 Numeric. Proportion of \code{N.fudge} to remove.
-rs <- sapply(rep(seq(50, 500, by = 50), each = 5), FUN = function(N, p, K, N.fudge = 1, rm.1) {
-  
+rs <- sapply(rep(c(50, 100, 200, 500), each = 5), FUN = function(N, p, K, N.fudge = 1, rm.1) {
   # Simulate some fine and dandy CMR data.
   xy <- replicate(N, {
     rbinom(K, size = 1, prob = p)
@@ -49,25 +48,35 @@ rs <- sapply(rep(seq(50, 500, by = 50), each = 5), FUN = function(N, p, K, N.fud
 
   # Estimate population sizes using Huggins' model and  TIRM.
   tr.result <- calculateMarkFast(x = xy)
+  mark.estimate <- tr.result$p.cequal.dot$results$derived$`N Population Size`$estimate
+  mark.se <- tr.result$p.cequal.dot$results$derived$`N Population Size`$se
+  mark.p <- tr.result$p.cequal.dot$results$real$estimate
+  mark.p.se <- tr.result$p.cequal.dot$results$real$se
+  
   mdl <- fitTirm(data = buildClassTable(xy$count), max.pop = N * 3)
+  mdl.ci <- bootstrapCapwire(mdl, bootstraps = 300)
+  
   
   out <- list()
   out$huggins <- data.frame(N = N,
-                            pop.size = tr.result$p.cequal.dot$results$derived$`N Population Size`$estimate,
-                            se = tr.result$p.cequal.dot$results$derived$`N Population Size`$se,
-                            p.est = tr.result$p.cequal.dot$results$real$estimate,
-                            p.est.se = tr.result$p.cequal.dot$results$real$se,
+                            pop.size = mark.estimate,
+                            ci.low = mark.estimate - 1.96 * mark.se,
+                            ci.high = mark.estimate + 1.96 * mark.se,
+                            se = mark.se,
+                            p.est = mark.p,
+                            p.est.se = mark.p.se,
                             model = "huggins", method = "closureOK")
   out$tirm <- data.frame(N = N,
                          pop.size = mdl$ml.pop.size, 
-                         se = NA,
+                         ci.low = mdl.ci$conf.int[1],
+                         ci.high = mdl.ci$conf.int[2],
                          p.est = NA,
                          p.est.se = NA,
                          model = "tirm", method = "closureOK")
   
   # If you want to fudge the data (introduce heterogeneity due to violation of closure), specify
   # N.fudge > 0.
-  if (N.fudge < 1) {
+  if (N.fudge < 0) {
     # decrease p due to edge effect
     l.fudge <- sample(1:nrow(xy), size = round(nrow(xy) * N.fudge), replace = FALSE)
     
@@ -99,7 +108,7 @@ rs <- sapply(rep(seq(50, 500, by = 50), each = 5), FUN = function(N, p, K, N.fud
   
   out <- as.data.frame(do.call(rbind, out))
   out
-}, p = p, K = K, N.fudge = 0.4, rm.1 = 0.5, simplify = FALSE)
+}, p = p, K = K, N.fudge = 0, rm.1 = 0.5, simplify = FALSE)
 
 rs <- do.call(rbind, rs)
 
@@ -108,3 +117,4 @@ ggplot(rs, aes(x = N, y = pop.size, color = method, shape = model)) +
   scale_color_brewer(palette = "Set1") +
   geom_segment(aes(x = N-lw, y = N, xend = N+lw, yend = N), size = 1, alpha = 0.75) +
   geom_jitter()
+ggsave("./figures/primerjava huggins tirm.jpg")
