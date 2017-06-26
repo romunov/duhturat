@@ -55,14 +55,12 @@ rs <- sapply(rep(c(50, 100, 200, 500), each = 5), FUN = function(N, p, K, N.fudg
   
   mdl <- fitTirm(data = buildClassTable(xy$count), max.pop = N * 3)
   mdl.ci <- bootstrapCapwire(mdl, bootstraps = 300)
-  
-  
+
   out <- list()
   out$huggins <- data.frame(N = N,
                             pop.size = mark.estimate,
                             ci.low = mark.estimate - 1.96 * mark.se,
                             ci.high = mark.estimate + 1.96 * mark.se,
-                            se = mark.se,
                             p.est = mark.p,
                             p.est.se = mark.p.se,
                             model = "huggins", method = "closureOK")
@@ -91,7 +89,7 @@ rs <- sapply(rep(c(50, 100, 200, 500), each = 5), FUN = function(N, p, K, N.fudg
     # Estimate population sizes using Huggins' model and  TIRM for fudged data.
     tr.result <- calculateMarkFast(x = xy)
     mdl <- fitTirm(data = buildClassTable(xy$count), max.pop = N * 3)
-    
+
     out$huggins.fudge <- data.frame(N = N,
                                     pop.size = tr.result$p.cequal.dot$results$derived$`N Population Size`$estimate,
                                     se = tr.result$p.cequal.dot$results$derived$`N Population Size`$se,
