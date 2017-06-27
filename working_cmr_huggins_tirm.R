@@ -109,10 +109,10 @@ rs <- sapply(rep(c(50, 100, 200, 500), each = 5), FUN = function(N, p, K, N.fudg
 }, p = p, K = K, N.fudge = 0, rm.1 = 0.5, simplify = FALSE)
 
 rs <- do.call(rbind, rs)
+rs$id <- 1:nrow(rs)
 
-ggplot(rs, aes(x = N, y = pop.size, color = method, shape = model)) +
+ggplot(rs, aes(x = id, y = pop.size, color = model)) +
   theme_bw() +
   scale_color_brewer(palette = "Set1") +
-  geom_segment(aes(x = N-lw, y = N, xend = N+lw, yend = N), size = 1, alpha = 0.75) +
-  geom_jitter()
+  geom_pointrange(aes(x = id, ymin = ci.low, ymax = ci.high))
 ggsave("./figures/primerjava huggins tirm.jpg")
