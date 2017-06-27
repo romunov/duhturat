@@ -109,10 +109,17 @@ rs <- sapply(rep(c(50, 100, 200, 500), each = 5), FUN = function(N, p, K, N.fudg
 }, p = p, K = K, N.fudge = 0, rm.1 = 0.5, simplify = FALSE)
 
 rs <- do.call(rbind, rs)
+rs$id <- rep(1:length(unique(rs$N)), each = 5)
 rs$id <- 1:nrow(rs)
+
+lbl <- data.frame(x = c(35, 35, 35, 10), y = unique(rs$N) + 20, label = unique(rs$N))
 
 ggplot(rs, aes(x = id, y = pop.size, color = model)) +
   theme_bw() +
   scale_color_brewer(palette = "Set1") +
-  geom_pointrange(aes(x = id, ymin = ci.low, ymax = ci.high))
+  ggtitle(sprintf("Simulated N ")) +
+  geom_hline(aes(yintercept = N), color = "light grey") +
+  geom_text(data = lbl, aes(x = x, y = y, label = label), color = "light grey") +
+  geom_pointrange(aes(ymin = ci.low, ymax = ci.high))
+
 ggsave("./figures/primerjava huggins tirm.jpg")
