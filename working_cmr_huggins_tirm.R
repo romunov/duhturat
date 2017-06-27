@@ -112,14 +112,12 @@ rs <- do.call(rbind, rs)
 rs$id <- rep(1:length(unique(rs$N)), each = 5)
 rs$id <- 1:nrow(rs)
 
-lbl <- data.frame(x = c(35, 35, 35, 10), y = unique(rs$N) + 20, label = unique(rs$N))
-
 ggplot(rs, aes(x = id, y = pop.size, color = model)) +
   theme_bw() +
+  theme(panel.grid.minor = element_blank()) +
   scale_color_brewer(palette = "Set1") +
   ggtitle(sprintf("Simulated N ")) +
-  geom_hline(aes(yintercept = N), color = "light grey") +
-  geom_text(data = lbl, aes(x = x, y = y, label = label), color = "light grey") +
+  scale_y_continuous(breaks = c(50, 100, 200, 500)) +
   geom_pointrange(aes(ymin = ci.low, ymax = ci.high))
 
 ggsave("./figures/primerjava huggins tirm.jpg")
