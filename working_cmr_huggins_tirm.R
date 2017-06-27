@@ -116,8 +116,10 @@ ggplot(rs, aes(x = id, y = pop.size, color = model)) +
   theme_bw() +
   theme(panel.grid.minor = element_blank()) +
   scale_color_brewer(palette = "Set1") +
-  ggtitle(sprintf("Simulated N ")) +
+  ggtitle(sprintf("Simulated p = %s, shown with 95%% CI", p)) +
+  ylab("Simulated/estimated population size") +
+  xlab("Simulation number") +
   scale_y_continuous(breaks = c(50, 100, 200, 500)) +
   geom_pointrange(aes(ymin = ci.low, ymax = ci.high))
 
-ggsave("./figures/primerjava huggins tirm.jpg")
+ggsave("./figures/primerjava huggins tirm.png")
