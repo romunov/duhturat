@@ -1,12 +1,12 @@
 library(raster)
 library(rgeos)
 library(cluster)
-library(splancs) #csr
+library(splancs)
 library(foreach)
 library(doParallel)
 
 if (Sys.info()["sysname"] == "Windows") {
-  ncores <- 4
+  ncores <- 2
 } else {
   ncores <- 46
 }
@@ -63,9 +63,7 @@ foreach(i = (1:nrow(xy))) %dopar% {
   source("distWeights.R")
   source("individualContribution.R")
   source("calcNormal2D.R")
-  source("superPopulation.R")
   source("writeINP.R")
-  source("calcNormal2D.R")
 
   out <- tryCatch({
     simulation(
@@ -91,6 +89,7 @@ foreach(i = (1:nrow(xy))) %dopar% {
   if (any(class(out) %in% c("error", "warning"))) {
     message(out$message)
     cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
+    cat(sprintf("died in seed %s \n", seed), file = "./data/failed.errors.txt", append = TRUE)
   }
   out
 }
@@ -120,9 +119,7 @@ foreach(i = (1:nrow(xy))) %dopar% {
   source("distWeights.R")
   source("individualContribution.R")
   source("calcNormal2D.R")
-  source("superPopulation.R")
   source("writeINP.R")
-  source("calcNormal2D.R")
   
   out <- tryCatch({
     simulation(
@@ -148,6 +145,8 @@ foreach(i = (1:nrow(xy))) %dopar% {
   if (any(class(out) %in% c("error", "warning"))) {
     message(out$message)
     cat(out$message, file = "./data/failed.errors.txt", append = TRUE)
+    cat(sprintf("died in seed %s \n", seed), file = "./data/failed.errors.txt", append = TRUE)
+    
   }
   out
 }
