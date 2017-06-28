@@ -13,7 +13,8 @@ calculateIndices <- function(x, lf) {
   
   SD <- x$simulation.pars$SD
   
-  mdl <- fitTirm(data = buildClassTable(ch$count), max.pop = info$generated_walkers)
+  # max population is set to be theoretical based on detection probability
+  mdl <- fitTirm(data = buildClassTable(ch$count), max.pop = info$num_of_sampled_walkers * 1/info$capture_prob)
   info$N.tirm <- mdl$ml.pop.size
   x$simulation.pars <- info
   
@@ -61,7 +62,7 @@ calculateIndices <- function(x, lf) {
   }
   
   if (x$simulation.pars$sim.dist == "normal") {
-    qs <- sapply(0.5, FUN = getQnormal, SD = SD, p = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99))
+    qs <- sapply(c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99), FUN = getQnormal, SD = SD)
   }
   
   area.50 <- pi * (area + qs["50%"])^2
