@@ -41,7 +41,7 @@ xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
-cl <- makeCluster(ncores)
+cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
@@ -90,7 +90,7 @@ foreach(i = (1:nrow(xy))) %dopar% {
     message(out$message)
     ftw <- "./data/failed.errors.%s.txt"
     cat(out$message, file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
-    cat(sprintf("died in seed %s \n", seed), file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
+    cat(sprintf("\ndied in seed %s \n", xy$seed[i]), file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
   }
   out
 }
@@ -139,14 +139,14 @@ foreach(i = (1:nrow(xy))) %dopar% {
       sim.dist = xy$sim.dist[i],
       num.boots = xy$num.boots[i]
     )
-  }, 
+  },
   error = function(e) e,
   warning = function(w) w)
   
   if (any(class(out) %in% c("error", "warning"))) {
     message(out$message)
     cat(out$message, file = "./data/failed.errors.txt", append = TRUE)
-    cat(sprintf("died in seed %s \n", seed), file = "./data/failed.errors.txt", append = TRUE)
+    cat(sprintf("\ndied in seed %s \n", xy$seed[i]), file = "./data/failed.errors.txt", append = TRUE)
     
   }
   out
