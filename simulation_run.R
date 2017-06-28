@@ -35,13 +35,13 @@ xy$home.range <- xy$SD
 xy$area <- 1000
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
-xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 xy <- xy[rep(1:nrow(xy), each = 2), ]
 
 xy$sim.dist <- c("empirical", "normal")
+xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 
 cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 registerDoParallel(cl)
