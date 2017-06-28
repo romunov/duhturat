@@ -3,20 +3,9 @@ library(ggplot2)
 library(tidyr)
 library(dplyr) # starts_with, used in gather
 
-if (Sys.info()["sysname"] == "Windows") {
-  ncores <- 8
-} else {
-  ncores <- 46
-}
-
-cl <- makeCluster(ncores)
-
 # Uncomment to rerun the analysis from the beginning. You might be waiting a while...
 source("analysis_run_mark.R")
 source("analysis_calculate_indices.R")
-
-stopCluster(cl)
-rm(cl)
 
 load("simulations_calculated_indices.RData")
 xy <- droplevels(xy[xy$fun == "empirical", ])

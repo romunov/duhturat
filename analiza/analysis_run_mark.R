@@ -4,6 +4,14 @@ library(parallel)
 source("markAnalysis.R")
 source("readRunModels.R")
 
+if (Sys.info()["sysname"] == "Windows") {
+  ncores <- 8
+} else {
+  ncores <- 46
+}
+
+cl <- makeCluster(ncores)
+on.exit(close.connection(cl))
 
 clusterExport(cl = cl, varlist = c("extractPars", "readMark"))
 clusterEvalQ(cl = cl, expr = library(RMark))

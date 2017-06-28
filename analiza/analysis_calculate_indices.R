@@ -1,11 +1,21 @@
 # Chunk 1 load packages and scripts
 library(capwire)
+library(parallel)
 
 source("markAnalysis.R")
 source("readRunModels.R")
 source("../getQs.R")
 source("../calcNormal2D.R")
 source("calculateIndices.R")
+
+if (Sys.info()["sysname"] == "Windows") {
+  ncores <- 4
+} else {
+  ncores <- 46
+}
+
+cl <- makeCluster(ncores)
+on.exit(closeCluster(cl))
 
 load("simulations.RData")
 
