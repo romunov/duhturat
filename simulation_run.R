@@ -37,7 +37,7 @@ xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
-xy$rsln <- 1
+xy$rsln <- 3
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
