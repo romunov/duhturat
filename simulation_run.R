@@ -45,7 +45,7 @@ cl <- makeCluster(ncores)
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = (1:nrow(xy))) %dopar% {
+foreach(i = (1:nrow(xy))) %do% {
   library(raster)
   library(rgeos)
   library(cluster)
@@ -88,8 +88,9 @@ foreach(i = (1:nrow(xy))) %dopar% {
 
   if (any(class(out) %in% c("error", "warning"))) {
     message(out$message)
-    cat(out$message, file = sprintf("./data/failed.errors.%s.txt", xy$sim.dist[i]), append = TRUE)
-    cat(sprintf("died in seed %s \n", seed), file = "./data/failed.errors.txt", append = TRUE)
+    ftw <- "./data/failed.errors.%s.txt"
+    cat(out$message, file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
+    cat(sprintf("died in seed %s \n", seed), file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
   }
   out
 }
