@@ -1,5 +1,4 @@
 # Chunk 1 load packages and scripts
-library(parallel)
 library(capwire)
 
 source("markAnalysis.R")
@@ -9,16 +8,6 @@ source("../calcNormal2D.R")
 source("calculateIndices.R")
 
 load("simulations.RData")
-load("simulations_test.RData")
-
-if (Sys.info()["sysname"] == "Windows") {
-  ncores <- 4
-} else {
-  ncores <- 46
-}
-
-cl <- makeCluster(ncores)
-on.exit(stopCluster(cl))
 
 clusterEvalQ(cl, source("../calcNormal2D.R"))
 clusterEvalQ(cl, source("../getQs.R"))
@@ -29,4 +18,5 @@ lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 system.time(xy <- clusterMap(cl = cl, fun = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE))
 xy <- do.call(rbind, xy)
 rownames(xy) <- NULL
+
 save(xy, file = "simulations_calculated_indices.RData")

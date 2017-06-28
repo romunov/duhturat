@@ -20,25 +20,31 @@ source("writeINP.R")
 source("calcNormal2D.R")
 
 set.seed(357) # use seed for reproducibility of generating starting values
-nsim <- 2000
-xy <- data.frame(SD = round(runif(nsim, min = 20, max = 60)),
-                 prob = runif(nsim, min = 0.15, max = 0.4),
-                 num.walkers = sample(c(630, 800, 1000, 1400, 1890), size = nsim, replace = TRUE),
-                 sessions = sample(4:7, size = nsim, replace = TRUE)
+nsim <- 500
+xy <- data.frame(SD = round(runif(nsim, min = 5, max = 200)),
+                 prob = runif(nsim, min = 0.1, max = 0.3),
+                 num.walkers = sample(c(1000, 2000, 3000, 4000, 5000), size = nsim, replace = TRUE),
+                 sessions = sample(c(3, 6, 10), size = nsim, replace = TRUE)
 )
+
+# SD=60, home range extends from 0 to about 200, see
+# curve(dnorm(x, sd = 60), from = 0, to = 600)
+# SD=20, home range extends from 0 to about 50
+# curve(dnorm(x, sd = 20), from = 0, to = 600)
 
 xy$sap <- 200
 xy$home.range <- xy$SD
-xy$area <- 400
+xy$area <- 1000
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
-xy$rsln <- 0.5
+xy$rsln <- 3
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
+i <- which.min(xy$SD)
 
 rdt <- data.frame(
   SD = as.numeric(xy[i, "SD"]),
@@ -188,3 +194,7 @@ for (i in seq(0, 8, by = 1)) {
 }
 
 curve(dnorm(x, sd = 200), from = 0, to = 1000)
+
+load("./analiza/simulations.RData")
+esde <- sapply(xy.mark, FUN = function(x) x$simulation.pars$SD)
+range(esde)
