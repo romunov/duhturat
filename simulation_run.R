@@ -37,7 +37,7 @@ xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
 xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
-xy$rsln <- 3
+xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
@@ -45,7 +45,7 @@ cl <- makeCluster(ncores)
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = (1:nrow(xy))) %do% {
+foreach(i = (1:nrow(xy))) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
