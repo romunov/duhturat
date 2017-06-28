@@ -35,11 +35,13 @@ xy$home.range <- xy$SD
 xy$area <- 1000
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
-xy$sim.dist <- "empirical"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
+xy <- xy[rep(1:nrow(xy), each = 2), ]
+
+xy$sim.dist <- c("empirical", "normal")
 
 cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 registerDoParallel(cl)
@@ -91,63 +93,6 @@ foreach(i = (1:nrow(xy))) %dopar% {
     ftw <- "./data/failed.errors.%s.txt"
     cat(out$message, file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
     cat(sprintf("\ndied in seed %s \n", xy$seed[i]), file = sprintf(ftw, xy$sim.dist[i]), append = TRUE)
-  }
-  out
-}
-
-##########
-# normal #
-##########
-
-# all parameters remain the same, fitted distribution changes
-xy$sim.dist <- "normal"
-
-foreach(i = (1:nrow(xy))) %dopar% {
-  library(raster)
-  library(rgeos)
-  library(cluster)
-  library(splancs)
-  
-  source("simulation.R")
-  source("walkerContribution.R")
-  source("populateWorld.R")
-  source("sampleWorld.R")
-  source("sampleWalkers.R")
-  source("numberOfBins.R")
-  source("calculateContribution.R")
-  source("calculateBins.R")
-  source("weighDistances.R")
-  source("distWeights.R")
-  source("individualContribution.R")
-  source("calcNormal2D.R")
-  source("writeINP.R")
-  
-  out <- tryCatch({
-    simulation(
-      SD = xy$SD[i],
-      prob = xy$prob[i],
-      sessions = xy$sessions[i],
-      num.walkers = xy$num.walkers[i],
-      sap = xy$sap[i],
-      area = xy$area[i],
-      work.dir = xy$work.dir[i],
-      seed = xy$seed[i],
-      summary.file = xy$summary.file[i],
-      home.range = xy$home.range[i],
-      rsln = xy$rsln[i],
-      weight.switch = xy$weight.switch[i],
-      sim.dist = xy$sim.dist[i],
-      num.boots = xy$num.boots[i]
-    )
-  },
-  error = function(e) e,
-  warning = function(w) w)
-  
-  if (any(class(out) %in% c("error", "warning"))) {
-    message(out$message)
-    cat(out$message, file = "./data/failed.errors.txt", append = TRUE)
-    cat(sprintf("\ndied in seed %s \n", xy$seed[i]), file = "./data/failed.errors.txt", append = TRUE)
-    
   }
   out
 }
