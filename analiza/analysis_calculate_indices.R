@@ -10,11 +10,13 @@ source("calculateIndices.R")
 
 if (Sys.info()["sysname"] == "Windows") {
   ncores <- 4
+  cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 } else {
   ncores <- 46
+  cl <- makeCluster(ncores, type = "FORK", outfile = "clusterfuck.txt")
 }
 
-cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
+
 on.exit(closeCluster(cl))
 
 load("simulations.RData")
