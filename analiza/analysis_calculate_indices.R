@@ -14,7 +14,7 @@ if (Sys.info()["sysname"] == "Windows") {
   ncores <- 46
 }
 
-cl <- makeCluster(ncores)
+cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 on.exit(closeCluster(cl))
 
 load("simulations.RData")
