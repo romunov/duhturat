@@ -35,11 +35,7 @@ xy$seed <- 1:nrow(xy)
 xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
-
-xy <- xy[xy$seed > 500, ] # this is temporary
-
 xy <- xy[rep(1:nrow(xy), each = 2), ]
-
 xy$sim.dist <- c("empirical", "normal")
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 
