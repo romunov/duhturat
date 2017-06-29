@@ -15,7 +15,7 @@ if (Sys.info()["sysname"] == "Windows") {
 # empirical #
 #############
 set.seed(357) # use seed for reproducibility of generating starting values
-nsim <- 500
+nsim <- 1500
 xy <- data.frame(SD = round(runif(nsim, min = 5, max = 200)),
                  prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(1000, 2000, 3000, 4000, 5000), size = nsim, replace = TRUE),
@@ -34,7 +34,7 @@ xy$sap <- 200
 xy$home.range <- xy$SD
 xy$area <- 1000
 xy$work.dir <- "data"
-xy$seed <- 1:nrow(xy)
+xy$seed <- 501:(nrow(xy) + 500)
 xy$rsln <- 2
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
