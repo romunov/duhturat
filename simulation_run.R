@@ -18,10 +18,7 @@ set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
 xy <- data.frame(SD = round(runif(nsim, min = 5, max = 200)),
                  prob = runif(nsim, min = 0.1, max = 0.3),
-                 num.walkers = sample(c(1000, 2000, 3000, 4000, 5000), size = nsim, replace = TRUE),
-                 # 0.005014205 0.006367245 0.007959056 0.011142679 0.015042616 # densities range [╩0.005, 0.015] walkers/unit, 
-                 # 3 fold increase for sap 200 and area 400
-                 # if not enough walkers, sampling fails. why 3-fold? because a 3 fold increase in a population could be considered a lot
+                 num.walkers = sample(c(500, 800, 1000, 1300, 1500), size = nsim, replace = TRUE),
                  sessions = sample(c(3, 6, 10), size = nsim, replace = TRUE)
 )
 
