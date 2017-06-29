@@ -32,7 +32,7 @@ xy$home.range <- xy$SD
 xy$area <- 1000
 xy$work.dir <- "data"
 xy$seed <- 1:nrow(xy)
-xy$rsln <- 2
+xy$rsln <- 1
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 xy <- xy[rep(1:nrow(xy), each = 2), ]
