@@ -28,7 +28,6 @@ clusterEvalQ(cl, library(capwire))
 
 lf <- list.files("../data/", pattern = ".inp", full.names = TRUE)
 system.time(xy <- clusterMap(cl = cl, fun = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE))
-# tmp <- mapply(FUN = calculateIndices, x = xy.mark, lf = lf, SIMPLIFY = FALSE)
 xy <- do.call(rbind, xy)
 rownames(xy) <- NULL
 
