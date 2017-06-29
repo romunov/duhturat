@@ -24,7 +24,7 @@ xe$correction.type <- factor(xe$correction.type, levels = c("naive", "hr", "50",
 # first examine p
 xep <- gather(xe[, c("true.p", "p.target.1", "p.target.sp", "num.generated.walkers", 
                      "variable", "index", "sap.hr.ratio", "sessions")],
-                 key = p.var, value = p.val, p.target.1, p.target.sp)
+              key = p.var, value = p.val, p.target.1, p.target.sp)
 xep$correction.type <- gsub("dens\\.(.*)\\.(.*)$", "\\1", x = xep$variable)
 xep$correction.type <- factor(xep$correction.type, levels = c("naive", "hr", "50", "60", "70", "80", "90", "95", "99", "effect"))
 xep <- xep[!duplicated(xep[, c("p.val", "p.var", "num.generated.walkers", "true.p", "correction.type")]), ]
@@ -60,7 +60,8 @@ ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   scale_y_continuous(limits = c(-0.5, 1)) +
   geom_smooth(method = "loess", se = FALSE) +
   facet_grid(num.generated.walkers ~ .)
-ggsave("./figures/E-0c pristranskost p glede na model in st. generiranih walkerjev.png")
+ggsave("./figures/E-0c pristranskost p glede na model in st. generiranih walkerjev.png",
+       width = 10, height = 5, units = "in")
 summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xep))
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
@@ -138,6 +139,7 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   geom_jitter(alpha = 0.2, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
+  scale_x_continuous(limits = c(500, 3000)) +
   geom_hline(yintercept = 1, size = 1, alpha = 0.5) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png",
@@ -175,7 +177,8 @@ ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = sap.hr.ratio, y =
   geom_jitter(alpha = 0.5, shape = 1) +
   scale_color_brewer(palette = "Set1") +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/E-5.dAIC gled na razmerje hr_sap po correction type in st. gen.walk.png")
+ggsave("./figures/E-5.dAIC gled na razmerje hr_sap po correction type in st. gen.walk.png",
+       width = 10, height = 8, units = "in")
 
 ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = sap.hr.ratio, y = dAIC)) +
   theme_bw() +
@@ -184,14 +187,16 @@ ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = sap.hr.ratio, y =
   geom_jitter(alpha = 0.5, shape = 1) +
   geom_smooth(aes(color = better.model), method = "lm") +
   facet_grid(num.generated.walkers ~ correction.type)
-ggsave("./figures/E-6.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png")
+ggsave("./figures/E-6.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png",
+       width = 10, height = 8, units = "in")
 
 ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = model, y = dAIC)) +
   theme_bw() +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-  geom_jitter(alpha = 0.5) +
+  geom_violin() +
   facet_grid(num.generated.walkers ~ correction.type)
-  
+ggsave("./figures/E-7 dAIC po modelih sp in 1.png", width = 10, height = 8, units = "in")
+
 # # # normal # # #
 
 xz <- droplevels(aee[aee$fun == "normal", ])
