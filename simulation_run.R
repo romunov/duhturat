@@ -64,7 +64,7 @@ cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = (1:nrow(xy))) %do% {
+foreach(i = (1:nrow(xy))) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
