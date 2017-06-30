@@ -11,7 +11,7 @@ if (Sys.info()["sysname"] == "Windows") {
 }
 
 cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
-on.exit(close.connection(cl))
+on.exit(stopCluster(cl))
 
 clusterExport(cl = cl, varlist = c("extractPars", "readMark"))
 clusterEvalQ(cl = cl, expr = library(RMark))
