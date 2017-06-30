@@ -16,7 +16,14 @@ if (Sys.info()["sysname"] == "Windows") {
 #############
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
-xy <- data.frame(SD = round(runif(nsim, min = 5, max = 200)),
+
+# Because radius and area are not linearly (in a straight line) correlated, we need to sample from
+# area and transform to r.
+A <- seq((pi * 5^2), (pi * 200^2), by = 1)
+A <- sample(A, size = nsim, replace = TRUE)
+r <- sqrt(A/pi)
+
+xy <- data.frame(SD = round(r),
                  prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(500, 800, 1000, 1300, 1500), size = nsim, replace = TRUE),
                  sessions = sample(c(3, 6, 10), size = nsim, replace = TRUE)
