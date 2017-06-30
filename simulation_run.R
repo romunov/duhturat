@@ -6,7 +6,7 @@ library(foreach)
 library(doParallel)
 
 if (Sys.info()["sysname"] == "Windows") {
-  ncores <- 2
+  ncores <- 4
 } else {
   ncores <- 46
 }
@@ -26,7 +26,7 @@ r <- sqrt(A/pi)
 xy <- data.frame(SD = round(r),
                  prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(500, 800, 1000, 1300, 1500), size = nsim, replace = TRUE),
-                 sessions = sample(c(3, 6, 10), size = nsim, replace = TRUE)
+                 sessions = sample(c(5, 10, 15), size = nsim, replace = TRUE)
 )
 
 # SD=60, home range extends from 0 to about 200, see
@@ -46,31 +46,30 @@ xy <- xy[rep(1:nrow(xy), each = 2), ]
 xy$sim.dist <- c("empirical", "normal")
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
 
-# katere še enkrat zagnat:
-inp <- list.files("./data", pattern = ".inp")
-inp <- data.frame(mdl = gsub("^.*_(\\w+)_(\\d+)\\.inp", "\\1", x = inp),
-                  seed = gsub("^.*_(\\w+)_(\\d+)\\.inp", "\\2", x = inp))
-inp <- split(inp, f = inp$mdl)
-head(inp[[1]])
-
-inp <- lapply(inp, FUN = function(x) {
-  x$seed <- as.numeric(as.character(x$seed))
-  (1:2000)[!((1:2000) %in% x$seed)]
-})
-
-xy <- xy[(xy$sim.dist == "empirical" & (xy$seed %in% inp[[1]])) |
-          (xy$sim.dist == "normal" & (xy$seed %in% inp[[2]])), ]
+# # katere še enkrat zagnat:
+# inp <- list.files("./data", pattern = ".inp")
+# inp <- data.frame(mdl = gsub("^.*_(\\w+)_(\\d+)\\.inp", "\\1", x = inp),
+#                   seed = gsub("^.*_(\\w+)_(\\d+)\\.inp", "\\2", x = inp))
+# inp <- split(inp, f = inp$mdl)
+# 
+# inp <- lapply(inp, FUN = function(x) {
+#   x$seed <- as.numeric(as.character(x$seed))
+#   (1:2000)[!((1:2000) %in% x$seed)]
+# })
+# 
+# xy <- xy[(xy$sim.dist == "empirical" & (xy$seed %in% inp[[1]])) |
+#            (xy$sim.dist == "normal" & (xy$seed %in% inp[[2]])), ]
 
 cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 registerDoParallel(cl)
 on.exit(stopCluster(cl))
 
-foreach(i = (1:nrow(xy))) %dopar% {
+foreach(i = (1:nrow(xy))) %do% {
   library(raster)
   library(rgeos)
   library(cluster)
   library(splancs)
-
+  
   source("simulation.R")
   source("walkerContribution.R")
   source("populateWorld.R")
@@ -84,9 +83,9 @@ foreach(i = (1:nrow(xy))) %dopar% {
   source("individualContribution.R")
   source("calcNormal2D.R")
   source("writeINP.R")
-
-  out <- tryCatch({
-    simulation(
+  
+  # out <- tryCatch({
+   out <- simulation(
       SD = xy$SD[i],
       prob = xy$prob[i],
       sessions = xy$sessions[i],
@@ -102,10 +101,10 @@ foreach(i = (1:nrow(xy))) %dopar% {
       sim.dist = xy$sim.dist[i],
       num.boots = xy$num.boots[i]
     )
-  },
-  error = function(e) e,
-  warning = function(w) w)
-
+  # },
+  # error = function(e) e,
+  # warning = function(w) w)
+  
   if (any(class(out) %in% c("error", "warning"))) {
     message(out$message)
     ftw <- "./data/failed.errors.%s.txt"
