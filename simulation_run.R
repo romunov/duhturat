@@ -17,9 +17,9 @@ if (Sys.info()["sysname"] == "Windows") {
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
 
-# Because radius and area are not linearly (in a straight line) correlated, we need to sample from
+# Because radius and area are not linearly correlated (in a straight line), we need to sample from
 # area and transform to r.
-A <- seq((pi * 5^2), (pi * 200^2), by = 1)
+A <- seq((pi * 5^2), (pi * 200^2), by = 1) # simulate r from 5 to 200
 A <- sample(A, size = nsim, replace = TRUE)
 r <- sqrt(A/pi)
 
@@ -45,6 +45,21 @@ xy$num.boots <- 5000
 xy <- xy[rep(1:nrow(xy), each = 2), ]
 xy$sim.dist <- c("empirical", "normal")
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
+
+# katere še enkrat zagnat:
+inp <- list.files("./data", pattern = ".inp")
+inp <- data.frame(mdl = gsub("^.*_(\\w+)_(\\d+)\\.inp", "\\1", x = inp),
+                  seed = gsub("^.*_(\\w+)_(\\d+)\\.inp", "\\2", x = inp))
+inp <- split(inp, f = inp$mdl)
+head(inp[[1]])
+
+inp <- lapply(inp, FUN = function(x) {
+  x$seed <- as.numeric(as.character(x$seed))
+  (1:2000)[!((1:2000) %in% x$seed)]
+})
+
+xy <- xy[(xy$sim.dist == "empirical" & (xy$seed %in% inp[[1]])) |
+          (xy$sim.dist == "normal" & (xy$seed %in% inp[[2]])), ]
 
 cl <- makeCluster(ncores, outfile = "clusterfuck.txt")
 registerDoParallel(cl)
