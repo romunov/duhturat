@@ -16,10 +16,12 @@ if (Sys.info()["sysname"] == "Windows") {
 #############
 set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 2000
+sap <- 200
 
 # Because radius and area are not linearly correlated (in a straight line), we need to sample from
 # area and transform to r.
-A <- seq((pi * 5^2), (pi * 200^2), by = 1) # simulate r from 5 to 200
+ratio <- 1:100
+A <- sap/ratio
 A <- sample(A, size = nsim, replace = TRUE)
 r <- sqrt(A/pi)
 
@@ -34,7 +36,7 @@ xy <- data.frame(SD = round(r),
 # SD=20, home range extends from 0 to about 50
 # curve(dnorm(x, sd = 20), from = 0, to = 600)
 
-xy$sap <- 200
+xy$sap <- sap
 xy$home.range <- xy$SD
 xy$area <- 1000
 xy$work.dir <- "data"

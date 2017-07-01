@@ -18,7 +18,7 @@ xe$model <- ".1"
 xe$model[grepl(".sp$", xe$variable)] <- ".sp"
 xe$model[grepl(".tirm", xe$variable)] <- ".tirm"
 xe$correction.type <- sapply(strsplit(as.character(xe$variable), "\\."), "[", 2)
-xe$sap.hr.ratio <- with(xe, area.naive/hr)
+xe$sap.hr.ratio <- with(xe, area.naive/(pi * xe$hr^2))
 xe$correction.type <- factor(xe$correction.type, levels = c("naive", "hr", "50", "60", "70", "80", "90", "95", "99", "effect"))
 
 # first examine p
@@ -37,7 +37,8 @@ ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.05) +
   geom_smooth(method = "loess", se = FALSE)
-ggsave("./figures/E-0a pristranskost .1 in .sp ocene ulovljivosti.png")
+ggsave("./figures/E-0a pristranskost .1 in .sp ocene ulovljivosti.png",
+       width = 10, height = 5, units = "in")
 
 ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
   theme_bw() +
@@ -114,24 +115,27 @@ ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = p.var)) +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
   geom_smooth(method = "loess", se = FALSE) +
-  facet_grid(sessions ~ correction.type)
-ggsave("./figures/E-0h pristranskost p glede sap.hr razmerje glede na model.png",
+  facet_grid(sessions ~ num.generated.walkers)
+ggsave("./figures/E-0h pristranskost p glede sap.hr razmerje glede na st. walkerjev in st. sessionov.png",
        width = 10, height = 5, units = "in")
 summary(glm(p.val ~ sap.hr.ratio * sessions * p.var, data = xep))
 
-ggplot(xep, aes(x = sap.hr.ratio, y = p.val)) +
+ggplot(xep, aes(x = sap.hr.ratio, y = p.val, color = as.factor(sessions))) +
   theme_bw() +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
   ylab("p_ests/p_true") +
   scale_color_brewer(palette = "Set1") +
   geom_jitter(alpha = 0.1) +
-  geom_smooth(aes(color = sessions), method = "loess", se = FALSE) +
-  facet_grid(. ~ correction.type)
-ggsave("./figures/E-0i pristranskost p glede na sap.hr.ratio in glede na popravek brez sessions.png",
+  geom_smooth(method = "loess", se = FALSE) +
+  facet_grid(. ~ as.factor(num.generated.walkers))
+ggsave("./figures/E-0i pristranskost p glede na sap.hr.ratio in glede sessions.png",
        width = 10, height = 5, units = "in")
 
 # analyse density
-xe <- xe[xe$index < 8, ]
+# remove 1% of values considered as outlayers due to numerical problems
+xe <- xe[xe$index < quantile(xe$index, probs = 0.99), ]
+fh <- 5
+fw <- fh * 1.62
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
@@ -139,30 +143,31 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   geom_jitter(alpha = 0.2, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
-  scale_x_continuous(limits = c(500, 3000)) +
+  # scale_y_continuous(limits = c(0, 10)) +
+  scale_x_continuous(limits = c(0, 100)) +
   geom_hline(yintercept = 1, size = 1, alpha = 0.5) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png",
-       width = 10, height = 8, units = "in")
+       width = fw, height = fh, units = "in")
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
-  geom_hline(yintercept = 1) +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-  geom_jitter(alpha = 0.2, shape = 1) +
+  # geom_jitter(alpha = 0.2, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
+  scale_y_continuous(limits = c(0, 10)) +
   geom_hline(yintercept = 1, size = 1, alpha = 0.5) +
-  facet_grid(num.generated.walkers ~ correction.type, scales = "free_y")
-ggsave("./figures/E-1b.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png",
-       width = 10, height = 8, units = "in")
+  facet_grid(num.generated.walkers ~ correction.type)
+ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk brez pik.png",
+       width = fw, height = fh, units = "in")
 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
   geom_jitter(alpha = 0.5, shape = 1) +
-  scale_y_continuous(limits = c(0, 2)) +
-  scale_x_continuous(limits = c(0, 5000)) +
+  # scale_y_continuous(limits = c(0, 2)) +
+  # scale_x_continuous(limits = c(0, 5000)) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
   geom_hline(yintercept = 1, size = 1, alpha = 0.5) +
