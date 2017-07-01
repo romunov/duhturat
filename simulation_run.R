@@ -20,16 +20,17 @@ sap <- 200
 
 # Because radius and area are not linearly correlated (in a straight line), we need to sample from
 # area and transform to r.
-ratio <- 1:100
-A <- (pi * sap^2)/ratio
-A <- sample(unique(round(A)), size = nsim, replace = TRUE)
-r <- sqrt(A/pi)
-
-xy <- data.frame(SD = round(r),
+ratio <- c(200, 1)
+H <- (pi * sap^2)/ratio
+H <- seq(from = H[1], to = H[2], length.out = 10)
+r <- round(sqrt(H/pi))
+xy <- data.frame(SD = sample(r, size = nsim, replace = TRUE),
                  prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(500, 800, 1000, 1300, 1500), size = nsim, replace = TRUE),
                  sessions = sample(c(5, 10, 15), size = nsim, replace = TRUE)
 )
+
+# table(xy$SD, xy$num.walkers, xy$sessions)
 
 # SD=60, home range extends from 0 to about 200, see
 # curve(dnorm(x, sd = 60), from = 0, to = 600)
