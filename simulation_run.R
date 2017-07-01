@@ -21,8 +21,8 @@ sap <- 200
 # Because radius and area are not linearly correlated (in a straight line), we need to sample from
 # area and transform to r.
 ratio <- 1:100
-A <- sap/ratio
-A <- sample(A, size = nsim, replace = TRUE)
+A <- (pi * sap^2)/ratio
+A <- sample(unique(round(A)), size = nsim, replace = TRUE)
 r <- sqrt(A/pi)
 
 xy <- data.frame(SD = round(r),
