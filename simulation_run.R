@@ -15,7 +15,7 @@ if (Sys.info()["sysname"] == "Windows") {
 # empirical #
 #############
 set.seed(357) # use seed for reproducibility of generating starting values
-nsim <- 2000
+nsim <- 3000
 sap <- 200
 
 # Because radius and area are not linearly correlated (in a straight line), we need to sample from
