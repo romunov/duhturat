@@ -18,17 +18,29 @@ set.seed(357) # use seed for reproducibility of generating starting values
 nsim <- 3000
 sap <- 200
 
-# Because radius and area are not linearly correlated (in a straight line), we need to sample from
-# area and transform to r.
-ratio <- c(200, 1)
+# Because radius and area are not linearly correlated (in a straight line), we first calculate area,
+# calculate area if we divide it by 1, 2,... 1000
+ratio <- c(1000, 1)
 H <- (pi * sap^2)/ratio
-H <- seq(from = H[1], to = H[2], length.out = 10)
+H <- seq(from = H[1], to = H[2], length.out = 10) # 10 points with ~20 replications on the x axis should be enough
 r <- round(sqrt(H/pi))
+
 xy <- data.frame(SD = sample(r, size = nsim, replace = TRUE),
                  prob = runif(nsim, min = 0.1, max = 0.3),
                  num.walkers = sample(c(500, 800, 1000, 1300, 1500), size = nsim, replace = TRUE),
                  sessions = sample(c(5, 10, 15), size = nsim, replace = TRUE)
 )
+
+###############
+# DIAGNOSTICS #
+###############
+
+# plot(gBuffer(SpatialPoints(matrix(c(0,0), nrow = 1)), width = max(r)))
+# plot(gBuffer(SpatialPoints(matrix(c(0,0), nrow = 1)), width = min(r)), add = TRUE)
+
+# ar <- min(r):max(r)
+# plot(ar, y = scale(ar, center = FALSE), type = "l", ylim = c(0, 2.5))
+# lines(ar, y = scale(pi * (ar)^2, center = FALSE), type = "l")
 
 # table(xy$SD, xy$num.walkers, xy$sessions)
 
@@ -36,6 +48,10 @@ xy <- data.frame(SD = sample(r, size = nsim, replace = TRUE),
 # curve(dnorm(x, sd = 60), from = 0, to = 600)
 # SD=20, home range extends from 0 to about 50
 # curve(dnorm(x, sd = 20), from = 0, to = 600)
+
+##################
+# </DIAGNOSTICS> #
+##################
 
 xy$sap <- sap
 xy$home.range <- xy$SD
