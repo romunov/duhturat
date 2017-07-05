@@ -18,7 +18,7 @@ xe$model <- ".1"
 xe$model[grepl(".sp$", xe$variable)] <- ".sp"
 xe$model[grepl(".tirm", xe$variable)] <- ".tirm"
 xe$correction.type <- sapply(strsplit(as.character(xe$variable), "\\."), "[", 2)
-xe$sap.hr.ratio <- with(xe, area.naive/(pi * xe$hr^2))
+xe$sap.hr.ratio <- with(xe, (pi * xe$hr^2)/area.naive)
 xe$correction.type <- factor(xe$correction.type, levels = c("naive", "hr", "50", "60", "70", "80", "90", "95", "99", "effect"))
 
 # first examine p
@@ -133,7 +133,7 @@ ggsave("./figures/E-0i pristranskost p glede na sap.hr.ratio in glede sessions.p
 
 # analyse density
 # remove 1% of values considered as outlayers due to numerical problems
-xe <- xe[xe$index < quantile(xe$index, probs = 0.99), ]
+xe <- xe[xe$index < quantile(xe$index, probs = 0.95), ]
 fh <- 5
 fw <- fh * 1.62
 
@@ -143,8 +143,6 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   geom_jitter(alpha = 0.2, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
-  # scale_y_continuous(limits = c(0, 10)) +
-  scale_x_continuous(limits = c(0, 100)) +
   geom_hline(yintercept = 1, size = 1, alpha = 0.5) +
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. gen.walk.png",
@@ -153,7 +151,6 @@ ggsave("./figures/E-1.gostota gled na razmerje hr_sap po correction type in st. 
 ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
-  # geom_jitter(alpha = 0.2, shape = 1) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
   scale_y_continuous(limits = c(0, 10)) +
@@ -166,8 +163,6 @@ ggplot(xe, aes(x = sap.hr.ratio, y = index)) +
   theme_bw() +
   theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
   geom_jitter(alpha = 0.5, shape = 1) +
-  # scale_y_continuous(limits = c(0, 2)) +
-  # scale_x_continuous(limits = c(0, 5000)) +
   geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
   scale_color_brewer(palette = "Set1") +
   geom_hline(yintercept = 1, size = 1, alpha = 0.5) +
