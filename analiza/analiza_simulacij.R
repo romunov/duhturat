@@ -197,6 +197,9 @@ ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = model, y = dAIC))
   facet_grid(num.generated.walkers ~ correction.type)
 ggsave("./figures/E-7 dAIC po modelih sp in 1.png", width = 10, height = 8, units = "in")
 
+# ~.sp vedno oceni več osebkov, zato je vedno nad ~1
+# ker MR po defaultu precenjuje dejansko gostoto, je za pričakovat, da bodo vsi nad 1
+# ker so vsi nad 1, je za pričakovat, da bo tisti, ki oceni številčnost nižjo, manj pristranski
 # # # normal # # #
 
 xz <- droplevels(aee[aee$fun == "normal", ])

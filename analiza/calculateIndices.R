@@ -12,7 +12,6 @@ calculateIndices <- function(x, lf) {
   ch$count <- sapply(strsplit(ch$ch, ""), FUN = function(y) sum(as.numeric(y)))
   
   SD <- x$simulation.pars$SD
-  
   # max population is set to be theoretical based on detection probability
   mdl <- fitTirm(data = buildClassTable(ch$count), max.pop = info$num_of_sampled_walkers * 1/info$capture_prob)
   info$N.tirm <- mdl$ml.pop.size
@@ -53,8 +52,6 @@ calculateIndices <- function(x, lf) {
     b <- unlist(x$simulation.pars$hazard_fun_b)
     mx <- unlist(x$simulation.pars$hazard_fun_mx)
     
-    # curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx), from = 0, to = 300)
-    
     set.seed(x$simulation.pars$seed)
     qs <- getQcustom(fnc = weibullLikeDistribution, 
                      sigma = sigma, b = b, mx = mx, xrange = c(0, sigma * 3),
@@ -74,8 +71,7 @@ calculateIndices <- function(x, lf) {
   area.99 <- pi * (area + qs["99%"])^2
   
   # true density
-  dens.true <- pi * (x$simulation.pars$area_size)^2 # see populateWorld(), line 22
-  dens.true <- x$simulation.pars$generated_walkers / dens.true
+  dens.true <- x$simulation.pars$generated_walkers / (pi * x$simulation.pars$area_size^2)
   
   # calculate density given (enlarged) sampling area
   dens.naive.1 <- size.1 / area.naive
