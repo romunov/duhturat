@@ -31,20 +31,22 @@ xy <- data.frame(SD = round(runif(nsim, min = 5, max = 200)),
 # curve(dnorm(x, sd = 60), from = 0, to = 600)
 # SD=20, home range extends from 0 to about 50
 # curve(dnorm(x, sd = 20), from = 0, to = 600)
-
+xy <- data.frame(SD = c(5, 10, 15), prob = 0.18, num.walkers = 800, sessions = 5)
+  
 xy$sap <- 200
 xy$home.range <- xy$SD
 xy$area <- 1000
 xy$work.dir <- "data"
-xy$seed <- 1:nrow(xy)
-xy$sim.dist <- "empirical"
+# xy$seed <- 1:nrow(xy)
+xy$seed <- 1
+xy$sim.dist <- "normal"
 xy$summary.file <- sprintf("simulation_list_%s.txt", xy$sim.dist)
-xy$rsln <- 3
+xy$rsln <- 0.5
 xy$weight.switch <- TRUE
 xy$num.boots <- 5000
 
 i <- sample(1:nrow(xy), size = 1, replace = FALSE)
-i <- which.min(xy$SD)
+# i <- which.min(xy$SD)
 
 rdt <- data.frame(
   SD = as.numeric(xy[i, "SD"]),
@@ -83,11 +85,14 @@ simulation(
 )
 
 # paralelna verzija
-cl <- makeCluster(4)
+library(foreach)
+library(doParallel)
+
+cl <- makeCluster(3)
 registerDoParallel(cl)
 
 
-foreach(i = 1:5) %dopar% {
+foreach(i = 1:3) %dopar% {
   library(raster)
   library(rgeos)
   library(cluster)
@@ -133,7 +138,20 @@ foreach(i = 1:5) %dopar% {
 }
 
 # setwd("..")
-out <- markAnalysis(fn = "./data/mark-2017-05-01-14-32_1417.inp", wd = "./data")
+source("./analiza/markAnalysis.R")
+source("./analiza/readRunModels.R")
+library(RMark)
+out.3 <- markAnalysis(fn = "./data/mark-2017-10-27-10-34_normal_1.inp")
+out.1 <- markAnalysis(fn = "./data/mark-2017-10-27-10-41_normal_1.inp")
+out.05 <- markAnalysis(fn = "./data/mark-2017-10-27-11-05_normal_1.inp")
+
+
+out.3$real.fun.pars
+out.1$real.fun.pars
+out.05$real.fun.pars
+# velikost celic bistveno ne vpliva na oceno parametrov
+
+
 
 # By how much should cut-off of home range be expanded to encompass practically all sampled points?
 # ~ 4
@@ -198,3 +216,7 @@ curve(dnorm(x, sd = 200), from = 0, to = 1000)
 load("./analiza/simulations.RData")
 esde <- sapply(xy.mark, FUN = function(x) x$simulation.pars$SD)
 range(esde)
+
+
+with(xy, xy[num.generated.walkers == "800" & sessions == "5" & num.captured.walkers == 39 &
+              hr == "68", ])

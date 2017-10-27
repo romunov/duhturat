@@ -24,11 +24,10 @@ calculateIndices <- function(x, lf) {
   size.tirm <- x$simulation.pars$N.tirm
   
   # add capture probability esimates and the difference
-  p.1 <- x$real.fun.pars$estimate[1]
-  p.sp <- x$real.fun.pars$estimate[2]
   p.diff <- diff(x$real.fun.pars$estimate)
   true.p <- x$simulation.pars$capture_prob
-  p <- x$simulation.pars$capture_prob - x$real.fun.pars$estimate
+  # p <- true.p - x$real.fun.pars$estimate
+  p <- x$real.fun.pars$estimate
   # by how far off p is compared to simulated probability
   p.target.1 <- p[grepl("~1", x$real.fun.pars$model.name)]
   p.target.sp <- p[grepl("~sp", x$real.fun.pars$model.name)]
