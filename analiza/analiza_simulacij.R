@@ -10,11 +10,13 @@ source("functions.R")
 
 load("simulations_calculated_indices.RData")
 
+plt <- c(a0 = TRUE, b0 = TRUE, d0 = TRUE, f0 = TRUE, h0 = TRUE, i0 = TRUE, a1 = TRUE,
+         b1 = TRUE, a2 = TRUE, a5 = TRUE, a6 = TRUE, a7 = TRUE)
 #### EMPIRICAL ####
-createFigures(xy = xy, type = "E")
+createFigures(xy = xy, type = "E", plt)
 
 #### NORMAL ####
-createFigures(xy = xy, type = "N")
+createFigures(xy = xy, type = "N", plt)
 
 # out <- table(xy$num.generated.walkers, xy$sessions, xy$fun)
 # 5  10  15

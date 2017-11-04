@@ -1,6 +1,7 @@
 createFigures <- function(xy, type = c("N", "E"), ...) {
   #' ... can be a vector of named logical values which will make plot and summary print - or not.
-  #' See code for possible values.
+  #' See code for possible values (e.g. "a0", "b0", "a1"). Example of usage would be:
+  #' createFigures(xy, type = "N", c(a0 = TRUE, b0 = FALSE, a1 = TRUE))
   
   ps <- as.list(...) # ps = plot switch
   
@@ -38,7 +39,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
                                  "true.p", "correction.type")]), ]
   xep$p.val <- xep$p.val/xep$true.p
   
-  if (ps$a0) {
+  if (names(ps) %in% "a0") {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -53,7 +54,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     print(summary(glm(p.val ~ p.var, data = xep)))
   }
   
-  if (ps$b0) {
+  if (names(ps) %in% "b0") {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -69,7 +70,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     print(summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xep)))
   }
   
-  if (ps$d0) {
+  if (names(ps) %in% "d0") {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -82,7 +83,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 7, height = 3, units = "in")
   }
   
-  if (ps$h0) {
+  if (names(ps) %in% "f0") {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -94,7 +95,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     ggsave(sprintf("./figures/%s-0f pristranskost p glede na sap.hr ratio po st. gen walkerjev brez popravka.png", type))
   }
   
-  if (ps$h0) {
+  if (names(ps) %in% "h0") {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -108,7 +109,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     summary(glm(p.val ~ hr.sap.ratio * sessions * p.var, data = xep))
   }
   
-  if (ps$i0) {
+  if (names(ps) %in% "i0") {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = as.factor(sessions))) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -127,7 +128,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
   fh <- 5
   fw <- fh * 1.62
   
-  if (ps$a1) {
+  if (names(ps) %in% "a1") {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -140,7 +141,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = fw, height = fh, units = "in")
   }
   
-  if (ps$b1) {
+  if (names(ps) %in% "b1") {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -153,7 +154,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = fw, height = fh, units = "in")
   }
   
-  if (ps$a2) {
+  if (names(ps) %in% "a2") {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -166,7 +167,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 10, height = 8, units = "in")
   }
   
-  if (ps$a5) {
+  if (names(ps) %in% "a5") {
     # AICc
     ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = hr.sap.ratio, y = dAIC)) +
       theme_bw() +
@@ -178,7 +179,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 10, height = 8, units = "in")
   }
   
-  if (ps$a6) {
+  if (names(ps) %in% "a6") {
     ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = hr.sap.ratio, y = dAIC)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -190,7 +191,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 10, height = 8, units = "in")
   }
   
-  if (ps$a7) {
+  if (names(ps) %in% "a7") {
     ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = model, y = dAIC)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
