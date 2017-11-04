@@ -1,4 +1,10 @@
-createFigures <- function(xy, type = c("N", "E")) {
+createFigures <- function(xy, type = c("N", "E"), ...) {
+  #' ... can be a vector of named logical values which will make plot print - or not.
+  #' See code for possible values.
+  
+  ps <- as.list(...) # ps = plot switch
+  
+  browser()
   if (type == "E") {
     xy <- droplevels(xy[xy$fun == "empirical", ])
   }
@@ -42,6 +48,9 @@ createFigures <- function(xy, type = c("N", "E")) {
     geom_smooth(method = "loess", se = FALSE)
   ggsave(sprintf("./figures/%s-0a pristranskost .1 in .sp ocene ulovljivosti.png", type),
          width = 5, height = 5, units = "in")
+  
+  message(sprintf("Printing global average for model %s", type))
+  print(summary(glm(p.val ~ p.var, data = xep)))
   
   ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
     theme_bw() +
@@ -87,7 +96,7 @@ createFigures <- function(xy, type = c("N", "E")) {
     geom_smooth(method = "loess", se = FALSE, size = 0.5) +
     facet_grid(sessions ~ num.generated.walkers)
   ggsave(sprintf("./figures/%s-0h pristranskost p glede sap.hr razmerje glede na st. walkerjev in st. sessionov.png", type),
-         width = 10, height = 5, units = "in")
+         width = 6, height = 5, units = "in")
   summary(glm(p.val ~ hr.sap.ratio * sessions * p.var, data = xep))
   
   ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = as.factor(sessions))) +
