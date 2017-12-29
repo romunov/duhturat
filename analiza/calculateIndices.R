@@ -106,7 +106,7 @@ calculateIndices <- function(x, lf) {
   dens.95.tirm <- size.tirm / area.95
   dens.99.tirm <- size.tirm / area.99
   
-  # calculate index ((D - D^)/D) * 100
+  # calculate index
   # calIn <- function(Dh, D = dens.true) ((D - Dh)/D) * 100
   # calIn <- function(Dh, D = dens.true) ((D - Dh))
   calIn <- function(Dh, D = dens.true) ((Dh/D))
