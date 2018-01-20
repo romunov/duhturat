@@ -22,7 +22,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
   xe$model[grepl(".sp$", xe$variable)] <- ".sp"
   xe$model[grepl(".tirm", xe$variable)] <- ".tirm"
   xe$correction.type <- sapply(strsplit(as.character(xe$variable), "\\."), "[", 2)
-  xe$hr.sap.ratio <- with(xe, hr/sqrt(xe$area.naive/pi))
+  xe$hr.sap.ratio <- with(xe, hr/sqrt(xe$area.naive/pi)) # ratio of r is equivalent to ratio of areas
   xe$correction.type <- factor(xe$correction.type, 
                                levels = c("naive", "hr", "50", "60", "70", 
                                           "80", "90", "95", "99", "effect"))
@@ -39,7 +39,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
                                  "true.p", "correction.type")]), ]
   xep$p.val <- xep$p.val/xep$true.p
   
-  if (names(ps) %in% "a0") {
+  if (any(names(ps) %in% "a0")) {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -54,7 +54,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     print(summary(glm(p.val ~ p.var, data = xep)))
   }
   
-  if (names(ps) %in% "b0") {
+  if (any(names(ps) %in% "b0")) {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -70,7 +70,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     print(summary(glm(p.val ~ true.p * p.var * num.generated.walkers, data = xep)))
   }
   
-  if (names(ps) %in% "d0") {
+  if (any(names(ps) %in% "d0")) {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -83,7 +83,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 7, height = 3, units = "in")
   }
   
-  if (names(ps) %in% "f0") {
+  if (any(names(ps) %in% "f0")) {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -95,7 +95,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     ggsave(sprintf("./figures/%s-0f pristranskost p glede na sap.hr ratio po st. gen walkerjev brez popravka.png", type))
   }
   
-  if (names(ps) %in% "h0") {
+  if (any(names(ps) %in% "h0")) {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = p.var)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -109,7 +109,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     summary(glm(p.val ~ hr.sap.ratio * sessions * p.var, data = xep))
   }
   
-  if (names(ps) %in% "i0") {
+  if (any(names(ps) %in% "i0")) {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = as.factor(sessions))) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -128,9 +128,10 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
   fh <- 5
   fw <- fh * 1.62
   
-  if (names(ps) %in% "a1") {
+  if (any(names(ps) %in% "a1")) {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
+      scale_y_continuous(limits = c(0, 5)) +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       geom_jitter(alpha = 0.2, shape = 1, size = 0.5) +
       geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
@@ -141,7 +142,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = fw, height = fh, units = "in")
   }
   
-  if (names(ps) %in% "b1") {
+  if (any(names(ps) %in% "b1")) {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -154,7 +155,47 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = fw, height = fh, units = "in")
   }
   
-  if (names(ps) %in% "a2") {
+  if (any(names(ps) %in% "c1")) {
+    ggplot(xe[xe$sessions == 5, ], aes(x = hr.sap.ratio, y = index)) +
+      theme_bw() +
+      scale_y_continuous(limits = c(0, 5)) +
+      theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+      geom_jitter(alpha = 0.2, shape = 1, size = 0.5) +
+      geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
+      scale_color_brewer(palette = "Set1") +
+      geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
+      facet_grid(num.generated.walkers ~ correction.type)
+    ggsave(sprintf("./figures/%s-1c.gostota gled na razmerje hr_sap po correction type in st. gen.walk za k5.png", type),
+           width = fw, height = fh, units = "in")
+  }
+  if (any(names(ps) %in% "d1")) {
+    ggplot(xe[xe$sessions == 10, ], aes(x = hr.sap.ratio, y = index)) +
+      theme_bw() +
+      scale_y_continuous(limits = c(0, 5)) +
+      theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+      geom_jitter(alpha = 0.2, shape = 1, size = 0.5) +
+      geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
+      scale_color_brewer(palette = "Set1") +
+      geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
+      facet_grid(num.generated.walkers ~ correction.type)
+    ggsave(sprintf("./figures/%s-1d.gostota gled na razmerje hr_sap po correction type in st. gen.walk za k10.png", type),
+           width = fw, height = fh, units = "in")
+  }
+  if (any(names(ps) %in% "e1")) {
+    ggplot(xe[xe$sessions == 15, ], aes(x = hr.sap.ratio, y = index)) +
+      theme_bw() +
+      scale_y_continuous(limits = c(0, 5)) +
+      theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+      geom_jitter(alpha = 0.2, shape = 1, size = 0.5) +
+      geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
+      scale_color_brewer(palette = "Set1") +
+      geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
+      facet_grid(num.generated.walkers ~ correction.type)
+    ggsave(sprintf("./figures/%s-1e.gostota gled na razmerje hr_sap po correction type in st. gen.walk za k15.png", type),
+           width = fw, height = fh, units = "in") 
+  }
+  
+  if (any(names(ps) %in% "a2")) {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -167,7 +208,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 10, height = 8, units = "in")
   }
   
-  if (names(ps) %in% "a5") {
+  if (any(names(ps) %in% "a5")) {
     # AICc
     ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = hr.sap.ratio, y = dAIC)) +
       theme_bw() +
@@ -179,19 +220,30 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
            width = 10, height = 8, units = "in")
   }
   
-  if (names(ps) %in% "a6") {
-    ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = hr.sap.ratio, y = dAIC)) +
+  if (any(names(ps) %in% "a6")) {
+    ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = hr.sap.ratio, y = dAIC, color = better.model)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
       scale_color_brewer(palette = "Set1") +
       geom_jitter(alpha = 0.5, shape = 1, size = 0.5) +
-      geom_smooth(aes(color = better.model), method = "lm", size = 0.5) +
+      # geom_smooth(method = "lm", size = 0.5) +
       facet_grid(num.generated.walkers ~ correction.type)
     ggsave(sprintf("./figures/%s-6a.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png", type),
            width = 10, height = 8, units = "in")
   }
   
-  if (names(ps) %in% "a7") {
+  if (any(names(ps) %in% "b6")) {
+    ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = hr.sap.ratio, y = dAIC, color = better.model)) +
+      theme_bw() +
+      theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
+      scale_color_brewer(palette = "Set1") +
+      geom_jitter(alpha = 0.5, shape = 1, size = 0.5)
+      # geom_smooth(method = "lm", size = 0.5)
+    ggsave(sprintf("./figures/%s-6b.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.png", type),
+           width = 10, height = 8, units = "in")
+  }
+  
+  if (any(names(ps) %in% "a7")) {
     ggplot(droplevels(xe[xe$model %in% c(".1", ".sp"), ]), aes(x = model, y = dAIC)) +
       theme_bw() +
       theme(legend.position = "top", axis.text.x = element_text(angle = 90, vjust = 0.5)) +
@@ -199,8 +251,8 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       facet_grid(num.generated.walkers ~ correction.type)
     ggsave(sprintf("./figures/%s-7a dAIC po modelih sp in 1.png", type), width = 10, height = 8, units = "in")
   }
+  
   # ~.sp vedno oceni več osebkov, zato je vedno nad ~1
   # ker MR po defaultu precenjuje dejansko gostoto, je za pričakovat, da bodo vsi nad 1
   # ker so vsi nad 1, je za pričakovat, da bo tisti, ki oceni številčnost nižjo, manj pristranski
-  # # # normal # # #
 }
