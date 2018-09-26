@@ -6,6 +6,7 @@
 #' http://stats.stackexchange.com/a/36023/144
 #' https://stats.stackexchange.com/a/127486/144
 getQnormal <- function(probs, SD) {
+  # browser()
   N <- 10000
   xy <- data.frame(x = rnorm(N, mean = 0, sd = SD),
                    y = rnorm(N , mean = 0, sd = SD))
@@ -17,12 +18,12 @@ getQnormal <- function(probs, SD) {
   v1 <- cbind(r1 * cos(theta), r1 * sin(theta))
   pts <- t(colMeans(xy) - (e1 %*% t(v1)))
   
-  # colnames(pts) <- c("x", "y")
-  # sp.krog2 <- SpatialPolygons(list(Polygons(list(Polygon(pts)), ID = 1)))
-  # plot(xy, asp = 1, axes = TRUE)
-  # lines(pts, col = "blue", lwd = 2)
-  # abline(v = range(pts[, "x"]), col = "red")
-  # abline(h = range(pts[, "y"]), col = "red")
+  colnames(pts) <- c("x", "y")
+  sp.krog2 <- SpatialPolygons(list(Polygons(list(Polygon(pts)), ID = 1)))
+  plot(xy, asp = 1, axes = TRUE)
+  lines(pts, col = "blue", lwd = 2)
+  abline(v = range(pts[, "x"]), col = "red")
+  abline(h = range(pts[, "y"]), col = "red")
   
   out <- diff(range(pts[, 1]))/2 # assumes symmetrical 2D normal distribution
   names(out) <- paste(probs * 100, "%", sep = "")
