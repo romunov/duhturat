@@ -1,0 +1,145 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[slovene]{babel}
+\usepackage[monochrome]{color}
+\usepackage[colorlinks = true, urlcolor = red]{hyperref}
+%\usepackage{amsmath}
+%\usepackage{float}
+%\usepackage{multirow}
+\usepackage{natbib}
+\usepackage{booktabs}
+\usepackage{graphicx}
+
+\title{
+\textsc{
+Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij \\
+\vspace{0.3cm}
+Spatially explicit modeling of superpopulation density
+}}
+
+% 1.0-3 upošteval popravke, ki jih je prispeval Črt Ahlin (21.3.2013)
+% 1.0-4 upošteval komentarje Petra Trontlja (22.3.2013)
+% 1.1 upošteval komentarje Petra Trontlja in Maje Jelenčič - oddal Blejecu, da odda Košmeljevi
+% 1.2 z mentorjem spremenila in oddala recenzentki
+% 2.0 na predlog komisije na predstavitvi dispozicije sem vključil še nekaj stvari
+
+\author{\textsc{Roman Luštrik}}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Znanstveno področje na katerega se nanaša \\ predlagana tema doktorske disertacije}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Naloga je interdisciplinarna in se nanaša na področje statistike in biologije.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Prikaz dosedanjih raziskovanj opredeljenega \\ raziskovalnega problema}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%V ekologiji je v raziskavah v povezavi z živalskimi populacijami ocena velikosti populacije pomembno izhodišče. S pomočjo modelov ulova in ponovnega ulova lahko k štetju pristopimo na statističen način. Ker smo pri štetju navadno prostorsko omejeni, bomo v tem delu raziskali možnost vključitve prostorske omejitve pri oceni številčnosti in ocenjevanju velikosti območja superpopulacij. Tako bomo prispevali k boljšemu poznavanju ocenjevanja številčnosti in gostot ter poznavanju učinka roba. Rešitve bodo zanimive za raziskovalce v ekologiji in varstveni biologiji.
+
+Populacija je opredeljena kot skupina osebkov, ki pripadajo isti vrsti in naseljujejo skupni prostor v določenem času \citep{krebs2001}. Populacije so umeščene v prostor, nanje pa vplivajo abiotski in biotski dejavniki. Za preučevanje in upravljanje populacij je eden ključnih parametrov njihova velikost. Velikost populacije pogosto ocenjujemo s pomočjo modelov ulova in ponovnega ulova (označimo kot $\hat{N}$). Pri tej metodi osebek označimo in izpustimo, nato pa spremljamo njegovo ulovljivost (verjetnost, da bomo osebek zaznali) skozi (ne)odlov v odlovnih intervalih \citep{williams2002}.
+ 
+% poglej, če je v tem odstavku kaka pomembna informacija, ki bi jo lahko
+%Lovljenje izvajamo v vzorčenem območju.  Ko vzorčeno območje ni popolnoma geografsko zaprto, bomo zaznali tudi osebke, katerih domač okoliš ni v celoti vključen v vzorčeno območje. Superpopulacijo sestavljajo osebki, katerih domači okoliš se popolnoma ali delno prekriva z vzorčenim območjem. Prečkanje roba vzorčenega območje ima velik vpliv, ko je vzorčeno območje relativno majhno v primerjavi z domačim okolišem osebka. Nenazadnje tudi zaradi tega, ker bo v tem primeru v vzorčenem območju verjetno manj živali in bo ``napaka'', ki jo naredimo zaradi enega osebka, pomenila večjo spremembo pri oceni številčnosti. Če je osebkov znatno veliko (ker je njihov domači okoliš primerljivo majhen), en osebek ne bo imel bistvenega vpliva na oceno številčnosti. Zaradi visoke mobilnosti nekaterih živali je poznavanje območja superpopulacija zelo pomembno pri računanju populacijske gostote. 
+% napiši, da je bolj problem prekrivanja domačega okoliša s SAP, ne pa toliko prehajanje osebka. je slednje le posledica? tu je verjetno malo kura in jajce primer
+Za ocenjevanje velikosti populacij pogosto uporabljamo modele za zaprte populacije (angl. \emph{closed population capture-recapture models}, \citet{coochwhite2012}), saj so praktični za uporabo. Da bodo cenilke parametrov za te modele nepristranske, morajo med vzorčenjem veljati predpostavke o a) prostorski in demografsko zaprti populaciji (angl. \emph{closure}), b) enaki ulovljivosti za vse osebke in c), da so oznake osebkov zanesljive. Za naše potrebe bomo predpostavili, da je populacija zaprta. Da je vzorčena populacija v času vzorčenja kar se da zaprta, se v praksi vzorči v relativno kratkem časovnem obdobju na relativno velikem območju. Zaradi zanesljivosti določitve osebkov z molekularnimi metodami lahko predpostavimo zanesljivost oznak \citep{beja-pereira-et-al-2009}. Podrobneje bomo preučili predpostavko o enaki ulovljivosti.
+
+V praksi so vzorčenja navadno omejena finančno, časovno ali fizično na določeno območje (npr. mejo rezervata ali državno mejo), zaradi česar je populacija lahko relativno odprta. Poleg živali, ki so stalno v območju vzorčenja naletimo še na živali, ki del časa preživijo zunaj območja vzorčenja in tvorijo t.i. superpopulacijo. Ker območje vzorčenja ni dovolj veliko, da bi lahko zaobjeli celotno superpopulacijo, nekateri osebki prehajajo rob območja, zato je kršena predpostavka o zaprtosti populacije. Drugače rečeno, vzorčeno območje in domači okoliš osebkov se lahko le delno prekrivata. Zaradi prehajanja roba je verjetnost ulovljivosti spremenjena, saj osebek ni vedno na voljo za ulov. \citet{kendall1999} je pokazal, da je za populacije, ki prehajajo rob vzorčenega območja naključno, $E(\hat{p}_i) = \tau_i p_i$, kjer je $\tau_i$ verjetnost, da vzorčimo osebek $i$ iz superpopulacije v danem odlovnem intervalu in $p_i$ ulovljivost. Ocena gostote populacije bo nepristranska, če bodo imeli vsi osebki v vzorčenem območju $\tau = 1$. Če imajo nekateri osebki $\tau < 1$, bo ocena pristranska. Pristranskost parametrov zaradi prehajanja meje vzorčenega območja, kjer je $\tau < 1$, ima za posledico t.i. \emph{učinek roba}.
+
+Učinek roba je že dolgo proučevan problem \citep{efford2004}, ki pa do danes še nima zadovoljive rešitve. Prvič se v literaturi z njim ukvarja \citet{dice1938, dice1941}, ki predlaga, da se vzorčeno območje poveča za polmer domačega okoliša. Dosedanje raziskave s področja metod ulova in ponovnega ulova se osredotočajo predvsem na vzorčenje s pomočjo pasti na mreži ali situ (pregled teh metod najdemo v \citet{williams2002}, poglavje 14). Dela, ki se ukvarjajo s popravljanjem učinka roba, navadno uporabljajo vzorčenje na situ \citep{parmenter-n-etal2003}. % prevod vzorčenje na situ ("sampling on a grid") je predlagal yerpo
+
+Prvi prispevek, ki predpostavlja heterogeno ulovljivost posameznega osebka, so objavili \citet{otisetal1978}, vendar so že v tem delu predvideni zapleti, ker je potrebno ocenjevati veliko število parametrov. Število parametrov lahko zmanjšamo tako, da predpostavimo nekaj ``tipov'' osebkov. Na primer, take, ki so stalno prisotni v vzorčenem območju in take, ki občasno prehajajo rob vzorčenega območja. \citet{miller2005} predstavijo model, ki po naravi ni prostorski, izrabi pa dejstvo, da je bilo v enem odlovnem intervalu za posamezen osebek zabeleženih več vzorcev. S heterogenostjo ulovljivosti se ukvarjajo še \citet{burnham-n-overton1978}, \citet{chao1988} in \citet{pledger-n-2005}.
+
+Z razvojem genetike in GPS tehnologije je osebek mogoče ``odloviti'' tudi s pomočjo neinvazivnih genetskih vzorcev, za kar so razvili modele, ki vključujejo prostorsko komponento (angl. \emph{spatially explicit models}). Tako dobimo (grobo) predstavo o gibanju živali (lahko samo z enim odlovnim intervalom). Ker modeli izrabljajo prostorsko informacijo je mogoče oceniti velikost območja, kjer se nahaja superpopulacija, kar je ključen podatek za zanesljivo računanje populacijske gostote \citep{gardneretal2009, royleetal2011, efford2011, borchers2012, royle-et-al-2013}. 
+Od teh sta metodi avtorjev \citet{royleetal2011} in \citet{efford2011} primerni za podatke, ki niso vezani na odlov s pomočjo pasti, kar bo pomembno za naše delo.
+
+%Pričakovati je, da bo vključevanje še več informacij (npr. združevanje prostorske in genetske informacije) izboljšalo oceno gostote \citep{gopalaswamyetal2012}.
+
+%Na primer, \citet{royle-n-young2008} v Bayesianskem okviru poizkušata oceniti velikost populacije znotraj vzorčenega območja s pomočjo prostorske informacije ujetih osebkov. Gostoto ocenjujeta na podlagi števila centroidov domačih okolišev, ki se nahajajo znotraj vzorčenega območja. V kolikor osebki naključno prehajajo mejo vzorčenega območja, je številčnost verjetno relativno dobro ocenjena. Avtorja navajata, da je pristranskost najmanjša pri zmerno visoki gostoti, pomembno pa je tudi, da je vzorčeno območje relativno veliko v primerjavi z velikostjo domačega okoliša posameznega osebka (kot je to argumentirano nekaj odstavkov višje). Z enakim problemom se spopada \citet{efford2004} s pomočjo obrnjenega napovedovanja (``inverse prediction''). \citet{borchers-n-efford2008} uporabita podatke o odlovu osebkov na pasteh, da ocenita lokacijo domačega okoliša osebka in prostorsko odvisno ulovljivost s pomočjo metode največjega verjetja. Gostoto smatrata kot eksplicitni parameter v modelu. Nekatera orodja za prostorsko eksplicitne modele so že na voljo \citep{gopalaswamy2012spacecap}.
+
+%Poleg preciznega nahajališča osebka je naključno nabiranje vzorcev zvezno in ni več omejeno na odlovne intervale \citep{miller2005}.
+
+% lahko pa pogledamo zadevo z drugega konca. stare metode imajo to slabost, da se ne podpirajo več vzorcev znotraj enega odlovnega intervala. ampak če imaš več vzorcev znotraj enega odlovnega intervala imaš dve informaciji! eno, da si osebej ujel (torej capture history 1), drugi podatek pa je velikost vzorčnega območja oz. drugače rečeno, lokacijo centroida vzorčnega območja, katerega lokacija je z večanjem vzorca le bolj zanesljiva
+% še en korak dalje: modeli za heterogenost predpostavljajo heterogenost ulovljivosti, ta metoda pa jo direktno kvantificira
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Raziskovalne hipoteze}
+% Najprej je bil tu naslov Raziskovalni cilji, kot sem to zapisal, po tem, ko sem se posvetoval s Petrom Trontljem. Zadevo sem moral na ukaz mentorja in recenzentke Košmeljeve spremeniti v Raziskovalne hipoteze.
+
+% Žalosti me, da nekateri ne ločijo med hipotezo in ciljem (t.i. ``wish list''). Kot piše Trontelj v priporočilih za pisanje dispozicije:
+
+%Kaj od zgoraj navedenega je hipoteza? Kandidati jo pogosto enačijo z napovedjo, na primer "v razmerah A bo nastalo več produkta C kot v razmerah B." To je napačno. Napoved sama po sebi še ni znanstvena hipoteza. Hipoteza je teoretska razlaga fenomena, na primer "razmere A so ugodne za nastanek produkta C, ker omogočajo višjo aktivnost C-sintetaze kot razmere B." Šele na podlagi tega razmisleka lahko formuliramo preverljivo napoved. O višji aktivnosti C-sintetaze sklepamo po navedbah iz literature ali iz opažanj. Recimo, da nas zanima, zakaj v fermentorju dobimo tako malo produkta C. To je naš raziskovalni problem. Potemtakem bi se celotna raziskovalna hipoteza lahko glasila:
+
+%"Avtor et al. (2005) so pokazali, da je optimum delovanja nekaterih bla-sintetaz, ki jim je C-sintetaza podobna po aminokislinskem zaporedju (Avtorica et al. 2007), v razmerah A. Iz podobnosti zaporedij sklepamo, da ima C-sintetaza podobne biokemijske lastnosti kot bla-sintetaze. Zato pričakujemo, da bo količina produkta naraščala, ko bomo razmere spreminjali od B proti A." 
+
+%Sestavni del tako formulirane hipoteze je poleg razmisleka o podatkih iz literature in napovedi tudi povsem teoretsko sklepanje o povezavi med strukturo in 
+%funkcionalnostjo.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\citet{royleetal2011} so pokazali, da novejši modeli ulova in ponovnega ulova z vključevanjem prostorske komponente izboljšajo oceno ulovljivosti, hkrati pa ocenijo velikost območja superpopulacije. Klasični modeli omogočajo ocenjevanje velikosti superpopulacije, a jim manjka še prostorska dimenzija. Statistiko, ki opiše pojavljanje posameznega osebka v prostoru (domačem okolišu) glede na vzorčeno območje, lahko uporabimo kot individualno kovariato v klasičnih modelih, ki to podpirajo.
+\begin{itemize}
+\item Pričakujemo, da bomo z upoštevanjem prostorske komponente (kot individualne kovariate, ki do neke mere opiše gibanje osebka) izboljšali oceni velikosti in gostote populacije. Z upoštevanjem dodatne informacije o gibanju bomo izboljšali oceno ulovljivosti, saj bomo vključili eno od pomembnih komponent, ki vplivajo na zaznavnost ($\tau$) in ulovljivost ($p$) osebkov. Gostoto bomo lahko ocenili z boljšim poznavanjem velikosti prispevnega območja superpopulacije, pri čemer nam bo pomagalo razumevanje gibanja osebkov.
+ 
+%\item S pomočjo poznavanja gibanja povprečnega osebka pričakujemo, da bomo lahko ocenili velikost območja, na katerem se zadržuje superpopulacija. Z upoštevanjem teh popravkov pričakujemo, da bomo lahko bolj pravilno ocenili populacijsko gostoto.
+
+\item Pričakujemo, da bo razlika med ocenjeno in dejansko gostoto odvisna od števila (oz. gostote) simuliranih živali. Pri nizki gostoti bo učinek roba zanemarljiv, s povečevanjem gostote se bo odstopanje ocenjene gostote od prave vrednosti povečevalo. Ker cenilka predpostavlja enako ulovljivost ($\hat{N} = \frac{1}{\hat{p}_i}$), bo zaradi večjega števila napačno ocenjenih ulovljivosti ocena velikosti populacije pristranska. % formula te cenilke je v williamsu na strani 301
+ % z več živali se povečuje tudi število tistih, ki hodijo čez rob. le-te imajo zameštrano ulovljivost (so dejansko manj ulovljivi kot tisti, ki roba ne prehajajo), vendar pa dobijo povprečno ulovljivost, ki je precenjena.
+\end{itemize}
+%Smiselno je pričakovati, da bomo z vključevanje prostorske komponente v modele, ki omogočajo vključevanje individualnih kovariat, ne modelirajo pa prostorske komponente neposredno, izboljšali oceno ulovljivosti in ocenili velikost območja, na katerem se nahaja superpopulacija.
+
+
+%V tem delu bomo poskušali oceniti, če lahko s pomočjo vključevanja nekaterih prostorskih lastnosti posameznega osebka vključimo prostorsko komponento, ki bo izboljšala model in omogočila oceniti velikost območja superpopulacije. Za to bomo uporabili že obstoječe modele, ki temeljijo na oceni parametrov s pomočjo metode največjega verjetja in se tako razlikuje od dosedajšnih pristopov.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Metode raziskovanja}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Denimo, da imamo za vsak ujet osebek v odlovnem intervalu vsaj en podatek o lokaciji odlova. Več podatkov kot imamo, bolje lahko opišemo velikost in gibanje osebka v domačem okolišu. Informacijo o lokaciji domačega okoliša in njegove velikosti lahko izkoristimo za generiranje nove statistike. Ker imamo navadno premalo točk, da bi lahko zadovoljivo opisali gibanje osebka znotraj domačega okoliša, imamo dve možnosti.
+% Črt dobro pove, da je statistika v bistvu ena številka, in ne more biti npr. porazdelitev. http://en.wikipedia.org/wiki/Statistic
+
+Prva je, da na podlagi parametričnega modela predpostavimo verjetnost pojavljanja osebka na določeni točki znotraj domačega okoliša. V ta namen lahko, med drugimi, uporabimo pol-normalno ali inverzno-normalno porazdelitev (bivariatna normalna porazdelitev). Odstotek prekrivanja domačega okoliša (glede na funkcijo, ki opisuje verjetnost pojavljanja v domačem okolišu) je predmet preučevanja (individualna kovariata).
+%Gibanje osebka lahko opišemo s funkcijo, ki opisuje verjetnost nahajanja v določeni točki domačega okoliša. Osi $x$ in $y$ predstavljata položaj glede na zemljepisno širino oz. dolžino, os $z$ pa verjetnost nahajanja v dani točki. 
+
+Druga možnost je neparametrična. Na podlagi razdalj parov točk osebkov, ki imajo vsaj dve vzorčni točki, izračunamo empirično porazdelitveno funkcijo razdalj. To funkcijo uporabimo za računanje verjetnosti nahajanja osebka v dani točki domačega okoliša. Vzorčne točke za izračun razdalj lahko dobimo s pomočjo drugih metod metod, npr. GPS-GSM telemetrijo (po potrebi točke redčimo za zmanjševanje avtokorelacije \citep{royle-et-al-2013}).
+%pri parametričnih si je kamot predstavljat repke, pri neparametrični pa imamo podatke samo do maksimalne prehojene razdalje. po potrebi lahko to krajšamo, če želimo, da zaobjamemo večino, točk (navadno je to zaradi komputacijskih omejitev).
+
+Odstotek prekrivanja domačega okoliša osebka z vzorčenim območjem pove nekaj o prispevku h gostoti osebkov v območju vzorčenja in o potencialni ulovljivosti. To lahko uporabimo kot individualno kovariato v katerem izmed modelov ulova in ponovnega ulova, ki temelji na generaliziranih linearnih modelih (npr. Hugginsov model, Schwartz-Arnasonova modifikacija Jolly-Seberjevega modela ipd).
+
+%V Hugginsovem modelu za zaprte populacije, heterogenost ulovljivosti modeliramo s pomočjo individualnih kovariat. Metoda, ki jo predstavi Huggins temelji na logistični regresiji, s pomočjo katere ocenimo ulovljivost. Ko ocenimo ulovljivost, Huggins pokaže, da je velikost populacije, $\nu$, $E[\hat{\nu}(\theta)] = \sum_{i = 1}^n p_{i}^{-1}(\theta)$ nepristranska scenilka $\nu$ (nepristranskost pokaže tudi za varianco).
+
+Izračunali bomo različne informacije, ki opisujejo gibanje v domačem okolišu (uporaba različnih predpostavk - krivulj) in preverili njihovo ustreznost kot pokazatelje modifikatorje ulovljivosti tako, da jih bomo vključili v modele, ki primarno niso prostorski. Za primerjavo bomo analizirali podatke še z modeli, ki vključujejo prostorsko komponentno oz. predpostavijo nekaj različnih skupin, ki imajo enako ulovljivost. %Preverili bomo katera kovariata je najbolj primerna za izboljšanje ocene ulovljivosti. Predpostavljamo lahko, da se živali gibajo uniformno po svojem domačem okolišu. Individualna kovariata bo v tem primeru kar odstotek prekrivajoče se površine domačega okoliša z vzorčenim območjem kar individualna kovariata. Če predpostavimo, da se osebek največ giba v centru svojega domačega okoliša, z oddaljenostjo od njega pa verjetnost, da se bo osebek nahajal v tisti točki, pada, bo individualna kovariata odvisna od tega, kateri in kolikšen del domačega okoliša se nahaja znotraj vzorčenega območja. Podatke o gibanju živali lahko predpostavimo (npr. gibanje na podlagi uniformne ali inverzne normalne porazdelitve), izračunamo iz parnih razdalj vzorcev za posamezno žival in zbranih za vse živali (lahko tudi glede na spol) ali pa jih pridobimo iz drugega vira, npr. telemetrije ali drugih načinov spremljanja (sensu \citet{efford2004}). S pomočjo porazdelitve, ki opisuje gibanje živali, bomo lahko ocenili s kakšnega območja prihaja velik delež superpopulacije.
+
+S simulacijami bomo preverili, ali predlagane izračunane kovariate izboljšajo oceno velikosti superpopulacije in pripadajoč interval zaupanja. Na večjem območju bomo generirali osebke in jih vzorčili znotraj manjšega območja. Vsi osebki, ki kadarkoli pridejo v stik z vzorčenim območjem pripadajo superpopulaciji. V odlovnih intervalih bomo vzorčili po eno točko. Ker bomo kontrolirali verjetnost ulovljivosti in poznali število osebkov, ki jih je v danem trenutku mogoče vzorčiti, bomo lahko preverili zanesljivost naše ocene. Metodo bomo preizkusili na praktični primer, predvidoma na podatke iz raziskave na medvedih v Sloveniji iz leta 2007.
+
+Podatke odlovne zgodovine bomo analizirali s pomočjo programa \texttt{MARK} (oz. \texttt{R} paketa \texttt{RMark}). Preverili bomo, če bo model, kjer vključimo individualno kovariato, boljši od tistega, kjer individualne kovariate ne vključimo (in predpostavljamo homogeno ulovljivost). Modele bomo primerjati s pomočjo popravljenega Akaikovega informacijske kriterija (AICc) \citep{akaike1974, burnham-anderson2002}. Drugi pokazatelj bo odstopanje ocenjene gostote od simulirane. S simulacijami bomo poskušali zaobjeti čim večji parametrski prostor. Simulacije bodo sprogramirane v programskem jeziku \texttt{R} \citep{rcore}, in bodo po potrebi poganjane na visoko zmogljivem računalniškem sestavu.
+
+
+%V pomoč nam bodo tudi orodja za modele s prostorsko omejitvijo \citep{borchers2012, gopalaswamy2012spacecap}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Pričakovani rezultati in prispevek disertacije k razvoju znanosti}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Prispevali bomo k boljšemu poznavanju problema učinka roba na ocenjevanje velikosti populacij in njihovih gostot. Ker je učinek roba že dolgo proučevan pojav, ki še ni bil zadovoljivo rešen, pričakujemo, da bomo lahko rezultate objavili v vplivnejših znanstvenih revijah s področja biologije.
+
+S pomočjo pravilnejših ocen gostot bodo raziskovalci, upravljalci parkov in lovišč dobili boljši vpogled v populacijo in s tem imeli možnost izboljšanja upravljanja. Rezultati bodo imeli praktičen pomen v ekologiji in varstveni genetiki.
+
+%Pričakujemo, da bo naš nov popravek zadovoljivo opisal prispevek posameznega hodca v vzorčno območje, in da bomo s pomočjo tega popravka lahko bolje všteli heterogenost dostopnosti za ulov ($\tau$) oz. ulovljivost samo ($p$) sensu  \citet{kendall1999} pri končni gostoti osebkov v vzorčnem območju (in posledično velikost populacije).
+%
+%Ta metoda bo doprinesla  k že obstoječemu modelu, za katere poznamo cenilke po metodi največjega verjetja, njihovo obnašanje v različnih situacijah pa je že relativno dobro poznano. Dodatno še uporabi prostorsko komponento (čeprav posredno preko prispevka v vzorčno območje), kar do sedaj v Hugginsovem modelu za zaprte populacije še ni bilo narejeno.
+
+\newpage
+\bibliographystyle{authordate1}
+\bibliography{c:/users/romunov/Dropbox/roman_baza_clankov}
+%http://www.bioznanosti.si/obrazci#vloga za odobritev teme doktorske disertacije
+
+
+\end{document}
+%tst

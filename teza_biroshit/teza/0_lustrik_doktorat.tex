@@ -1,0 +1,91 @@
+% pdflatex 0_lustrik_doktorat; bibtex 0_lustrik_doktorat; pdflatex 0_lustrik_doktorat; pdflatex 0_lustrik_doktorat
+% or run: runlatex.bat
+
+\documentclass[a4paper, 12pt, oneside]{article}
+\setlength{\parskip}{1 cm} %space between paragraphs
+
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[slovene]{babel} %adds slovene chars
+\usepackage{booktabs} %advanced tables
+\usepackage{array}
+\usepackage{fancyhdr}
+\usepackage{Sweave}
+\usepackage[tmargin=35mm, bmargin=30mm, lmargin=30mm, rmargin=25mm]{geometry} %custom margins
+\usepackage[font=footnotesize, justification=raggedright]{caption}
+\usepackage{subcaption}
+\usepackage[Q=yes, url=yes]{examplep} %this is for verbatim inline text, you can insert [Q=yes,div=yes,bsdiv=yes] for additional wrappers of \PVerbOpt
+\usepackage{pdflscape}
+\usepackage{longtable}
+\usepackage{natbib}  % some extra cookies for bibtex
+\usepackage[table]{xcolor}
+\usepackage{float}
+\usepackage{appendix}
+\usepackage{setspace}
+\usepackage[T1]{fontenc} %tole rabiš, da lahko nardiš CAPS in BOLD hkrati - ma ne dela, mona
+\usepackage{bold-extra}
+\usepackage{amsmath} % matrices?
+% \usepackage{biblatex} % za supresiranje note fielda
+
+% help pictures that they're not alone on a page
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+
+% \AtEveryBibitem{%
+%   \clearfield{note}%
+% }
+
+%header defs
+\pagestyle{fancy}
+\addtolength{\headheight}{\baselineskip}
+\lhead{\footnotesize\textup{Luštrik, R. \naslov .} \\
+   \hspace{1cm} Dokt. disertacija, Ljubljana, Univ. v Ljubljani, Biotehniška fakulteta, 2018}
+\rhead{\thepage}
+\fancyfoot{} %clear footers
+
+%misc settings
+\setlength{\parindent}{0in} %no indentation throughout the document
+
+\newcommand{\avtor}{Roman \textsc{Luštrik}} %vstavi ime diplomanta (that's you)
+\newcommand{\naslov}{Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij} %vstavi naslov diplomskega dela
+\newcommand{\naslovEN}{Spatially explicit modeling of superpopulation density} %vstavi angleški naslov diplomskega dela
+
+\newcommand{\platnica}{\Large{\textsc{Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij}}}
+\newcommand{\platnicaEN}{\Large{\textsc{Spatially explicit modeling of superpopulation density}}}
+
+%custom hyphenation
+\hyphenation{la-bo-ra-to-rij-sko po-i-men-o-van-je} %separate words with space
+
+%little something for natbib
+\citestyle{egu}
+\setlength{\bibhang}{1cm}
+\addto{\captionsslovene}{
+  \renewcommand*{\refname}{}
+}
+
+% add extra sub section
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+
+\setlength{\LTcapwidth}{23cm} %podaljšanje caption-a
+
+\author{Roman Luštrik}
+
+\begin{document}
+
+%\include{rezultati_sweave} %run through Sweave before running latex
+\include{1_preambula}
+\pagenumbering{arabic}
+\include{2_uvod}
+\include{3_matinmet}
+\include{4_rezultati}
+\include{5_diskusija}
+\include{6_povzetek}
+\include{7_virinref}
+%\include{zahvala}
+%\include{priloge1}
+%\include{priloge2}
+%\include{priloge3}
+
+\end{document}

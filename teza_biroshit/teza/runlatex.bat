@@ -1,0 +1,5 @@
+pdflatex 0_lustrik_doktorat
+bibtex 0_lustrik_doktorat
+pdflatex 0_lustrik_doktorat
+pdflatex 0_lustrik_doktorat
+pdflatex 0_lustrik_doktorat

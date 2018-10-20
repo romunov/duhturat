@@ -48,6 +48,14 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
     return(sprintf("K = %s", string))
   }
   
+  # display legend only for E plots
+  if (type == "E") {
+    smart.legend <- theme(legend.position = "top")
+  } else {
+    # smart.legend <- theme(legend.position = "none")
+    smart.legend <- theme(legend.position = "top")
+  }
+  
   if (any(names(ps) %in% "a0")) {
     ggplot(xep, aes(x = true.p, y = p.val, color = p.var)) +
       theme_bw() +
@@ -56,10 +64,10 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       ylab(expression(frac(hat(p), p))) +
       xlab("Simulirana vrednost p") +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp])), name = "Model") +
-      geom_jitter(alpha = 0.05, size = 2, shape = 1) +
-      geom_smooth(method = "loess", se = FALSE)
-    ggsave(sprintf("./figures/%s-0a pristranskost .1 in .sp ocene ulovljivosti.pdf", type),
-           width = 5, height = 5, units = "in", device = cairo_pdf)
+      geom_jitter(alpha = 0.01, size = 2, shape = 1) +
+      geom_smooth(method = "loess", se = FALSE, size = 0.5) +
+    ggsave(sprintf("./figures/%s-0a_pristranskost_1_in_sp_ocene_ulovljivosti.pdf", type),
+           width = 5, height = 3, units = "in", device = cairo_pdf)
     
     message(sprintf("Printing global average for model %s", type))
     print(summary(glm(p.val ~ p.var, data = xep)))
@@ -73,10 +81,10 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       ylab(expression(frac(hat(p), p))) +
       xlab("Simulirana vrednost p") +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp])), name = "Model") +
-      geom_jitter(alpha = 0.1, size = 0.5) +
+      geom_jitter(alpha = 0.01, size = 2, shape = 1) +
       geom_smooth(method = "loess", se = FALSE, size = 0.5) +
       facet_grid(. ~ num.generated.walkers, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-0b pristranskost p.1 in p.sp glede na st. walkerjev.pdf", type),
+    ggsave(sprintf("./figures/%s-0b_pristranskost_p1_in_psp_glede_na_st_walkerjev.pdf", type),
            width = 7, height = 3, units = "in", device = cairo_pdf)
     
     print("Pristranskost p glede na model in št. generiranih walkerjev")
@@ -92,10 +100,10 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       ylab(expression(frac(hat(p), p))) +
       xlab("Simulirana vrednost p") +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp])), name = "Model") +
-      geom_jitter(alpha = 0.2, size = 1) +
+      geom_jitter(alpha = 0.1, size = 2, shape = 1) +
       geom_smooth(method = "loess", se = FALSE, size = 0.5) +
       facet_grid(. ~ correction.type)
-    ggsave(sprintf("./figures/%s-0d pristranskost p glede na model in tip popravka.pdf", type),
+    ggsave(sprintf("./figures/%s-0d_pristranskost_p_glede_na_model_in_tip_popravka.pdf", type),
            width = 7, height = 3, units = "in", device = cairo_pdf)
   }
   
@@ -108,27 +116,28 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       ylab(expression(frac(hat(p), p))) +
       xlab("Razmerje med velikostjo domačega okoliša in velikostjo območja vzorčenja") +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp])), name = "Model") +
-      geom_jitter(alpha = 0.1, size = 0.5) +
+      geom_jitter(alpha = 0.01, size = 1, shape = 1) +
       geom_smooth(method = "loess", se = FALSE, size = 0.5) +
       facet_grid(. ~ num.generated.walkers, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-0f pristranskost p glede na sap.hr ratio po st. gen walkerjev brez popravka.pdf", type),
-           device = cairo_pdf)
+    ggsave(sprintf("./figures/%s-0f_pristranskost_p_glede_na_sap_hr_ratio_po_st_gen_walkerjev_brez_popravka.pdf", type),
+           device = cairo_pdf, width = 6, height = 3)
   }
   
   if (any(names(ps) %in% "h0")) {
     ggplot(xep, aes(x = hr.sap.ratio, y = p.val, color = p.var)) +
       theme_bw() +
-      theme(legend.position = "top", axis.title.y = element_text(angle = 0, vjust = 0.5),
-            axis.text.x = element_text(angle = 0, vjust = 0.4),
+      theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+            axis.text.x = element_text(angle = 90, vjust = 0.4),
             axis.text = element_text(size = 6)) +
+      smart.legend +
       ylab(expression(frac(hat(p), p))) +
       xlab("Razmerje med velikostjo domačega okoliša in velikostjo območja vzorčenja") +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp])), name = "Model") +
-      geom_jitter(alpha = 0.1, size = 0.5) +
+      geom_jitter(alpha = 0.01, size = 1, shape = 1) +
       geom_smooth(method = "loess", se = FALSE, size = 0.5) +
       facet_grid(sessions ~ num.generated.walkers, labeller = labeller(sessions = labeller.addK,
                                                                        num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-0h pristranskost p glede sap.hr razmerje glede na st. walkerjev in st. sessionov.pdf", type),
+    ggsave(sprintf("./figures/%s-0h_pristranskost_p_glede_sap_hr_razmerje_glede_na_st_walkerjev_in_st_sessionov.pdf", type),
            width = 6, height = 5, units = "in", device = cairo_pdf)
     summary(glm(p.val ~ hr.sap.ratio * sessions * p.var, data = xep))
   }
@@ -145,7 +154,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       geom_jitter(alpha = 0.1, size = 0.5) +
       geom_smooth(method = "loess", se = FALSE, size = 0.5) +
       facet_grid(. ~ num.generated.walkers, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-0i pristranskost p glede na hr.sap.ratio in glede sessions.pdf", type),
+    ggsave(sprintf("./figures/%s-0i_pristranskost_p_glede_na_hr_sap_ratio_in_glede_sessions.pdf", type),
            width = 10, height = 5, units = "in", device = cairo_pdf)
     
   }
@@ -158,18 +167,19 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
   if (any(names(ps) %in% "a1")) {
     ggplot(xe, aes(x = hr.sap.ratio, y = index)) +
       theme_bw() +
-      theme(legend.position = "top", axis.title.y = element_text(angle = 0, vjust = 0.5),
+      theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
             axis.text.x = element_text(angle = 90, vjust = 0.4),
             axis.text = element_text(size = 6)) +
+      smart.legend +
       xlab("Razmerje med velikostjo domačega okoliša in velikostjo območja vzorčenja") +
       ylab(expression(frac(hat(D), D))) +
       scale_y_continuous(limits = c(0, 5)) +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp]), expression(M[tirm])), name = "Model") +
-      geom_jitter(alpha = 0.2, shape = 1, size = 0.5) +
+      geom_jitter(alpha = 0.05, shape = 1, size = 1) +
       geom_smooth(aes(color = model), method = "loess", se = TRUE, size = 0.5) +
       geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-1a.gostota gled na razmerje hr_sap po correction type in st. gen.walk.pdf", type),
+    ggsave(sprintf("./figures/%s-1a_gostota_gled_na_razmerje_hr_sap_po_correction_type_in_st_gen_walk.pdf", type),
            width = fw, height = fh, units = "in", device = cairo_pdf)
   }
   
@@ -186,7 +196,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       scale_y_continuous(limits = c(0, 10)) +
       geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-1b.gostota gled na razmerje hr_sap po correction type in st. gen.walk brez pik.pdf", type),
+    ggsave(sprintf("./figures/%s-1b_gostota_gled_na_razmerje_hr_sap_po_correction_type_in_st_gen_walk_brez_pik.pdf", type),
            width = fw, height = fh, units = "in", device = cairo_pdf)
   }
   
@@ -205,7 +215,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
       labs(caption = "K = 5") +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-1c.gostota gled na razmerje hr_sap po correction type in st. gen.walk za k5.pdf", type),
+    ggsave(sprintf("./figures/%s-1c_gostota_gled_na_razmerje_hr_sap_po_correction_type_in_st_gen_walk_za_k5.pdf", type),
            width = fw, height = fh, units = "in", device = cairo_pdf)
   }
   if (any(names(ps) %in% "d1")) {
@@ -223,7 +233,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
       labs(caption = "K = 10") +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-1d.gostota gled na razmerje hr_sap po correction type in st. gen.walk za k10.pdf", type),
+    ggsave(sprintf("./figures/%s-1d_gostota_glede_na_razmerje_hr_sap_po_correction_type_in_st_gen_walk_za_k10.pdf", type),
            width = fw, height = fh, units = "in", device = cairo_pdf)
   }
   if (any(names(ps) %in% "e1")) {
@@ -241,7 +251,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
       labs(caption = "K = 15") +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-1e.gostota gled na razmerje hr_sap po correction type in st. gen.walk za k15.pdf", type),
+    ggsave(sprintf("./figures/%s-1e_gostota_glede_na_razmerje_hr_sap_po_correction_type_in_st_gen_walk_za_k15.pdf", type),
            width = fw, height = fh, units = "in", device = cairo_pdf) 
   }
   
@@ -258,7 +268,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp]), expression(M[tirm])), name = "Model") +
       geom_hline(yintercept = 1, size = 0.5, alpha = 0.5) +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-2a.gostota glede na razmerje, corr.type in st. gen walkerjev pozoomano.pdf", type),
+    ggsave(sprintf("./figures/%s-2a_gostota_glede_na_razmerje_corr_type_in_st_gen_walkerjev_pozoomano.pdf", type),
            width = 10, height = 8, units = "in", device = cairo_pdf)
   }
   
@@ -273,7 +283,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
             axis.text = element_text(size = 6)) +
       geom_jitter(alpha = 0.5, shape = 1, size = 0.5) +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-5a.dAIC gled na razmerje hr_sap po correction type in st. gen.walk.pdf", type),
+    ggsave(sprintf("./figures/%s-5a_dAIC_gled_na_razmerje_hr_sap_po_correction_type_in_st_gen.walk.pdf", type),
            width = 10, height = 8, units = "in", device = cairo_pdf)
   }
   
@@ -289,7 +299,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       geom_jitter(alpha = 0.5, shape = 1, size = 0.5) +
       guides(color = guide_legend(override.aes = list(size = 2), alpha = 1)) +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-6a.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.pdf", type),
+    ggsave(sprintf("./figures/%s-6a_dAIC_glede_na_razmerje_hr_sap_po_correction_type_in_st_gen.walk_in_boljsi_model.pdf", type),
            width = 10, height = 8, units = "in", device = cairo_pdf)
   }
   
@@ -299,13 +309,14 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       ylab(expression(Delta ~ "AIC")) +
       xlab("Razmerje med velikostjo domačega okoliša in velikostjo območja vzorčenja") +
       theme(legend.position = "top", axis.title.y = element_text(angle = 90, vjust = 0.5),
-            axis.text.x = element_text(angle = 90, vjust = 0.4),
+            axis.text.x = element_text(angle = 0, vjust = 0.4),
             axis.text = element_text(size = 6)) +
       scale_color_brewer(palette = "Set1", labels = c(expression(M[0]), expression(M[sp])), name = "Model") +
       guides(color = guide_legend(override.aes = list(size = 2), alpha = 1)) +
-      geom_jitter(alpha = 0.5, shape = 1, size = 0.5)
-    ggsave(sprintf("./figures/%s-6b.dAIC glede na razmerje hr_sap po correction type in st.gen.walk in boljsi model.pdf", type),
-           width = 10, height = 8, units = "in", device = cairo_pdf)
+      geom_jitter(alpha = 0.01, shape = 1, size = 1) +
+      guides(color = guide_legend(override.aes = list(alpha = 1)))
+    ggsave(sprintf("./figures/%s-6b_dAIC_glede_na_razmerje_hr_sap_po_correction_type_in_st_gen_walk_in_boljsi_model.pdf", type),
+           width = 6, height = 4, units = "in", device = cairo_pdf)
   }
   
   if (any(names(ps) %in% "a7")) {
@@ -320,7 +331,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       geom_violin() +
       scale_x_discrete(labels = c(expression(M[0]), expression(M[sp]))) +
       facet_grid(num.generated.walkers ~ correction.type, labeller = labeller(num.generated.walkers = labeller.addN))
-    ggsave(sprintf("./figures/%s-7a dAIC po modelih sp in 1.pdf", type), width = 10, height = 8, units = "in", 
+    ggsave(sprintf("./figures/%s-7a_dAIC_po_modelih_sp_in_1.pdf", type), width = 10, height = 8, units = "in", 
            device = cairo_pdf)
   }
   
@@ -335,7 +346,7 @@ createFigures <- function(xy, type = c("N", "E"), ...) {
       xlab(expression(Delta ~ "AIC")) +
       geom_histogram() +
       facet_wrap(~ better.model, scales = "free_x", labeller = label_parsed)
-    ggsave(sprintf("./figures/%s-8a dAIC glede na najboljsi model.pdf", type), width = 8, height = 4, units = "in", 
+    ggsave(sprintf("./figures/%s-8a_dAIC_glede_na_najboljsi_model.pdf", type), width = 8, height = 4, units = "in", 
            device = cairo_pdf)
   }
 }

@@ -1,0 +1,88 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[slovene]{babel} %adds slovene chars
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% da ne jamra zarad hyperref buga
+\makeatletter\def\Hy@xspace@end{}\makeatother
+
+\begin{document}
+
+\title{Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij \\
+\vspace{0.3cm}
+Spatially explicit modeling of superpopulation density}
+\author{Roman Luštrik}
+\date{26.6.2013}
+\institute{Oddelek za biologijo \\ Biotehniška fakulteta \\ Univerza v Ljubljani}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}{Ocenjevanje velikosti populacij}
+Velikost populacij (abundanco) lahko ocenjujemo na različne načine.
+\begin{itemize}
+\item{S pomočjo štetja.}
+	\begin{itemize}
+	\item[] \tiny{based on counts}
+	\end{itemize}
+\item{Metode na osnovi razdalje opažanja.}
+	\begin{itemize}
+	\item[] \tiny{distance-based methods}
+	\end{itemize}
+\item Metode s pomočjo označevanja in ponovnega videnja za zaprte in odprte populacije.
+	\begin{itemize}
+	\item[] \tiny{mark-recapture methods}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Cenilka za dva odlova}
+$$\hat{N} = \frac{n_1 n_2}{m_2}$$
+kjer je $n_1$ in $n_2$ število označenih živali v prvem in drugem odlovu in $m_2$ ponazarja koliko živali je bilo označenih v obeh odlovnih intervalih.
+\end{frame}
+
+\begin{frame}{Alternativa in posplošitev}
+Enak model lahko zapišemo tudi s pomočjo multinomskega modela
+\begin{align*}
+P(n_1, n_2, m_2 | N, p_1, p_2) = & \frac{N!}{m_2!(n_1-m_2)!(n_2-m_2)!(N-r)!} \\ 
+& \times (p_1p_2)^{m_2} (p_1q_2)^{n_1-m_2}(q_1p_2)^{n_2-m_2}(q_1q_2)^{N-r}
+\end{align*}
+$r$ predstavlja koliko posameznih živali je bilo označenih. Posplošimo lahko na poljubno število odlovnih intervalov kot
+$$P(x_{ijk}|N, \pi_{ijk}) = \frac{N!}{\Pi_{i,j,k} x_{ijk}!} \Pi_{i,j,k} \pi_{ijk}^{x_{ijk}}$$
+Predpostavke modela so zaprtost populacije, enaka verjetnost ulova za vse živali in zanesljivost oznak.
+\end{frame}
+
+\begin{frame}{Problem kršenja predpostavke}
+Ker vsaj nekatere živali prehajajo rob vzorčenega območja, je kršena predpostavka o enaki verjetnosti ulova.
+\includegraphics<1>[width=0.7\textwidth]{intro}
+\includegraphics<2>[height=0.7\textwidth]{world}
+\end{frame}
+
+\begin{frame}{Možna rešitev}
+\begin{itemize}[itemsep=1em]
+\item[] Velikost populacije ocenimo s pomočjo modela, ki omogočajo tudi vključevanje individualni kovariat.
+\item[] Predpostavimo gibanje posameznega osebka glede na parametričen ali neparametričen (parne razdalje) model.
+\item[] Delež prekrivanja domačega okoliša z vzorčenim območjem je individualna kovariata, ki jo uporabimo pri modeliranju.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Tehnična izvedba}
+\begin{itemize}[itemsep=1em]
+\item[] S pomočjo simulacij bomo preverili, če vključevanje individualne kovariate izboljša oceno velikosti (gostoto) populacije.
+\item[] Preverili bomo vpliv različnih dejavnikov na oceno. % (npr. razmerje med vzorčenim območjem in domačim okolišem).
+\item[] Modele bomo med seboj primerjali na podlagi popravljenega Akaikovega informacijskega kriterija (AICc) in na podlagi odstopanja izračunane gostote od simulirane.
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pričakovani rezultati}
+\begin{itemize}[itemsep=1em]
+\item[] S pomočjo nove informacije (individualne kovariate) bomo izboljšali oceno velikosti (gostote) populacije.
+\item[] Raziskali bomo vpliv nekaterih parametrov na oceno velikosti (gostote) populacije. Ti parametri so lahko npr. razmerje med površino vzorčenega območja in domačega okoliša, različna ulovljivost, ki ni na račun prehajanja vzorčenega območja.
+\item[] Razvili bomo orodje, ki bo v pomoč teoretskim in praktičnim raziskavam na področju ocenjevanja učinka roba v študijah ulova-ponovnega ulova.
+\end{itemize}
+\end{frame}
+\end{document}

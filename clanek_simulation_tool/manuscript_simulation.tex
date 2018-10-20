@@ -1,0 +1,92 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+%\SweaveOpts{size = "scriptsize", comment = NA, background = "#ffffff", highlight= FALSE} % print version
+%\SweaveOpts{size = "scriptsize", comment = NA, tidy = FALSE}
+   \usepackage[colorlinks = true, urlcolor = red]{hyperref}
+\usepackage{amsmath}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage{booktabs}
+%\usepackage{multirow}
+   \usepackage{paralist} % inline list
+   \usepackage{fancyvrb}
+
+\title{Simulation tools for spatial explicit sampling without traps}
+\author{Roman Luštrik and Tomaž Skrbinšek}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\section{Introduction}
+
+When estimating population sizes or population densities, sampling is usually confined to a certain area. This may be due to cost constraints, time constrains, trap layout or due to anthropogenic borders (parks, reserves, national borders, etc.). More often than not, the entire population of interest can not be encompassed entirely, as animals move in and out of the sampling area, especially animals near the border. This phenomena is termed edge effect and can contribute to violation of assumptions of closure and equal capture probability for closed populations \citep{williams2002}. All things being equal, capture probabilities of animals walking in and out of the sampling area are different to capture probabilities of animals that have home ranges entirely inside the sampling area \citep{burnham-n-overton1978}. \citet{kendall1999} showed that under completely random immigration and emigration, capture probability is modified by $\tau$ and $E(\hat{p_i}) = \tau_i p_i$ (see proof on page 2518, eqns. 3 and 4). Due to animals crossing sampling area border, estimating animal density will apply to a larger area than actually sampled, the so called effective area. \citet{dice1938, dice1941} proposed to pad the sampling area with a strip which is half the radius of animals' home range. It should not be left unsaid that home range can be influenced by a number of factors, including season, food availability, sex, etc., and average home range size may only be a rough approximation. But at what point does this padding become moot? Can this be used in practice? Theoretically, when animal's home range area is minute compared to sampling area size, bias in estimating capture probability due to heterogeneity should be negligible, hence population size estimate should be unbiased.
+
+Students of animal populations have been aware of edge effect for the last 75 years \citep{efford2004}, yet little theoretical work has been done to demonstrate how it may influence parameter estimates. One of the earliest was \citet{schroder1981}, who simulated data for a capture grid. With the advance of GPS technology, we're able to record individual animal captures and recaptures noninvasively through DNA \citep{waits2005}, giving us information on movement in countinuous time scale opposed to fixed traps, such as hair snares or cameras. 
+   
+   If we simulate a known number of ``walkers'' of known home range size and space use, any discrepancy between what we believe to be the truth (simulated data) and the result from a model is our root mean square error (RMSE). This will be our gauge to see when capture probability heterogeneity no longer influences population size estimate or density.
+   
+   %\citet{otisetal1978} proposed a model where heterogeneity can be estimated, but this approach may often be limited by the number ($N+1$) of nuisance parameters.
+   
+   %Spatial capture recapture models (SCR) show promising advance in accounting for violation of equal capture (encounter) probabilities and ambiguous actual sampling area \citep{royle-et-al-2013}}. 
+   
+   \section{Simulation}
+   
+   Simulation is placed in a large world, a significantly larger than home ranges of walkers or sampling area. This prevents walkers that have the potential to be inside the sampling area, to walk off the edge of the world. These walkers also contribute less than 1 to density, and a large world ensures their influence is minimal. We decided to use circular sampling polygons, but any shape can be used, including those with holes (as implemented in package \texttt{sp}). 
+   
+   Uniformly distributed points connected randomly present walkers' path we subject to sampling. For convenience, walkers' home range are circular. There are no limitations to path length or home range size or shape, as custom walkers can be generated and fed to the simulation, such as correlated walks by \citet{kareiva1983}.
+   
+   Sampling is performed in a number of sessions (see below), only on walkers that ever appear inside the sampling area. For each captured walker, a capture history is made, where one presents capture and zero non capture. Capture history is included in the simulation's output file and can be directly fed to program MARK \citep{white1999} or through RMark \citep{rmark}.
+
+For each simulation run, a file is produced. Header section consists of a comment block with human and computer readable information about the simulation. Information consists of information about number of generated walkers, number of caught walkers, various densities, etc. Body section contains capture history for individual walker.
+%Addition information provided in the header are 
+   %\begin{inparaenum}[\itshape a\upshape)]
+   %\item number of walkers generated, 
+   %\item number of walkers sampled,
+   %\item number of sessions,
+   %\item probability of capture of individual walker,
+   %\item radius of sampling area polygon (if using default circular sampling area),
+   %\item number of walkers in super population,
+   %\item average home range of walker,
+   %\item density in sampling area (number of walker centroids divided by the sampling area size), 
+   %\item density in area expanded for half the home range radius (dubbed ``Dice density'', calculated as number of centroids in expanded area divided by \textit{sampling area size}) and 
+   %\item density in the entire ``world''
+   %\end{inparaenum}. 
+   
+   \subsection{Sampling of walkers}
+Sampling is done in $s$ number of sessions. Each walker has probability $p$ of being captured. After successful capture, a single point is sampled from walker's path and if located inside the sampling area, capture is recorded. If walker is not captured or the point lies outside the sampling area, a zero is recorded. This process yields a capture history as demonstrated below.
+   % verbatim environment makes a box of \linewidth width. centering thus has no effect
+   % seehttp://newsgroups.derkeiler.com/Archive/Comp/comp.text.tex/2008-08/msg00638.html
+   % fancyvrb package provides BVerbatim environment that can be centered
+   \begin{center}
+   \begin{BVerbatim}
+   /* walker 1 */ 10000
+   /* walker 2 */ 10010
+   /* walker 3 */ 00110
+   /* walker 4 */ 11001
+   \end{BVerbatim}
+   \end{center}
+   
+   Main simulation parameters are \begin{inparaenum}[\itshape a\upshape \textit{)}] \item size of the world, \item number of generated walkers, \item number of points per walker, \item random number generator seed, \item probability $p$ of capture and \item number of sessions in which sampling takes place\end{inparaenum}. If sampling area polygon is not provided, radius of a circular sampling area polygon is required. Sampling results can be visualized upon request or \emph{post festum}.
+   
+   \subsection{Assumptions}
+   Simulation world is considered to be homogenous. Walkers move independently of each other and are distributed uniformly. Each individual has the same probability of being captured. All individuals are identified correctly. Sampling is done independently of previous session(s). Sample can be found anywhere (e.g. not confined to roads, clearings or other distinct locations).
+   
+   
+   \subsection{Technical information}
+   Simulation was coded in R \citep{r2012} and builds on widely used packages \texttt{sp} \citep{bivand2008}, 
+   %\texttt{raster} \citep{hijmans2012},
+   \texttt{rgeos} \citep{bivand2012},
+   \texttt{snowfall} \citep{knaus2010} and \texttt{adehabitatLT} \citep{calenge2006}.
+   Simulation needs package \texttt{snowfall} to run on multiple cores (see corresponding package manual for details). Calculations are done sequentially if only one core is specified (required for computers with a single core). Other package dependencies are \texttt{CircStats} \citep{lund2009}.
+   
+   
+   
+   \bibliography{c:/users/romunov/Dropbox/roman_baza_clankov}
+   \bibliographystyle{cell}
+   \end{document}
+   

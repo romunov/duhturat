@@ -6,3 +6,12 @@ mark_book.pdf
 web_resources
 clusterfuck.txt
 data/
+*.aux
+*.toc
+*.bbl
+*.lof
+*.nav
+*.out
+*.blg
+*.lot
+*.snm

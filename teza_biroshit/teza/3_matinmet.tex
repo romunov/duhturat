@@ -1,0 +1,72 @@
+\section{Materiali in metode}
+V našem primeru bo osnovni gradnik simulacije osebek \citep{deangelis_individual-based_2014}. Posamezniki v teh modelih imajo lastnosti, ki so lahko povezane s prostorom in časom, fiziološke lastnosti ali pa so v povezavi z drugimi osebki iste ali druge vrste. Ker parametre določimo sami, imamo veliko kontrole nad naključnostjo (stohastične), kar je še posebej uporabno pri proučevanju vpliva variabilnosti na pojav, ki ga raziskujemo.
+
+\subsection{Simuliranje gibanja osebkov}
+Simulacijo smo postavili v svet A, ki je tako velik, da noben simuliran osebek, ki ni imel nezanemarljivo možnost biti zaznan, ne bo imel praktične možnosti, da bi dosegel rob. To je delovalo kot varovalka, da ni prišlo do popačenja rezultatov pri simulacijah s parametri na skrajnosti svojih razponov. Znotraj sveta A smo centroide osebkov v območju S razporedili naključno s pomočjo enakomerne porazdelitve. Gibanje osebkov smo opisali z dvorazsežnostno normalno porazdelitvijo. V simulacijah smo generirali 500, 1000, 1500 in 2000 osebkov.
+
+Polmer domačega okoliša osebkov smo določili v enotah standardnega odlkona ($\sigma$) normalne porazdelitve. V centroidu je imel osebek največjo ulovljivost, z oddaljenostjo od centroida pa verjetnost pada glede na funkcijo normalne porazdelitve.
+
+\subsubsection{Odlov}
+Osebke smo vzorčili s ponavljanjem v K odlovnih presledkih (5, 10, 15), kjer smo v posameznem presledku zabeležili po eno lokacijo na osebek. Ulovljivost je za vse osebke enaka in določena s parametrom $p$. Parameter $p$ smo simulirali med 0.1 in 0.3, kar predstavlja pogoste realne ulovljivosti, ki jih poročajo v študijah ulova-ponovnega ulova (npr. \citet{wilson_evaluation_1985, foster_critique_2012, chandler_characterizing_2018}).
+
+Pri ulovu smo zabeležili tudi lokacijo znotraj vzorčenega območja, točke zabeležene zunaj pa smo krnili. Za osebke, od katerih smo dobili dva ali več vzorcev, smo izračunali vse možne pare razdalj med točkami. Te razdalje so osnova za izračun individualne spremenljivke.
+
+\subsubsection{Izračun individualne spremenljivke}
+Izračune smo izvajali na mreži celic oziroma rastru. Velikost celic smo nastavili na tako velikost, da po našem mnenju izbira velikosti ni vplivala na izračun. Glede na oddaljenost celice od centroida osebka smo s pomočjo posamezne funkcije za vsako celico rastra izračunali verjetnost pojavljanja, celice znotraj območja vzorčenja pa sešteli. Ta vrednost je povezana s časom, ki ga osebek porabi znotraj območja vzorčenja oziroma s časom, v katerem je na voljo za odlov.
+
+\subsubsubsection{Dvorazsežnostna normalna porazdelitev}
+Gibanje na podlagi dvorazsežnostne normalne porazdelitve se ujema s tistim, ki smo ga uporabili za simuliranje osebkov. Centroid smo izračunali kot geometrično sredino vseh vzorčenih točk osebka, za standardni odklon pa smo uporabili simulirano vrednost.
+
+\subsubsubsection{Empirična porazdelitev}
+Za prileganje empirične porazdelitve smo uporabili podatke o razdaljah med pari vseh možnih vzorčenih točk. Na podlagi števila celic in razdalje med centroidom vzorčenega območja in njegovim robom smo ustvarili primerno število razdelkov, katerih število ni vplivalo na točnost izračuna individualne spremenljivke. Vsako parno razdaljo smo uvrstili v razdelek in tako pridobili kumulativno število prehojenih razdalj (padajoča funkcija).
+
+Razdelke smo dodatno utežili na sledeč način. V območje vzorčenja smo na podlagi enakomerne porazdelitve ustvarili toliko naključnih točk, kot je bilo vzorčenih parnih razdalj. Iz vseh empiričnih prehojenih razdalj smo s ponavljanjem vzorčili dolžine in jih postavili v prostor z izhodiščem v prej naključno vzorčenih točkah, smer daljice pa je bila naključna. Delež daljic, ki se je nahajal popolnoma znotraj območja vzorčenja, so predstavljali utež razreda. Uteženemu histogramu smo prilegli in ocenili funkcijo s tremi parametri, ki spominja na kumulativno porazdelitveno funkcije Weibullove porazdelitve.
+
+\[
+f(x) = e^{-(\frac{x}{\lambda})^{-k}}  \cdot a
+\]
+
+za $x >= 0$. Za lažji izračun deleža domačega okoliša znotraj vzorčenega območja smo dodali parameter $a$, ki spremeni vrednost, kjer funkcija seka $y$ os pri $x = 0$.
+Za vse osebke smo predpostavili enako krivuljo, ki opiše rabo domačega okoliša okoli centroida. Na podlagi krivulje in območja vzorčenja smo izračunali relativni delež, ki ga posamezen osebek prebije znotraj vzorčenega območja.
+
+Porazdelitev smo izbrali po tem, ko smo izkustveno določili, da relativno dobro opiše porazdelitev uteženih dolžine prehojenih razdalj.
+
+\subsection{Ocenjevanje velikosti populacij}
+Velikost populacije smo ocenili s pomočjo dveh modelov, Hugginsovega modela in modela CAPWIRE. Iz prvega smo izluščili parametra ulovljivost in velikost ocenjene populacije ter pripadajoče intervale zaupanja, iz drugega pa samo velikost populacije in pripadajoč interval zaupanja. V vseh primerih smo uporabili 95 \% interval zaupanja.
+
+\subsubsection{Hugginsov model}
+Z vzorčenjem smo za vsak osebek ustvarili odlovno zgodovino z individualno spremenljivko v K odlovnih presledkih. Delež časa, ki ga je osebek preživel znotraj območja vzorčenja glede na eno od zgoraj opisanih krivulj, smo uporabili kot individualno spremenljivko.
+
+$M_0$: V prvem modelu smo predpostavili, da sta parametra za prvi in vsak nadaljnji ulov enaka ($c = p$), ulovljivost pa je odvisna samo od odlovne zgodovine (brez drugih spremenljivk). Ta model bi v zapisu, ki ga uporabljajo \citep{otis_statistical_1978}, imenovali $M_0$ in predpostavlja, da učinka roba ni.
+
+$M_{sp}$: Za drugi model smo prav tako predpostavili enakost parametrov ($c = p$), ulovljivost pa je odvisna od individualne spremenljivke. Le-to smo izračunali na dva različna načina (glej poglavje Izračun individualne spremenljivke). Ta model bo predvidoma upošteval, da obstaja učinek roba in ga v nadaljevanju označujemo kot $M_{sp}$.
+
+\subsubsection{Po modelu CAPWIRE}
+Pri modeliranju s paketom CAPWIRE smo uporabili model TIRM, ki predpostavili, da gre za dve skupini osebkov z različnimi verjetnostmi ulovljivosti. Odlovne zgodovine smo sešteli po osebku in število ulovov uporabili v modelu.
+
+\subsection{Statistike za primerjavo učinkovitosti delovanja popravka}
+Za vsak set parametrov (npr. velikost populacije, velikost domačega okoliša, ulovljivost...) smo izračunali tri modele - po Hugginsovem modelu z in brez modifikacije ulovljivosti s pomočjo individualne spremenljivke ($M_0$, $M_{sp}$) in po modelu TIRM, kjer smo predpostavili dve skupini, ki imata lahko različni ulovljivosti.
+
+Za vsak model smo zabeležili vrednosti parametrov, ki smo jih uporabili za simuliranje osebkov; število simuliranih osebkov, število odlovnih presledkov, polmer vzorčenega območja, število osebkov, ki smo jih zaznali (ujeli znotraj območja vzorčenja vsaj enkrat), standardni odklon uporabljen pri simuliranju domačega okoliša osebka, povprečni najdaljši premik in simulirana verjetnost ulovljivosti.
+
+Od ocenjenih parametrov Hugginsovih modelov smo zabeležili oceno ulovljivosti za posamezen odlovni presledek (in pripadajoč 95\% interval zaupanja) za modela $M_0$ in $M_{sp}$, ocenjena velikost populacije (in pripadajoč 95\% interval zaupanja), AIC ter razliko v AIC med modeloma $M_0$ in $M_{sp}$. Za model TIRM smo shranili le velikost populacije in interval zaupanja, ker ocena ulovljivosti s Hugginsovim modelom ni neposredno primerljiva.
+Poleg populacijskih statistik, ki jih je izračunal program MARK, smo shranili tudi parametre prileganja funkcij, s pomočjo katerih smo opisali parne razdalje med vzorčenimi točkami osebkov. Za (pol)normalno porazdelitev je to standardni odklon ($\sigma$), za empirično porazdelitev pa trije parametri ($\lambda$, $k$, $a$).
+
+Za vsako simulacijo smo izračunali sledeče statistike:
+
+\begin{itemize}
+  \item Gostoto osebkov brez popravka, t.i. "naivna gostota". Izračunali smo jo z deljenjem števila simuliranih osebkov ($N$) z velikostjo območja vzorčenja.
+  \item Gostoto osebkov s popravki, kjer smo vzorčeno območje povečali za razdaljo enako 50., 60., 70., 80., 90., 95. in 99. percentilu normalne ali empirične porazdelitve. Računanje percentila za normalno porazdelitev z znanim povprečjem in standardni odklon je preprosto. S pomočjo kvantilne funkcije (\emph{qnorm}) izračunamo pri kateri verjetnosti (prehojeni razdalji) je vrednost naključne spremenljivke manjša ali enaka dani verjetnosti.
+  Za empirično porazdelitev kvantilna funkcija ni znana, oz. je relativno zapletena. S pomočjo simulacijskega pristopa in vzorčenjem z zavračanjem smo simulirali mnogo vrednosti, ki se prilegajo empirični porazdelitvi z znanimi parametri. Percentile smo izračunali na podlagi simuliranih vrednostih. Percentile smo uporabili kot razdaljo, za katero povesmo povečali čamo območje vzorčenja in posledično izračunali spremenjeno gostoto.
+  \item AICc. Modela $M_0$ in $M_{sp}$, ki ocenita velikost populacije brez in s popravkom, smo primerjali glede na kriterij AICc. Kriterij nam omogoča rangirati modela, pri tem pa tehta med zapletenostjo in prileganjem modela podatkom. Uporabili bomo AICc, ki se od AIC razlikuje po tem, da je bolj primeren za manjše vzorce. Model z nižjo vrednostjo AICc in za razliko vsaj 2, bo boljši od drugega modela.
+\end{itemize}
+
+Izračunane statistike gostote smo primerjali s pravo gostoto, t.i. zlatim standardom, ki smo ga izračunali tako, da smo število generiranih centroidov (osebkov) delili s površino, ki smo jo uporabili za generiranje teh osebkov. Izračunali smo kazalnik, ki prikazuje delež ocenjene gostote od prave gostote ($I = \frac{\hat{D}}{D}$).
+
+Za prikaz trendov in razlik med skupinami smo uporabili posplošen linearnen model (t.i. GLM, \citet{faraway_extending_2006}), z normalno razporejenimi ostanki.
+
+Simulacije smo spisali v programskem okolju \Q{R} \citep{r_core_team_r_2018}. Pri tem bomo uporabili pakete \Q{sp} \citep{bivand_applied_2008}, \Q{raster} \citep{hijmans_ability_2006}, \Q{rgeos} \citep{bivand_rundel_2017}, \Q{cluster} \citep{maechler_et_al_2018}, \Q{splancs} \citep{rowlingson_diggle_2017}, \Q{foreach} \citep{microsoft_2017}) in \Q{doParallel} \citep{doparallel_2017}.
+
+Za oceno parametrov Hugginsovega modela smo uporabili paket \Q{RMark} \citep{laake_2013}, ki omogoča posredno povezavo s programom \Q{MARK} \citep{cooch_program_2012}. Model \Q{TIRM} smo ocenili s pomočjo \Q{R} paketa \Q{capwire} \citep{pennell_miller_2012}. Za vse grafike smo uporabili paket \Q{ggplot2} \citep{wickham_ggplot2_2009}.
+
+Simulacije bomo poganjali na delovni postaji na Oddelku za biologijo Katedra za ekologijo in varstvo okolja. Postaja ima v dveh procesorjih 24 sredic in 48 niti ter več kot 100 GB delovnega spomina. Osnovni operacijski sistem je CentOS, v katerem tečejo virtualni sistemi (odprtokodni sistemu Ubuntu 18.04). Disertacija je bila oblikovana s sistemom \LaTeX.
