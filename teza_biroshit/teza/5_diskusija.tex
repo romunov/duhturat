@@ -1,5 +1,4 @@
 \section{Razprava}
-
 Pomembno orodje za raziskovanje nekaterih osnovnih parametrov populacij, kot je njena velikost, so metode ulova-ponovnega ulova. Kot velja za vse metode, imajo tudi te nekatere predpostavke, ki nas do neke mere omejujejo. V tem delu smo se osredotočili na kršenje predpostavke enake ulovljivosti. Do kršenja te predpostavke pride, ker osebki prihajajo in odhajajo iz območja vzorčenja, kar imenujemo učinek roba.
 
 S pomočjo simulacij in klasičnih modelov za zaprte populacije (po Hugginsu) smo preverili delovanje predlaganega popravka. Vsakemu osebku smo izračunali individualno spremenljivko, ki je odvisna od lege vzorcev (centroida) v prostoru in predpostavljene funkcije gibanja. Gibanje okoli centroida smo opisali s pomočjo dveh porazdelitev. Dvorazsežno normalno porazdelitev, za katero smo uporabili simuliran standardni odklon.  Ta primer predstavlja t.i. zlati standard, saj bi morala najbolje opisati gibanje osebkov. Druga porazdelitev pa je odvisna od premikov osebkov, katerim priležemo rahlo spremenjeno kumulativno porazdelitev Weibullove funkcije. Ta način ne zahteva dodatnih informacij, ki bi jih sicer lahko pridobili z dodatnimi metodami (npr. opremljanje osebkov s telemetrijskimi ovratnicami).
@@ -59,7 +58,7 @@ Razlike v AICc med modeloma $M_0$ in $M_{sp}$ so primerljive s tistimi za normal
 
 Popravljanje gostote s širjenjem velikosti domačega okoliša sicer pomaga, a nikakor v taki meri kot smo to opazili za normalno porazdelitev (slika \ref{sli:slika8}). Pristranskost je, tako kot za normalno porazdelitev, relativno majhna za primere, kjer je razmerje med velikostjo domačega okoliša in območja vzorčenja relativno majhno (relativno majhen učinek roba). Nepristranskost gostote se občutno zmanjša šele za primere, ko območje vzorčenja razširimo za približno 80.-90. percentil. Pri 90. percentilu in več že prihaja do podcenjevanja ocene gostote. Najbolj točni so rezultati za ekstreme simulacije - za največja in najmanjša razmerja med velikostjo domačega okoliša in območja vzorčenja. Podcenjevanje je z vidika upravljanja verjetno bolj zaželeno kot precenjevanje ker daje to zadržano oceno velikosti populacije.
 
-\section{Zaključki}
+\section{Sklepi}
 Ugotovili smo, da je model $M_{sp}$ (model z dodano individualno spremenljivko) v povprečju boljši od modela, kjer te spremenljivke nismo uporabili ($M_0$). Razlike v AICc so lahko relativno velike (do $\sim 20$), v prid $M_{sp}$. V samo nekaterih primerih je bil boljši model $M_0$, a so relativne razlike med modeloma relativno majhne (do $\sim 2$), do česar lahko pride že zgolj po naključju.
 
 Ucenjena ulovljivost po modelu $M_{sp}$ je manj pristranska - nižja od simulirane, kar pomeni, da zaznamo krnenje zaradi prehajanje roba območja vzorčenja. Vendar pa so te razlike relativno majhne.

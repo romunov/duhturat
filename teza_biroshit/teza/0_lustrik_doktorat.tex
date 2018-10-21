@@ -15,7 +15,7 @@
 \usepackage[font=footnotesize, justification=raggedright]{caption}
 \usepackage{subcaption}
 \usepackage[Q=yes, url=yes]{examplep} %this is for verbatim inline text, you can insert [Q=yes,div=yes,bsdiv=yes] for additional wrappers of \PVerbOpt
-\usepackage{pdflscape}
+% \usepackage{pdflscape}
 \usepackage{longtable}
 \usepackage{natbib}  % some extra cookies for bibtex
 \usepackage[table]{xcolor}
@@ -23,17 +23,22 @@
 \usepackage{appendix}
 \usepackage{setspace}
 \usepackage[T1]{fontenc} %tole rabiš, da lahko nardiš CAPS in BOLD hkrati - ma ne dela, mona
-\usepackage{bold-extra}
+%\usepackage{bold-extra}
 \usepackage{amsmath} % matrices?
-% \usepackage{biblatex} % za supresiranje note fielda
+\usepackage{titlesec}
 
 % help pictures that they're not alone on a page
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\textfraction}{0.1}
 
-% \AtEveryBibitem{%
-%   \clearfield{note}%
-% }
+% redefine section, subsection, subsubsection and subsubsubsection
+\titleformat{\section}{\normalfont\fontfamily{cmr}\fontsize{12}{17}\bfseries\scshape}{\thesection}{1em}{}
+
+\titleformat{\subsection}{\normalfont\fontfamily{cmr}\fontsize{12}{17}\scshape}{\thesubsection}{1em}{}
+
+\titleformat{\subsubsection}{\normalfont\fontfamily{cmr}\fontsize{12}{17}\bfseries}{\thesubsubsection}{1em}{}
+
+\titleformat{\subsubsubsection}{\normalfont\fontfamily{cmr}\fontsize{12}{17}}{\thesubsubsubsection}{1em}{}
 
 %header defs
 \pagestyle{fancy}
@@ -50,8 +55,8 @@
 \newcommand{\naslov}{Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij} %vstavi naslov diplomskega dela
 \newcommand{\naslovEN}{Spatially explicit modeling of superpopulation density} %vstavi angleški naslov diplomskega dela
 
-\newcommand{\platnica}{\Large{\textsc{Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij}}}
-\newcommand{\platnicaEN}{\Large{\textsc{Spatially explicit modeling of superpopulation density}}}
+\newcommand{\platnica}{\Large{\textsc{\naslov}}}
+\newcommand{\platnicaEN}{\Large{\textsc{\naslovEN}}}
 
 %custom hyphenation
 \hyphenation{la-bo-ra-to-rij-sko po-i-men-o-van-je} %separate words with space
