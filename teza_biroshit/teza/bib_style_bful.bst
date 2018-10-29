@@ -92,10 +92,12 @@ FUNCTION {init.state.consts}
   #3 'after.block :=
 }
 STRINGS { s t}
+
 FUNCTION {output.nonnull}
 { 's :=
   output.state mid.sentence =
-    { ", " * write$ }
+    %{ ", " * write$ }
+	{ " " * write$ }
     { output.state after.block =
         { add.period$ write$
           newline$
@@ -220,16 +222,17 @@ FUNCTION {bbl.etal}
 { "in~sod." }
 
 FUNCTION {bbl.editors}
-{ "Uredniki" }
+{ "(ur.)" }
 
 FUNCTION {bbl.editor}
-{ "Urednik" }
+{ "(ur.)" }
 
 FUNCTION {bbl.edby}
 { "uredil" }
 
 FUNCTION {bbl.edition}
-{ "izdaja" }
+%{ "izdaja" }
+{ "izd."}
 
 FUNCTION {bbl.volume}
 { "zvezek" }
@@ -244,7 +247,7 @@ FUNCTION {bbl.nr}
 { "\v{s}t." }
 
 FUNCTION {bbl.in}
-{ "v" }
+{ "V" }
 
 FUNCTION {bbl.pages}
 { "str." }
@@ -823,7 +826,7 @@ FUNCTION {format.journal.eid}
   if$
 }
 FUNCTION {format.vol.num.pages}
-{ volume field.or.null
+{  volume field.or.null
   duplicate$ empty$ 'skip$
     {
       "volume" bibinfo.check
@@ -836,7 +839,8 @@ FUNCTION {format.vol.num.pages}
         'skip$
       if$
       swap$
-      "(" swap$ * ")" *
+      %"(" swap$ * ")" *
+	  ", " swap$ * 
     }
   if$ *
 }
@@ -956,7 +960,7 @@ FUNCTION {article}
   new.block
   crossref missing$
     {
-      journal
+	  journal ", " *
       "journal" bibinfo.check
       "journal" output.check
       format.vol.num.pages output
@@ -991,6 +995,7 @@ FUNCTION {book}
   format.date "year" output.check
   date.block
   format.btitle "title" output.check
+  format.edition output
   crossref missing$
     { format.bvolume output
       new.block
@@ -1003,7 +1008,6 @@ FUNCTION {book}
       format.book.crossref output.nonnull
     }
   if$
-  format.edition output
   format.book.pages output
   format.doi output
   new.block

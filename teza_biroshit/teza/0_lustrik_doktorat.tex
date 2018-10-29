@@ -2,7 +2,7 @@
 % or run: runlatex.bat
 
 \documentclass[a4paper, 12pt, oneside]{article}
-\setlength{\parskip}{1 cm} %space between paragraphs
+% \setlength{\parskip}{1 cm} %space between paragraphs
 
 \usepackage{graphicx}
 \usepackage[utf8]{inputenc}
@@ -12,10 +12,9 @@
 \usepackage{fancyhdr}
 \usepackage{Sweave}
 \usepackage[tmargin=35mm, bmargin=30mm, lmargin=30mm, rmargin=25mm]{geometry} %custom margins
-\usepackage[font=footnotesize, justification=raggedright]{caption}
+\usepackage[font=footnotesize, justification=raggedright,tablename=Preglednica]{caption}
 \usepackage{subcaption}
-\usepackage[Q=yes, url=yes]{examplep} %this is for verbatim inline text, you can insert [Q=yes,div=yes,bsdiv=yes] for additional wrappers of \PVerbOpt
-% \usepackage{pdflscape}
+\usepackage[Q=yes, url=yes]{examplep} %this is for verbatim inline text, you can insert
 \usepackage{longtable}
 \usepackage{natbib}  % some extra cookies for bibtex
 \usepackage[table]{xcolor}
@@ -23,27 +22,63 @@
 \usepackage{appendix}
 \usepackage{setspace}
 \usepackage[T1]{fontenc} %tole rabiš, da lahko nardiš CAPS in BOLD hkrati - ma ne dela, mona
-%\usepackage{bold-extra}
+\usepackage[hidelinks]{hyperref}
+\usepackage[justification=justified]{caption}
 \usepackage{amsmath} % matrices?
-\usepackage{titlesec}
+\usepackage[tiny, md]{titlesec} % change sectioning
+\usepackage[titles]{tocloft} % add Figure/Table to list of figures/tables
+\usepackage{titletoc}
+\usepackage{epigraph}
+
+% This chunk controls  space between sections, subsections..., and figures in TOC.
+\renewcommand{\cftsecafterpnum}{\vspace{-10pt}} % reduces space between paragraphs in toc
+\renewcommand{\cftsubsecafterpnum}{\vspace{-8pt}}
+\renewcommand{\cftsubsubsecafterpnum}{\vspace{-8pt}}
+\renewcommand{\cftparaafterpnum}{\vspace{-8pt}}
+
+\setlength{\epigraphwidth}{0.5\textwidth}
+\setlength{\epigraphrule}{0pt}
+\setlength{\beforeepigraphskip}{4cm}
 
 % help pictures that they're not alone on a page
 \renewcommand{\topfraction}{0.85}
 \renewcommand{\textfraction}{0.1}
 
+% add Figure/Table: x to LOF, TOF (titletoc)
+%figure
+\contentsmargin{0.5cm}
+\titlecontents{figure}
+  [1.7cm]
+  {}
+  {\makebox[0pt][r]{%
+      \makebox[1.7cm][l]{Slika~\thecontentslabel:}%
+    }%
+  }
+  {\hspace{-1.7cm}}
+  {\titlerule*[6pt]{.}\contentspage}
+
+% table
+\contentsmargin{0.5cm}
+\titlecontents{table}
+  [2.75cm]
+  {}
+  {\makebox[0pt][r]{%
+      \makebox[2.75cm][l]{Preglednica~\thecontentslabel:}%
+    }%
+  }
+  {\hspace{-2cm}}
+  {\titlerule*[6pt]{.}\contentspage}
+
 % redefine section, subsection, subsubsection and subsubsubsection
-\titleformat{\section}{\normalfont\fontfamily{cmr}\fontsize{12}{17}\bfseries\scshape}{\thesection}{1em}{}
-
-\titleformat{\subsection}{\normalfont\fontfamily{cmr}\fontsize{12}{17}\scshape}{\thesubsection}{1em}{}
-
-\titleformat{\subsubsection}{\normalfont\fontfamily{cmr}\fontsize{12}{17}\bfseries}{\thesubsubsection}{1em}{}
-
-\titleformat{\subsubsubsection}{\normalfont\fontfamily{cmr}\fontsize{12}{17}}{\thesubsubsubsection}{1em}{}
+\titleformat{\section}{\normalfont\fontfamily{cmr}\fontsize{12}{1.2em}\bfseries}{\thesection}{1ex}{}
+\titleformat{\subsection}{\normalfont\fontfamily{cmr}\fontsize{12}{1.2em}}{\thesubsection}{1ex}{}
+\titleformat{\subsubsection}{\normalfont\fontfamily{cmr}\fontsize{12}{1.2em}\bfseries}{\thesubsubsection}{1ex}{}
+\titleformat{\subsubsubsection}{\normalfont\fontfamily{cmr}\fontsize{12}{1.2em}}{\thesubsubsubsection}{1ex}{}
 
 %header defs
 \pagestyle{fancy}
 \addtolength{\headheight}{\baselineskip}
-\lhead{\footnotesize\textup{Luštrik, R. \naslov .} \\
+\lhead{\footnotesize\textup{Luštrik R. \naslov .} \\
    \hspace{1cm} Dokt. disertacija, Ljubljana, Univ. v Ljubljani, Biotehniška fakulteta, 2018}
 \rhead{\thepage}
 \fancyfoot{} %clear footers
@@ -55,8 +90,8 @@
 \newcommand{\naslov}{Modeli s prostorsko omejitvijo za ocenjevanje gostot superpopulacij} %vstavi naslov diplomskega dela
 \newcommand{\naslovEN}{Spatially explicit modeling of superpopulation density} %vstavi angleški naslov diplomskega dela
 
-\newcommand{\platnica}{\Large{\textsc{\naslov}}}
-\newcommand{\platnicaEN}{\Large{\textsc{\naslovEN}}}
+\newcommand{\platnica}{\textsc{\MakeUppercase{\textbf{\naslov}}}}
+\newcommand{\platnicaEN}{\MakeUppercase{\textbf{\naslovEN}}}
 
 %custom hyphenation
 \hyphenation{la-bo-ra-to-rij-sko po-i-men-o-van-je} %separate words with space
@@ -69,7 +104,8 @@
 }
 
 % add extra sub section
-\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+% \newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\subsubsubsection}[1]{\paragraph{#1} ~\\[1.2em]}
 \setcounter{secnumdepth}{4}
 \setcounter{tocdepth}{4}
 
@@ -77,20 +113,26 @@
 
 \author{Roman Luštrik}
 
+% reduce spacing between sections
+\titlespacing{\section}{0pt}{\parskip}{\parskip}
+\titlespacing{\subsection}{0pt}{\parskip}{\parskip}
+\titlespacing{\subsubsection}{0pt}{\parskip}{\parskip}
+\titlespacing{\subsubsubsection}{0pt}{\parskip}{\parskip}
+\setlength{\parskip}{1em} % reduce spacing between paragraphs
+
+% rename table caption name
+% \renewcommand{\tablename}{Preglednica}
+
 \begin{document}
 
-%\include{rezultati_sweave} %run through Sweave before running latex
 \include{1_preambula}
 \pagenumbering{arabic}
 \include{2_uvod}
 \include{3_matinmet}
 \include{4_rezultati}
-\include{5_diskusija}
+\include{5_diskusija_sklepi}
 \include{6_povzetek}
 \include{7_virinref}
-%\include{zahvala}
-%\include{priloge1}
-%\include{priloge2}
-%\include{priloge3}
+\include{8_zahvala}
 
 \end{document}

@@ -3,17 +3,17 @@
 \voffset -2cm
 \enlargethispage{2cm}
 \begin{center}
-\Large \textsc{Univerza v ljubljani} \\
-\Large \textsc{Biotehniška fakulteta} \\
+\Large\textsc{Univerza v ljubljani} \\
+\Large\textsc{Biotehniška fakulteta} \\
 %\Large \textsc{Oddelek za biologijo} \\
-\vspace{9cm}
-\avtor \\
-\vspace{1cm}
-\LARGE{\platnica}\\
-\vspace{0.8cm}
+\vspace{7cm}
+\Large\avtor \\
+\vspace{2cm}
+\LARGE\platnica \\
+\vspace{2cm}
 \Large \textsc{Doktorska disertacija}\\
 \vspace{8cm} %this may need adjusting due to title length
-\Large Šentvid nad Ljubljano, 2018 \\
+\Large Ljubljana, 2018 \\
 \end{center}
 \end{titlepage}
 
@@ -22,22 +22,25 @@
 \voffset -2cm
 \enlargethispage{2cm}
 \begin{center}
-\textsc{Univerza v ljubljani}\\
-\textsc{Biotehniška fakulteta}\\
-%\textsc{Oddelek za biologijo} \\
+\Large\textsc{Univerza v ljubljani}\\
+\Large\textsc{Biotehniška fakulteta}\\
 \vspace{6cm}
 \avtor \\
 \vspace{1cm}
-\platnica\\
+\large \platnica\\
 \vspace{0.8cm}
-\normalsize\textsc{Doktorska disertacija}\\
+\textsc{Doktorska disertacija}\\
 \vspace{2cm}
-\platnicaEN\\
+\large\platnicaEN\\
 \vspace{0.8cm}
-\normalsize\textsc{Doctoral dissertation}\\
-\vspace{7cm} %this may need adjusting due to title length
-Šentvid nad Ljubljano, 2018 \\
+\textsc{Doctoral dissertation}\\
+\vspace{8cm} %this may need adjusting due to title length
+\Large Ljubljana, 2018 \\
 \end{center}
+\end{titlepage}
+
+\begin{titlepage}
+\epigraph{In god we trust, all others bring data.}{-- W. Edward Deming}
 \end{titlepage}
 
 %page number 2 - the presiding commission
@@ -45,27 +48,21 @@
 \pagenumbering{Roman}
 \setcounter{page}{2}
 
-Na podlagi Statuta Univerze v Ljubljani ter po sklepu Senata Biotehniške fakultete in sklepaKomisije za doktorski študij Univerze v Ljubljani z dne XX. XX. XXXX je bilo potrjeno, da kandidat izpolnjuje pogoje za opravljanje doktorata znanosti na Interdisciplinarnem doktorskem študijskem programu Statistika. Za mentorja je bil imenovan doc. dr. Tomaž Skrbinšek.
+Na podlagi Statuta Univerze v Ljubljani ter po sklepu Senata Biotehniške fakultete in sklepa 44. seje Komisije za doktorski študij Univerze v Ljubljani z dne 13. 11. 2013 (po pooblastilu Senata Univerze z dne 20. 1. 2009) je bilo potrjeno, da kandidat izpolnjuje pogoje za opravljanje doktorata znanosti na Interdisciplinarnem doktorskem študijskem programu Statistika. Za mentorja je bil imenovan prof. dr. Andrej Blejec. S sklepom Senata UL z dne 13. 1. 2018 je bil za novega mentorja imenovan doc. dr. Tomaž Skrbinšek.
 
-% Doktorska disertacija je zaključek podiplomskega študija \textsc{Statistika}, znanstveni modul \textsc{biostatistika}.  \\
-% Komisija za doktorski študij UL je dne 13.11.2013 odobrila temo doktorskega dela. Za mentorja je bil imenovan prof. dr. Andrej Blejec. \\ \\
-% Na 19. seji je senat Biotehniške fakultete dne 25.9.2017 odobril podaljšanje roka za oddaljo spiralne verzije doktorske disertacije.
-% Dne xx.xx.xxxx je <delovno telo> odobrilo menjavo mentorja. Mentor doktorske disertacije je doc. dr. Tomaž Skrbinšek. \\
 \vspace{4cm}
 
 Komisija za oceno in zagovor:\\
 
-\begin{table}[ht] %[ht] means ``position this float HERE at the TOP''
+\begin{table}[!ht] %[ht] means ``position this float HERE at the TOP''
  \begin{tabular}{>{\raggedright} m{4cm} m{10cm}}
-  Predsednik: & prof. dr. Peter \textsc{Trontelj} \par Univerza v Ljubljani, Biotehniška fakulteta, Oddelek za biologijo \\ [10pt]
-  Član: & prof. dr. Vladimir \textsc{Batagelj} \par Fakulteta za matematiko in fiziko, recenzent \\ [10pt]
+   Predsednik: & prof. dr. Janez \textsc{Stare} \par Univerza v Ljubljani, Medicinska fakulteta, Inštitut za biostatistiko in medicinsko informatiko \\ [10pt]
+   Članica: & doc. dr. Martina \textsc{Lužnik} \par Univerza na Primorskem, Fakulteta za matematiko, naravoslovje in informacijske tehnologije, Oddelek za biodiverziteto \\ [10pt]
+   Član: & prof. dr. Andrej \textsc{Blejec} \par Univerza v Ljubljani, Biotehniška fakulteta, Oddelek za biologijo \\ [10pt]
  \end{tabular}
 \end{table}
 
-Delo je rezultat lastnega raziskovalnega dela.
-
-Podpisani se strinjam z objavo svoje naloge v polnem tekstu na spletni strani Digitalne knjižnice Biotehniške fakultete. Izjavljam, da je naloga, ki sem jo oddal v elektronski obliki, identična tiskani verziji.\\
-\vspace{1cm}
+\vspace{3cm}
 
 Datum zagovora:
 
@@ -74,69 +71,106 @@ Datum zagovora:
 \end{flushright}
 
 \newpage
-%ključna dokumentacijska informacija
-%vsebina strani naj ne presega ene strani
-\begin{center}
-\textsc{Ključna dokumentacijska informacija} %potrebno centrirat
-\end{center}
+%ključna dokumentacijska informacija, vsebina strani naj ne presega ene strani
+\section*{KLJUČNA DOKUMENTACIJSKA INFORMACIJA (KDI)}
+\addcontentsline{toc}{section}{KLJUČNA DOKUMENTACIJSKA INFORMACIJA (KDI)}
 
-% navodila za oblikovanje: http://www.bf.uni-lj.si/fileadmin/groups/2681/navodila_vsebina.pdf
+% KDI variables
+\newcommand{\numroman}{X}
+\newcommand{\numpages}{56}
+\newcommand{\numtables}{1}
+\newcommand{\numfigs}{11}
+% \newcommand{\numsup}{0}
+\newcommand{\numsources}{66}
+
+% navodila za oblikovanje: http://www.bf.uni-lj.si/fileadmin/users/1/knjiznice/Navodila_za_pripravo_zakljucnih_pisnih_izdelkov_na_BF.pdf
 \begin{table}[H]
- \begin{tabular}{>{\raggedright} p{2cm} m{12cm}}
+ \begin{tabular}{>{\raggedright} p{2cm} m{12.5cm}}
   ŠD & Dd \\
-  DK &  \\ % določi INDOK
-  KG & gostota, ocena velikosti populacije, učinek roba, metoda ulova in ponovnega ulova \\ % malo še za dopolnit
-  AV & \textsc{Luštrik}, Roman \\
+  DK & UDK 519.22:57(043.3) \\
+  KG & populacije, gostota, ocena velikosti populacije, učinek roba, metoda lova-ponovnega ulova, program MARK, program R \\
+  AV & \textsc{Luštrik}, Roman, univ. dipl. biol. \\
   SA & \textsc{Skrbinšek}, Tomaž (mentor) \\
   KZ & SI-1000 Ljubljana, Jamnikarjeva 101 \\
   ZA & Univerza v Ljubljani, Biotehniška fakulteta, Interdisciplinarni doktorski študijski program Statistika \\
   LI & 2018 \\
   IN & \textsc{\naslov} \\
   TD & Doktorska disertacija \\
-  OP & X, 46 str., 1 pregl., 10 sl., 1 pril., 45 vir. \\ %št. rimskih strani, št. navadnih strani, št. preglednic, kart, prilog in virov
+  OP & \numroman, \numpages~str., \numtables~pregl., \numfigs~sl., \numsources~vir. \\ %št. rimskih strani, št. navadnih strani, št. preglednic, kart, prilog in virov
   IJ & sl \\
   JI & sl/en \\
-  AI & <izvleček do približno 200 besed>\\ % poln abstrakt omejen na ~200 besed
+  AI & Eden od načinov ocenjevanja velikosti populacij je z uporabo metod lova-ponovnega ulova. Metoda predpostavlja, da je populacija zaprta (ni rojstev, smrti, priseljevanja in odseljevanja) in da imajo vsi osebki enako verjetnost ulovljivosti. Ker populacij pogosto ne moremo vzorčiti v celoti, zaradi prehoda roba območja vzorčenja prihaja do kršenja teh dveh predpostavk, kar imenujemo učinek roba. Klasični Hugginsov model za zaprte populacije za oceno parametrov sam po sebi ne omogoča uporabe prostorskih statistik, omogoča pa vključevanje individualne spremenljivke. V tem delu s pomočjo simulacij testiramo učinkovitost vključevanja individualne spremenljivke v model z namenom odpravljanja posledic učinka roba. Ugotovili smo, da je model, ki vključuje prostorsko informacijo, boljši od modela, ki te informacije ne nosi. Razlika v ocenjenem parametru verjetnosti ulovljivosti ($\hat{p}$) je s praktičnega vidika zelo majhna. Pristranskost ocene parametra $\hat{p}$ je najmanjša za tiste simulacije, kjer je velikost domačega okoliša znatno manjša od velikosti območja vzorčenja, za ostale pa je močno pristranska. Pristranskost ocene parametra $\hat{p}$ se pozna tudi pri oceni gostote, ki je zelo pristranska za primere, kjer je domač okoliš velik v primerjavi z velikostjo območja vzorčenja. Na podlagi porazdelitve za izračun individualne spremenljivke smo povečali območje vzorčenja in uspeli do neke mere popraviti gostoto, a le ob predpostavki, da imamo na voljo reprezentativno obliko in velikost domačega okoliša.\\ %  ~200 besed
  \end{tabular}
-
 \end{table}
 
 \newpage
 %keywords documentation
-\begin{center}
-\textsc{Keyword documentation} %Janja pravi, da je keyword bolj pravilno kot key word (kot to navajajo v navodilih)
-\end{center}
+\section*{KEY WORDS DOCUMENTATION (KWD)}
+\addcontentsline{toc}{section}{KEY WORDS DOCUMENTATION (KWD)}
+
 \begin{table}[H]
-  \begin{tabular}{>{\raggedright} p{2cm} m{11cm}}
+  \begin{tabular}{>{\raggedright} p{2cm} m{12.5cm}}
   DN & Dd \\
-  DC &  \\ %decimalna klasifikacija (UDK ali GDK)
-  CX & density, population size estimate, edge effect, mark-recapture \\
+  DC & UDC 519.22:57(043.3) \\ %decimalna klasifikacija (UDK ali GDK)
+  CX & populations, density, population size estimate, edge effect, mark-recapture, program MARK, program R \\
   AU & \textsc{Luštrik}, Roman \\
   AA & \textsc{Skrbinšek}, Tomaž (mentor) \\
   PP & SI-1000 Ljubljana, Jamnikarjeva 101 \\
-  PB & University of Ljubljana, Biotechnical faculty, Department of biology \\
+  PB & University of Ljubljana, Biotechnical Faculty, Interdisciplinary Doctoral Programme in Statistics \\
   PY & 2018 \\
   TI & \textsc{\naslovEN} \\
   DT & Doctoral dissertation \\
-  NO & XIII, 37 p., 6 tab., 13 fig., 7 ann., 44 ref.\\ %št. rimskih strani, št. navadnih strani, št. preglednic, kart, prilog in virov
+  NO & \numroman, \numpages~p., \numtables~tab., \numfigs~fig., \numsources~ref.\\ %št. rimskih strani, št. navadnih strani, št. preglednic, kart, prilog in virov
   LA & sl \\
   AL & sl/en \\
-  AB & <abstract> \\
+  AB & Among methods for estimating population sizes, mark-recapture is a popular choice. It assumes population closure (void of deaths, births, immigration and emigration) and equal probability of capture. Since populations often cannot be encompassed entirely, some individuals cross in and out of the sampling area in violation of aforementioned assumptions, which is termed edge effect. The time-tested Huggins model does not in itself use spatial information to estimate parameters; however, it does enable use of an individual covariate. In this thesis, we use simulations to test whether including spatial information through an individual covariate helps alleviate edge effect. Our findings suggest that including spatial information does improve the model. For practical purposes, the difference in estimates of probability of capture ($\hat{p}$) between models is negligible. Bias of $\hat{p}$ is smallest in cases where home range size is small relative to sampling area size and large for cases where home range is comparatively large. This is also evident in density estimates, which are highly biased in cases where home range is relatively large compared to sampling area. We increased the sampling area radius based on distributions used to calculate the individual covariate and managed to somewhat alleviate the bias, provided that the calculated home range shape and size are representative.\\
   \end{tabular}
-
 \end{table}
 
-% Table of contents
 \newpage
-\renewcommand*\contentsname{KAZALO VSEBINE}
+
+% Table of contents
+\renewcommand*{\contentsname}{}
+\section*{\textbf{\large KAZALO VSEBINE}}
+\vspace{-1.8cm}
+\addcontentsline{toc}{section}{\textbf{KAZALO VSEBINE}}
+\renewcommand{\baselinestretch}{0.8}\normalsize
 \tableofcontents
+\renewcommand{\baselinestretch}{1.0}\normalsize
 
 % List of tables
 \newpage
-\renewcommand*\listtablename{KAZALO PREGLEDNIC}
+\normalsize
+\renewcommand*\listtablename{}
+\section*{\textbf{KAZALO PREGLEDNIC}}
+\vspace{-1.5cm}
+\addcontentsline{toc}{section}{\textbf{KAZALO PREGLEDNIC}}
 \listoftables
 
 % List of images
 \newpage
-\renewcommand*\listfigurename{KAZALO SLIK}
+\normalsize
+\renewcommand*\listfigurename{} % remove list of figures title
+\section*{\textbf{KAZALO SLIK}} % add title manually
+\vspace{-1cm}
+\addcontentsline{toc}{section}{\textbf{KAZALO SLIK}} % manually add it to LOC
+% \renewcommand{\baselinestretch}{0.4}\normalsize
 \listoffigures
+% \renewcommand{\baselinestretch}{1.0}\normalsize
+
+\newpage
+\section*{OKRAJŠAVE IN SIMBOLI}
+\addcontentsline{toc}{section}{\textbf{OKRAJŠAVE IN SIMBOLI}}
+
+\begin{table}[H]
+ \begin{tabular}{>{\raggedright} p{2cm} m{12cm}}
+   $p$ ($\hat{p}$), $c$ & Verjetnost ulovljivosti (in njena cenilka) v kontekstu Hugginsovega modela za zaprte populacije \\
+   $M_0$ & Model, kjer smo predpostavili, da je ulovljivost enaka za prvo in vse nadaljnje ulove \\
+   $M_{sp}$ & Model, kjer smo predpostavili heterogenost ulovljivosti. To heterogenost opišemo s pomočjo individualne spremenljivke \\
+   CAPWIRE & Model za ocenjevanje velikost populacije, ki predpostavlja različno število skupin osebkov z enakim $p$ \\
+   TIRM & Ena oblika modela CAPWIRE \\
+   $D$ ($\hat{D}$) & Ocenjena gostota populacije in njena cenilka \\
+   AICc & Akaikov informacijski kriterij s popravkom za male vzorce \\
+ \end{tabular}
+\end{table}
+\normalsize

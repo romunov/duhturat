@@ -13,10 +13,12 @@ load("simulations_calculated_indices.RData")
 plt <- c(a0 = TRUE, b0 = TRUE, d0 = TRUE, f0 = TRUE, h0 = TRUE, i0 = TRUE, a1 = TRUE,
          b1 = TRUE, c1 = TRUE, d1 = TRUE, e1 = TRUE, a2 = TRUE, a5 = TRUE, a6 = TRUE, 
          b6 = TRUE, a7 = TRUE, a8 = TRUE)
-#### EMPIRICAL ####
-createFigures(xy = xy, type = "E", plt)
-#### NORMAL ####
-createFigures(xy = xy, type = "N", plt)
+# these figures included in the thesis
+plt <- c(a0 = TRUE, b0 = TRUE, f0 = TRUE, h0 = TRUE, a1 = TRUE, c1 = TRUE, d1 = TRUE, 
+         e1 = TRUE, b6 = TRUE, a8 = TRUE)
+
+createFigures(xy = xy, type = "E", dev = "png", plt)  # calculate data for empirical
+createFigures(xy = xy, type = "N", dev = "png", plt)  # calculate data for normal
 
 # out <- table(xy$num.generated.walkers, xy$sessions, xy$fun)
 # 5  10  15
@@ -25,9 +27,3 @@ createFigures(xy = xy, type = "N", plt)
 # 1000 -40  -8   0
 # 1300 -23   0  -1
 # 1500 -28  -4   0
-
-createFigures(xy, type = "E", c(c1 = TRUE, d1 = TRUE, e1 = TRUE))
-createFigures(xy, type = "N", c(c1 = TRUE, d1 = TRUE, e1 = TRUE))
-
-createFigures(xy, type = "E", c(a0 = TRUE))
-createFigures(xy, type = "N", c(a0 = TRUE))
