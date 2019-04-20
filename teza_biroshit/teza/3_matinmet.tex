@@ -18,9 +18,9 @@ Iz praktičnih razlogov smo izračune izvajali na mreži celic oziroma rastru. V
 Gibanje na podlagi dvorazsežnostne normalne porazdelitve se ujema s tistim, ki smo ga uporabili za simuliranje osebkov. Centroid smo izračunali kot geometrično sredino vseh vzorčenih točk osebka, za standardni odklon pa smo uporabili simulirano vrednost.
 
 \subsubsection[\bfseries Empirična porazdelitev]{Empirična porazdelitev}
-Za prileganje empirične porazdelitve smo uporabili podatke o razdaljah med pari vseh možnih vzorčenih točk. Na podlagi števila celic in razdalje med centroidom vzorčenega območja in njegovim robom smo ustvarili primerno število razdelkov, katerih število ni vplivalo na točnost izračuna individualne spremenljivke. Vsako parno razdaljo smo uvrstili v razdelek in tako pridobili kumulativno število prehojenih razdalj (padajoča funkcija).
+Za prileganje empirične porazdelitve smo uporabili podatke o razdaljah med pari vseh možnih vzorčenih točk. Na podlagi števila celic in razdalje med centroidom vzorčenega območja in njegovim robom smo ustvarili primerno število razdelkov, katerih število ni vplivalo na točnost izračuna individualne spremenljivke. Vsako parno razdaljo smo uvrstili v razdelek in tako pridobili kumulativno število parnih razdalj med vzorčenimi točkami (padajoča funkcija).
 
-Razdelke smo dodatno utežili na sledeč način. V območje vzorčenja smo na podlagi enakomerne porazdelitve ustvarili toliko naključnih točk, kot je bilo vzorčenih parnih razdalj. Iz vseh empiričnih prehojenih razdalj smo s ponavljanjem vzorčili dolžine in jih postavili v prostor z izhodiščem v prej naključno vzorčenih točkah, smer daljice pa je bila naključna. Delež daljic, ki se je nahajal popolnoma znotraj območja vzorčenja, je predstavljal utež razreda. Uteženemu histogramu smo prilegli in ocenili funkcijo s tremi parametri, ki spominja na kumulativno porazdelitveno funkcijo Weibullove porazdelitve.
+Razdelke smo dodatno utežili na sledeč način. V območje vzorčenja smo na podlagi enakomerne porazdelitve ustvarili toliko naključnih točk, kot je bilo vzorčenih parnih razdalj. Iz vseh empiričnih parnih razdalj med točkami smo s ponavljanjem vzorčili dolžine in jih postavili v prostor z izhodiščem v prej naključno vzorčenih točkah, smer daljice pa je bila naključna. Delež daljic, ki se je nahajal popolnoma znotraj območja vzorčenja, je predstavljal utež razreda. Uteženemu histogramu smo prilegli in ocenili funkcijo s tremi parametri, ki spominja na kumulativno porazdelitveno funkcijo Weibullove porazdelitve z dvema parametroma ($1 - e^{-(x/\lambda)^k}$). Naša funkcija se razlikuje po tem, da smo Weibullovi odšteli 1 in predznak $k$ uredili tako, da smo funkcijo spremenili v padajočo.
 
 \[
 f(x) = e^{-(\frac{x}{\lambda})^{-k}}  \cdot a
@@ -29,7 +29,7 @@ f(x) = e^{-(\frac{x}{\lambda})^{-k}}  \cdot a
 za $x >= 0$. Za lažji izračun deleža domačega okoliša znotraj vzorčenega območja smo dodali parameter $a$, ki spremeni vrednost, kjer funkcija seka $y$ os pri $x = 0$.
 Za vse osebke smo predpostavili enako krivuljo, ki opiše rabo domačega okoliša okoli centroida. Na podlagi krivulje in območja vzorčenja smo izračunali relativni delež, ki ga posamezen osebek prebije znotraj vzorčenega območja.
 
-Porazdelitev smo izbrali po tem, ko smo izkustveno določili, da relativno dobro opiše porazdelitev uteženih dolžin prehojenih razdalj.
+Porazdelitev smo izbrali po tem, ko smo izkustveno določili, da relativno dobro opiše porazdelitev uteženih dolžin parnih razdalj med vzorčenimi točkami.
 
 
 \subsection{OCENJEVANJE VELIKOSTI POPULACIJ}
@@ -45,15 +45,17 @@ $M_0$: V prvem modelu smo predpostavili, da sta parametra za prvi in vsak nadalj
 $M_{sp}$: Za drugi model smo prav tako predpostavili enakost parametrov ($c=p$), ulovljivost pa je odvisna od individualne spremenljivke. To smo izračunali na dva različna načina (glej poglavje Izračun individualne spremenljivke). Ta model bo predvidoma upošteval, da obstaja učinek roba, in ga označujemo kot $M_{sp}$.
 
 \subsubsection[\bfseries Model CAPWIRE]{Model CAPWIRE}
-Pri modeliranju s paketom CAPWIRE \citep{pennell_miller_2012} smo uporabili model TIRM, ki predpostavlja, da gre za mešanico dveh skupin osebkov z različnima verjetnostima ulovljivosti. Odlovne zgodovine smo sešteli po osebku in število ulovov uporabili v modelu. Iz rezultata smo izluščili velikost populacije.
+Pri modeliranju s paketom CAPWIRE \citep{pennell_miller_2012} smo uporabili model TIRM, ki predpostavlja, da gre za mešanico dveh skupin osebkov z različnima ulovljivostima. Odlovne zgodovine smo sešteli po osebku in število ulovov uporabili v modelu. Iz rezultata smo izluščili velikost populacije.
 
 \subsection{STATISTIKE ZA PRIMERJAVO UČINKOVITOSTI DELOVANJA POPRAVKA}
-Za vsak set parametrov (npr. velikost populacije, velikost domačega okoliša, ulovljivost …) smo izračunali tri modele - po Hugginsovem modelu z in brez modifikacije ulovljivosti s pomočjo individualne spremenljivke ($M_0$, $M_{sp}$) in po modelu TIRM, kjer smo predpostavili dve skupini, ki imata lahko različni ulovljivosti.
+Za vsak set parametrov (npr. velikost populacije, velikost domačega okoliša, ulovljivost $\ldots$) smo izračunali tri modele - po Hugginsovem modelu z in brez modifikacije ulovljivosti s pomočjo individualne spremenljivke ($M_0$, $M_{sp}$) in po modelu TIRM, kjer smo predpostavili dve skupini, ki imata lahko različni ulovljivosti.
 
-Za vsak model smo zabeležili vrednosti parametrov, ki smo jih uporabili za simuliranje osebkov: število simuliranih osebkov, število odlovnih intervalov, polmer vzorčenega območja, število osebkov, ki smo jih zaznali (ujeli znotraj območja vzorčenja vsaj enkrat), standardni odklon, uporabljen pri simuliranju domačega okoliša osebka, povprečni najdaljši premik in simulirana verjetnost ulovljivosti.
+Za vsak model smo zabeležili vrednosti parametrov, ki smo jih uporabili za simuliranje osebkov: število simuliranih osebkov, število odlovnih intervalov, polmer vzorčenega območja, število osebkov, ki smo jih zaznali (ujeli znotraj območja vzorčenja vsaj enkrat), standardni odklon, uporabljen pri simuliranju domačega okoliša osebka, povprečni najdaljši premik in simulirana ulovljivost.
 
 Od ocenjenih parametrov Hugginsovih modelov smo zabeležili oceno ulovljivosti za posamezen odlovni presledek za modela $M_0$ in $M_{sp}$, ocenjeno velikost populacije, AICc ter razliko v AICc med modeloma $M_0$ in $M_{sp}$. Za model TIRM smo shranili le velikost populacije in interval zaupanja, ker ocena ulovljivosti s Hugginsovim modelom ni neposredno primerljiva.
 Poleg populacijskih statistik, ki jih je izračunal program MARK, smo shranili tudi parametre prileganja funkcij, s pomočjo katerih smo opisali parne razdalje med vzorčenimi točkami osebkov. Za (pol)normalno porazdelitev je to standardni odklon ($\sigma$), za empirično porazdelitev pa trije parametri ($\lambda$, $k$, $a$).
+
+Kater model je boljši bomo uporabili razrede, ki jih predlagata \citet{burnham_model_2002}. Če bo razlika med modeloma med 0 in 2, bomo smatrali, da sta si modela podobna. Razlike med 4 in 7 bomo smatrali kot da sta si modela verjetno različna. Razlika večja od 10 kaže na to, da sta modela zagotovo različna.
 
 
 Za vsako simulacijo smo izračunali naslednje statistike:
@@ -61,7 +63,7 @@ Za vsako simulacijo smo izračunali naslednje statistike:
 \begin{itemize}
   \item Gostota osebkov brez popravka, t. i. ``naivna gostota''. Izračunali smo jo z deljenjem ocene velikosti populacije ($\hat{N}$) z velikostjo območja vzorčenja.
   \item Gostota osebkov s popravki, kjer smo vzorčeno območje povečali za razdaljo enako 50., 60., 70., 80., 90., 95. in 99. percentilu normalne ali empirične porazdelitve.
-Računanje percentila za normalno porazdelitev z znanim povprečjem in standardnim odklonom je preprosto. S pomočjo kvantilne funkcije ($\Q{qnorm}$) izračunamo, pri kateri verjetnosti (prehojeni razdalji) je vrednost naključne spremenljivke manjša ali enaka dani verjetnosti.
+Računanje percentila za normalno porazdelitev z znanim povprečjem in standardnim odklonom je preprosto. S pomočjo kvantilne funkcije ($\Q{qnorm}$) izračunamo, pri kateri parni razdalji je vrednost naključne spremenljivke manjša ali enaka dani verjetnosti.
 Za empirično porazdelitev kvantilna funkcija ni znana oziroma je relativno zapletena. S pomočjo simulacijskega pristopa in z vzorčenjem z zavračanjem smo simulirali mnogo vrednosti, ki se prilegajo empirični porazdelitvi z znanimi parametri. Percentile smo izračunali na podlagi simuliranih vrednostih. Percentile smo uporabili kot razdaljo, za katero smo povečali območje vzorčenja, in posledično izračunali spremenjeno gostoto.
   \item AICc. Modela $M_0$ in $M_{sp}$, ki ocenita velikost populacije brez in s popravkom, smo primerjali glede na kriterij AICc. Kriterij nam omogoča rangirati modela, pri tem pa tehta med zapletenostjo in prileganjem modela podatkom. Uporabili bomo AICc, ki se od AICc razlikuje po tem, da je bolj primeren za manjše vzorce. Model z nižjo vrednostjo AICc, z razliko vsaj 2, bomo smatrali kot boljšega od drugega modela.
 \end{itemize}

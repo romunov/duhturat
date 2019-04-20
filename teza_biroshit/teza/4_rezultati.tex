@@ -73,61 +73,15 @@ Zaznati je mogoče vzorec v številu uspešnih simulacij glede na uporabljeno fu
 \end{tabular}
 \end{table}
 
-\subsection{PARAMETER P MODELOV $M_0$ IN $M_{sp}$ PO HUGGINSU}
-Za modela $M_0$ in $M_{sp}$ smo predpostavili, da sta parametra $p$ in $c$ enaka. Ulovljivost v prvem in vseh ostalih odlovnih intervalih predpostavljamo enako. Zato v analizi obravnavamo le parameter ulovljivosti $p$. Za lažjo primerjavo smo izračunali razmerje med ocenjeno in simulirano vrednostjo $p$ (slika \ref{sli:slika3}). Model TIRM oceni $p$ za dve skupini, kar ni neposredno primerljivo s parametrom p po Hugginsovem modelu, zato tega nismo podrobneje preučili.
+\subsection{PARAMETER $p$ MODELOV $M_0$ IN $M_{sp}$ PO HUGGINSU}
+Za modela $M_0$ in $M_{sp}$ smo predpostavili, da sta parametra $p$ in $c$ enaka. Ulovljivost v prvem in vseh ostalih odlovnih intervalih predpostavljamo enako. Zato v analizi obravnavamo le parameter ulovljivosti $p$. Za lažjo primerjavo smo izračunali razmerje med ocenjeno in simulirano vrednostjo $p$ (slika \ref{sli:slika3}). Model TIRM oceni $p$ za dve skupini, kar ni neposredno primerljivo s parametrom $p$ po Hugginsovem modelu, zato tega nismo podrobneje preučili.
 
 V povprečju je ulovljivost za vse simulacije in modele podcenjena in je približno med 0.35 in 0.4 deleža simulirane vrednosti. Ulovljivost, ocenjena po modelu $M_{sp}$, je nekoliko bolj podcenjena ne glede na to, s pomočjo katere porazdelitve izračunamo individualno spremenljivko. V povprečju je ulovljivost za primer empirične porazdelitve za oba modela nekoliko nižja (za približno 0.01). Vidimo tudi, da se razlika med modeloma rahlo zmanjša s povečanjem simulirane ulovljivosti (slika \ref{sli:slika3}).
 
 \subsubsection[\bfseries Primerjava simulirane in ocenjene ulovljivosti glede na porazdelitev]{Primerjava simulirane in ocenjene ulovljivosti glede na porazdelitev}
-\subsubsubsection{Empirična porazdelitev}
-Povprečje deleža simulirane vrednosti preprostega $M_0$ modela je 0.397, modela z individualno spremenljivko $M_{sp}$ pa za 0.035 nižja.
+Pristranskost ocenjene ulovljivosti smo najprej preverili za vse simulirane parametre (število simuliranih osebkov $N$, število odlovnih intervalov $K$). Slika \ref{sli:slika3} prikazuje odstopanje (pristranskost) od simulirane ocene za modela $M_0$ in $M_{sp}$ za primere, ko smo individualno spremenljivko izračunali s pomočjo empirične (zgoraj) in normalne porazdelitve (spodaj).
 
-\begin{verbatim}
-Call:
-glm(formula = p.val ~ p.var, data = xep)
-
-Deviance Residuals:
- 	Min    	1Q	Median    	3Q   	Max
--0.36868  -0.16667  -0.07254   0.09971   1.44373
-
-Coefficients:
-              	Estimate Std. Error t value Pr(>|t|)
-(Intercept)   	0.397081   0.001467  270.69   <2e-16 ***
-p.varp.target.sp -0.035010   0.002075  -16.88   <2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for gaussian family taken to be 0.05769313)
-
-	Null deviance: 3109.8  on 53619  degrees of freedom
-Residual deviance: 3093.4  on 53618  degrees of freedom
-AIC: -786.36
-\end{verbatim}
-
-\subsubsubsection{Normalna porazdelitev}
-Povprečje deleža simulirane vrednosti preprostega $M_0$ modela je 0.387, modela z individualno spremenljivko $M_{sp}$ pa 0.349 (0.038 nižja).
-
-\begin{verbatim}
-Call:
-glm(formula = p.val ~ p.var, data = xep)
-
-Deviance Residuals:
- 	Min    	1Q	Median    	3Q   	Max
--0.35876  -0.16239  -0.07163   0.09433   1.45364
-
-Coefficients:
-              	Estimate Std. Error t value Pr(>|t|)
-(Intercept)   	0.387167   0.001381  280.29   <2e-16 ***
-p.varp.target.sp -0.037886   0.001953  -19.39   <2e-16 ***
----
-Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
-
-(Dispersion parameter for gaussian family taken to be 0.05563641)
-
-	Null deviance: 3265.5  on 58319  degrees of freedom
-Residual deviance: 3244.6  on 58318  degrees of freedom
-AIC: -2972.7
-\end{verbatim}
+Za primer izračuna individualne spremenljivke s pomočjo empirične porazdelitve je globalno povprečje za model $M_0$ 0.397 in 0.362 za model $M_{sp}$ (razlika 0.35 \%). Za primer izračuna individualne spremenljivke s pomočjo normalne porazdelitve je globalno povprečje 0.387 za model $M_0$ in 0.349 za model $M_{sp}$.
 
 \begin{figure}[H]
 \centering
@@ -143,19 +97,18 @@ AIC: -2972.7
   \label{sli:sub3.2}
 \end{subfigure}
 
-\caption[Primerjava ocenjene ulovljivosti s simulirano]{Primerjava ocenjene ulovljivosti s simulirano. Povprečna ocena ulovljivosti ($p$) za Hugginsova modela $M_0$ in $M_{sp}$. Na osi $x$ so prikazane simulirane vrednosti $p$, na osi $y$ pa razmerje med ocenjeno in simulirano vrednostjo verjetnosti ulovljivosti. Izračun individualne spremenljivke s pomočjo empirične (zgoraj) in normalne funkcije (spodaj). Ne kaže, da izbira funkcije za izračun individualne spremenljivke bistveno vpliva na oceno parametra $p$.
+\caption[Primerjava ocenjene ulovljivosti s simulirano]{Primerjava ocenjene ulovljivosti s simulirano. Povprečna ocena ulovljivosti ($p$) za Hugginsova modela $M_0$ in $M_{sp}$. Na osi $x$ so prikazane simulirane vrednosti $p$, na osi $y$ pa razmerje med ocenjeno in simulirano vrednostjo ulovljivosti. Izračun individualne spremenljivke s pomočjo empirične (zgoraj) in normalne funkcije (spodaj). Ne kaže, da izbira funkcije za izračun individualne spremenljivke bistveno vpliva na oceno parametra $p$. V povprečju je ocena ulovljivosti podcenjena.
 
 \medskip
 
-Figure \ref{sli:slika3}: Comparing estimated probability of capture against simulated. Average capture probability estimate from Huggins models $M_0$ and $M_{sp}$. Axis $x$ shows simulated $p$ and $y$ shows ratio between estimated ($\hat{p}$) and simulated value. Upper and lower figures show results where individual covariate has been calculated using empirical and two-dimensional normal functions, respectively. Type of function used does not appear to directly influence the result in a meaningful way.
-}
+Figure \ref{sli:slika3}: Comparing estimated probability of capture against simulated. Average capture probability estimate from Huggins models $M_0$ and $M_{sp}$. Axis $x$ shows simulated $p$ and $y$ shows ratio between estimated ($\hat{p}$) and simulated value. Upper and lower figures show results where individual covariate has been calculated using empirical and two-dimensional normal functions, respectively. Type of function used does not appear to directly influence the result in a meaningful way. On average, the estimated probability of capture is underestimated.}
 \label{sli:slika3}
 \end{figure}
 
-\subsubsection[\bfseries Primerjava verjetnosti ulovljivosti glede na število simuliranih osebkov]{Primerjava verjetnosti ulovljivosti glede na število simuliranih osebkov}
-Ocena verjetnosti ulovljivosti ($p$) glede na število simuliranih osebkov kaže podobno sliko (slika \ref{sli:slika4}). V povprečju model, kjer smo uporabili za izračun še individualno spremenljivko ($M_{sp}$), bolj podcenjuje ulovljivost kot model brez nje ($M_0$). Ta razlika je relativno majhna.
+\subsubsection[\bfseries Primerjava ulovljivosti glede na število simuliranih osebkov]{Primerjava ulovljivosti glede na število simuliranih osebkov}
+Ocena ulovljivosti ($p$) glede na število simuliranih osebkov kaže podobno sliko (slika \ref{sli:slika4}). V povprečju model, kjer smo uporabili za izračun še individualno spremenljivko ($M_{sp}$), bolj podcenjuje ulovljivost kot model brez nje ($M_0$). Ta razlika je relativno majhna.
 
-Opazili smo tudi trend, da je razkorak med modeloma večji za simulacije z manj osebki za manjše simulirane ulovljivosti. Z večanjem simuliranega parametra p se razlika zmanjšuje tudi za primere z najmanjšim številom simuliranih osebkov. Razlike med simulacijami, kjer smo individualno spremenljivko izračunali s pomočjo empirične ali normalne porazdelitve, so relativno majhne.
+Opazili smo tudi trend, da je razkorak med modeloma večji za simulacije z manj osebki za manjše simulirane ulovljivosti. Z večanjem simuliranega parametra $p$ se razlika zmanjšuje tudi za primere z najmanjšim številom simuliranih osebkov. Razlike med simulacijami, kjer smo individualno spremenljivko izračunali s pomočjo empirične ali normalne porazdelitve, so relativno majhne.
 
 \begin{figure}[H]
 \centering
@@ -172,16 +125,16 @@ Opazili smo tudi trend, da je razkorak med modeloma večji za simulacije z manj 
   \label{sli:sub4.2}
 \end{subfigure}
 
-\caption[Primerjava ocenjene ulovljivosti s simulirano glede na število simuliranih osebkov]{Primerjava ocenjene ulovljivosti s simulirano glede na število simuliranih osebkov. Točke prikazujejo razmerje med oceno ulovljivosti ($\hat{p}$) in simulirano vrednostjo glede na povprečno število generiranih osebkov znotraj območja vzorčenja. Na $x$ osi so prikazane simulirane vrednosti ulovljivosti, na $y$ osi pa razmerje med ocenjeno in simulirano vrednostjo. Okenca prikazujejo podatke glede na povprečno število simuliranih osebkov znotraj območja vzorčenja. Zgornja slika prikazuje podatke, kjer smo individualno spremenljivko ocenili s pomočjo empirične porazdelitve, spodnja pa podatke za simulacije, kjer smo individualno spremenljivko izračunali s pomočjo normalne porazdelitve.
+\caption[Primerjava ocenjene ulovljivosti s simulirano glede na število simuliranih osebkov]{Primerjava ocenjene ulovljivosti s simulirano glede na število simuliranih osebkov. Točke prikazujejo razmerje med oceno ulovljivosti ($\hat{p}$) in simulirano vrednostjo glede na povprečno število generiranih osebkov znotraj območja vzorčenja. Na $x$ osi so prikazane simulirane vrednosti ulovljivosti, na $y$ osi pa razmerje med ocenjeno in simulirano vrednostjo. Okenca prikazujejo podatke glede na povprečno število simuliranih osebkov znotraj območja vzorčenja. Zgornja slika prikazuje podatke, kjer smo individualno spremenljivko ocenili s pomočjo empirične porazdelitve, spodnja pa podatke za simulacije, kjer smo individualno spremenljivko izračunali s pomočjo normalne porazdelitve. V povprečju je ocena ulovljivosti podcenjena.
 
 \medskip
 
-Figure \ref{sli:slika4}: Comparing estimate probability of capture to simulated by number of simulated individuals. Figure shows ratio between estimated ($\hat{p}$) and simulated ($p$) probability of capture on the $y$ axis given the simulated values on $x$ axis. Number of individuals generated within the sampling polygon per simulation is divided by facets. Upper and lower figures represent results where individual covariate has been calculated using empirical and two-dimensional normal distribution, respectively.}
+Figure \ref{sli:slika4}: Comparing estimate probability of capture to simulated by number of simulated individuals. Figure shows ratio between estimated ($\hat{p}$) and simulated ($p$) probability of capture on the $y$ axis given the simulated values on $x$ axis. Number of individuals generated within the sampling polygon per simulation is divided by facets. Upper and lower figures represent results where individual covariate has been calculated using empirical and two-dimensional normal distribution, respectively. On average, the estimated probability of capture is underestimated.}
 \label{sli:slika4}
 \end{figure}
 
 \subsubsection[\bfseries Primerjava ulovljivosti glede na razmerje velikosti domačega okoliša in območja vzorčenja]{Primerjava ulovljivosti glede na razmerje velikosti domačega okoliša in območja vzorčenja}
-S slike \ref{sli:slika5} je razvidno, da je vpliv zelo velik. Ko je razmerje velikosti domačega okoliša in velikosti območja vzorčenja majhno (majhen domač okoliš v primerjavi z območjem vzorčenja), je ocena parametra relativno zanesljiva. Z večanjem razmerja med domačim okolišem in območjem vzorčenja pa se zanesljivost ocene poslabšuje in se celo spusti pod globalno povprečje.
+S slike \ref{sli:slika5} je razvidno, da je vpliv zelo velik. Ko je razmerje velikosti domačega okoliša in velikosti območja vzorčenja majhno (majhen domači okoliš v primerjavi z območjem vzorčenja), je ocena parametra relativno zanesljiva. Z večanjem razmerja med domačim okolišem in območjem vzorčenja pa se zanesljivost ocene poslabšuje in se celo spusti pod globalno povprečje.
 
 Sodeč po rezultatih s slike \ref{sli:slika5}, ne moremo sklepati, da ima število generiranih osebkov v povezavi z razmerjem velikosti domačega okoliša in območja vzorčenja bistven vpliv na oceno ulovljivosti, oziroma je vpliv neznaten. Razlike med simulacijami, kjer smo spreminjali funkcijo za izračun individualne spremenljivke, so majhne oz. jih v praktičnem smislu ni.
 
@@ -200,16 +153,16 @@ Sodeč po rezultatih s slike \ref{sli:slika5}, ne moremo sklepati, da ima števi
   \label{sli:sub5.2}
 \end{subfigure}
 
-\caption[Vpliv razmerja med ocenjeno in pravo ulovljivostjo v povezavi z razmerjem velikosti domačega okoliša in vzorčenega območja]{Vpliv razmerja med ocenjeno in pravo ulovljivostjo v povezavi z razmerjem velikosti domačega okoliša in vzorčenega območja. Zgornja slika prikazuje rezultate simulacij, kjer smo individualno spremenljivko izračunali s pomočjo empirične porazdelitve, spodnja pa za izračune s pomočjo normalne porazdelitve. Okenca predstavljajo povprečno število osebkov, ki smo jih generirali znotraj območja vzorčenja.
+\caption[Vpliv razmerja med ocenjeno in pravo ulovljivostjo v povezavi z razmerjem velikosti domačega okoliša in vzorčenega območja]{Vpliv razmerja med ocenjeno in simulirano ulovljivostjo v povezavi z razmerjem velikosti domačega okoliša in vzorčenega območja. Zgornja slika prikazuje rezultate simulacij, kjer smo individualno spremenljivko izračunali s pomočjo empirične porazdelitve, spodnja pa za izračune s pomočjo normalne porazdelitve. Okenca predstavljajo povprečno število osebkov, ki smo jih generirali znotraj območja vzorčenja. Pristranskost ocene ulovljivosti je večja za velika razmerja med velikosto domačega okoliša in območja vzorčenja in se manjša z manjšanjem razmerja.
 
 \medskip
 
-Figure \ref{sli:slika5}: Influence of ratio between estimated and simulated probability of capture by ratio of home range size and sampling polygon size. Influence of ratio between home range size and sampling polygon size (on $x$) on estimate of probability of capture depicted as ratio between estimated and simulated probabilities of capture ($y$ axis). Facets depict simulations based on number of simulated individuals within the sampling polygon. Upper and lower images represent simulations where individual covariate was calculated using empirical and two-dimensional normal distribution, respectively.
+Figure \ref{sli:slika5}: Influence of ratio between estimated and simulated probability of capture by ratio of home range size and sampling polygon size. Influence of ratio between home range size and sampling polygon size (on $x$) on estimate of probability of capture depicted as ratio between estimated and simulated probabilities of capture ($y$ axis). Facets depict simulations based on number of simulated individuals within the sampling polygon. Upper and lower images represent simulations where individual covariate was calculated using empirical and two-dimensional normal distribution, respectively. Probability of capture bias is largest for large ratios of home range and sampling area sizes and decreases as this ratio decreases.
 }
 \label{sli:slika5}
 \end{figure}
 
-Razmerje med površinama domačega okoliša in območja vzorčenja ima na pristranskost ocene parametra $p$ velik vpliv. Na sliki \ref{sli:slika6} je prikazano, kako se pristranskost ocene parametra $p$ spreminja z razmerjem površin domačega okoliša in vzorčenega območja glede na število generiranih osebkov in število odlovnih intervalov. Povprečji ocen obeh Hugginsovih modelov konvergirata z večanjem razmerja, kjer več simuliranih osebkov pomeni bolj podobno (in pristransko) oceno med modeloma. Podoben vpliv ima tudi število odlovnih intervalov, ki poleg tega vpliva tudi na variabilnost ocen. Več kot je odlovnih intervalov, manjša je variabilnost v oceni. S slike \ref{sli:slika6} ne moremo trditi, da smo zaznali bistvene razlike med simulacijami, kjer smo uporabili za izračun normalno ali empirično funkcijo.
+Razmerje med površinama domačega okoliša in območja vzorčenja ima na pristranskost ocene parametra $p$ velik vpliv. Na sliki \ref{sli:slika6} je prikazano, kako se pristranskost ocene parametra $p$ spreminja z razmerjem površin domačega okoliša in vzorčenega območja glede na število generiranih osebkov in število odlovnih intervalov. Povprečji ocen obeh Hugginsovih modelov konvergirata z večanjem razmerja, kjer več simuliranih osebkov pomeni bolj podobno (in pristransko) oceno med modeloma. Razlike v razmerjih (os $y$) za modela $M_0$ in $M_{sp}$ je za najmanjša razmerja med velikosto domačega okoliša in velikostjo območja vzorčenja (os $x$) le nekaj odstotkov. Po našem mnenju je to v praksi majhna razlika. Podoben vpliv ima tudi število odlovnih intervalov, ki poleg tega vpliva tudi na variabilnost ocen. Več kot je odlovnih intervalov, manjša je variabilnost v oceni. S slike \ref{sli:slika6} ne moremo trditi, da smo zaznali bistvene razlike med simulacijami, kjer smo uporabili za izračun normalno ali empirično funkcijo.
 
 \begin{figure}[H]
 \centering
@@ -224,31 +177,33 @@ Razmerje med površinama domačega okoliša in območja vzorčenja ima na pristr
   \includegraphics[width=1\linewidth]{C:/Users/romunov/Documents/workspace/doktorat/analiza/figures/N-0h_pristranskost_p_glede_sap_hr_razmerje_glede_na_st_walkerjev_in_st_sessionov.png}
   \label{sli:sub6.2}
 \end{subfigure}
-\caption[Prikaz pristranskosti ocene ulovljivosti glede na razmerje površin domačega okoliša in območja vzorčenja v povezavi s številom simuliranih osebkov in odlovnih intervalov]{Prikaz pristranskosti ocene ulovljivosti ($\hat{p}$) glede na razmerje površin domačega okoliša in območja vzorčenja v povezavi s številom simuliranih osebkov (stolpci) in odlovnih intervalov (vrstice). Na zgornji sliki so prikazani rezultati simulacij, kjer smo za izračun individualne spremenljivke uporabili empirično, na spodnji pa normalno funkcijo. Z večanjem števila simuliranih osebkov se veča pristranskost in manjša razlika v oceni parametra. Podobno sliko vidimo z večanjem števila odlovnih intervalov (vrstice), kjer poleg višanja pristranskosti in konvergence povprečij modelov opazimo tudi zmanjševanje variance ocene.\\
+\caption[Prikaz pristranskosti ocene ulovljivosti glede na razmerje površin domačega okoliša in območja vzorčenja v povezavi s številom simuliranih osebkov in odlovnih intervalov]{Prikaz pristranskosti ocene ulovljivosti ($\hat{p}$) glede na razmerje površin domačega okoliša in območja vzorčenja v povezavi s številom simuliranih osebkov (stolpci) in odlovnih intervalov (vrstice). Na zgornji sliki so prikazani rezultati simulacij, kjer smo za izračun individualne spremenljivke uporabili empirično, na spodnji pa normalno funkcijo.\\
 Se nadaljuje
 }
 \label{sli:slika6}
 \end{figure}
 
 \begin{figure}\ContinuedFloat
-\caption*{nadaljevanje Figure \ref{sli:slika6}: Depiction of bias as ratio of estimated probability of capture and simulated value against ratio of home range area and sampling polygon area by number of simulated individuals and sampling sessions. Data has been additionally sliced according to number of sampling occasions ($K$, facets in rows) and number of simulated individuals within sampling polygon ($\bar{N}$, facets in columns). Bias increases with increased ratio between home range size and sampling polygon size. On average, means of models converge and are highly biased for large ratios of home range size and sampling polygon size. By increasing number of sampling sessions, decrease in variance of estimates is apparent.}
+\caption*{nadaljevanje Slike 6: Z večanjem razmerja med velikostjo domačega okoliša in območja vzorčenja se veča pristranskost in manjša razlika v oceni parametra $\hat{p}$. Podobno sliko vidimo z večanjem števila odlovnih intervalov (vrstice), kjer poleg višanja pristranskosti in konvergence povprečij modelov opazimo tudi zmanjševanje variance ocene. Ocena se ne približa teoretičnemu razmerju 1 zaradi krnenja točk, ki so bile zabeležene zunaj območja vzorčenja.\\
+
+Figure \ref{sli:slika6}: Depiction of bias as ratio of estimated probability of capture and simulated value against ratio of home range area and sampling polygon area by number of simulated individuals and sampling sessions. Data has been additionally sliced according to number of sampling occasions ($K$, facets in rows) and number of simulated individuals within sampling polygon ($\bar{N}$, facets in columns). Bias increases with increased ratio between home range size and sampling polygon size. On average, means of models converge and are highly biased for large ratios of home range size and sampling polygon size. By increasing number of sampling sessions, decrease in variance of estimates is apparent. Values never reach theoretical ratio of 1 due to censoring of point that fall outside the sampling area.}
 \end{figure}
 
 \subsection{GOSTOTA}
 Simulirano gostoto smo izračunali kot število centroidov (osebkov) znotraj površine, kjer smo jih simulirali. S pomočjo modelov Huggins in TIRM smo dobili oceno številčnosti znotraj območja vzorčenja. Ker osebki niso bili omejeni na območje vzorčenja in so prehajali njegove meje, smo dejansko ocenili velikost superpopulacije, katere prostorska omejenost ni nedvoumno določena. Na podlagi ocenjenega števila osebkov in velikosti vzorčenega območja smo izračunali gostoto te superpopulacije.
 
-Za izračun gostote smo uporabili tudi razširjeno območje vzorčenja. Območje smo razširili tako, da smo polmer povečali za določeno razdaljo. Razdaljo smo izbrali kot percentil parne razdalje iz funkcije, ki smo jo ali prilegli podatkom (empirična funkcija) ali pa izračunali na podlagi simuliranih parametrov (dvorazsežna normalna porazdelitev). Gostoto smo izračunali glede na območje, povečano za standardni odklon polmera simuliranega območja gibanja osebka (hr), za percentil porazdelitve (50-99) oz. za najdaljšo prehojeno razdaljo (effect) v posamezni simulaciji. Spodnji rezultati so podani kot razmerje med ocenjeno in pravo gostoto. Ker gre za razmerje, kjer je prava gostota v imenovalcu, se bodo v primeru nepristransko ocenjene gostote vrednosti nahajale blizu 1.
+Za izračun gostote smo uporabili tudi razširjeno območje vzorčenja. Območje smo razširili tako, da smo polmer povečali za določeno razdaljo. Razdaljo smo izbrali kot percentil parne razdalje iz funkcije, ki smo jo ali prilegli podatkom (empirična funkcija) ali pa izračunali na podlagi simuliranih parametrov (dvorazsežna normalna porazdelitev). Gostoto smo izračunali glede na območje, povečano za standardni odklon polmera simuliranega območja gibanja osebka (hr), za percentil porazdelitve (50-99) oz. za najdaljšo parno razdaljo med vzorčnimi točkami (effect) v posamezni simulaciji. Spodnji rezultati so podani kot razmerje med ocenjeno in pravo gostoto. Ker gre za razmerje, kjer je prava gostota v imenovalcu, se bodo v primeru nepristransko ocenjene gostote vrednosti nahajale blizu 1.
 
 
 \subsubsection[\bfseries Razlike v gostoti glede na število simuliranih osebkov in funkcij za izračun individualne spremenljivke]{Razlike v gostoti glede na število simuliranih osebkov in funkcij za izračun individualne spremenljivke}
-Na sliki \ref{sli:slika6} so prikazani rezultati izračuna gostot. Na sliki uporabimo kazalnik, ki je z gostoto povezan kot razmerje med gostoto, izračunano iz ocenjene velikosti populacije, in gostoto, izračunano iz simulirane velikosti populacije ($\hat{D}/D$).
+Na sliki \ref{sli:slika7} so prikazani rezultati izračuna gostot. Na sliki uporabimo kazalnik, ki je z gostoto povezan kot razmerje med gostoto, izračunano iz ocenjene velikosti populacije, in gostoto, izračunano iz simulirane velikosti populacije ($\hat{D}/D$).
 
 Opazimo razlike med simulacijami, kjer smo uporabili empirično in normalno porazdelitev za izračun individualne spremenljivke. Razlike so predvsem v primerih, kjer smo območje vzorčenja povečali za razdaljo od 50. do 99. percentila. Pristranskost kazalnika se v odvisnosti od razmerja domačega okoliša in vzorčenega območja povečuje hitreje za primere, ko smo za izračun individualne spremenljivke uporabili empirično porazdelitev.
 
 Pristranskost kazalnika v primeru nepovečanega območja hitro narašča z večanjem razmerja med velikostjo domačega okoliša in velikostjo območja vzorčenja podobno za oba načina izračuna individualne spremenljivke.
 
 Z manjšanjem razmerja med površino domačega okoliša in območja vzorčenja se pristranskost v povprečju zmanjšuje. Za primere, kjer smo za izračun individualne spremenljivke uporabili empirično funkcijo, je gladilka za večja povečanja razmerja bolj konkavne oblike, s povečevanjem površine vzorčenega območja za izračun gostote pa se pristranskost v splošnem zmanjšuje.
-Pri simulacijah, kjer smo za izračun individualne spremenljivke uporabili normalno porazdelitev, je konkavnost gladilke možno opaziti le za primere, kjer smo območje vzorčenja povečali za najdaljšo prehojeno razdaljo (zadnji stolpec).
+Pri simulacijah, kjer smo za izračun individualne spremenljivke uporabili normalno porazdelitev, je konkavnost gladilke možno opaziti le za primere, kjer smo območje vzorčenja povečali za najdaljšo parno razdaljo med vzorčenimi točkami (zadnji stolpec).
 Za oba načina izračuna individualnih spremenljivk pa velja, da se povečanje površine vzorčenega območja pozna najmanj za tiste simulacije, kjer je bilo razmerje med velikostjo domačega okoliša in velikostjo vzorčenega območja najmanjše.
 
 Povečevanje števila simuliranih osebkov prispeva predvsem k zmanjšanju variabilnosti ocen velikosti populacij in posledično k manjši variabilnosti gostot. Variabilnost je za veliko večino primerov najmanjša za simulacije, kjer je razmerje med velikostjo domačega okoliša in velikostjo vzorčenega območja najmanjša.
@@ -277,7 +232,7 @@ Razlike med modeli so med scenariji primerljive. Najbolj precenjene rezultate da
 \end{figure}
 
 \subsubsection[\bfseries Razlike v gostoti glede na funkcijo za izračun individualne spremenljivke, število odlovnih intervalov ter število simuliranih osebkov]{Razlike v gostoti glede na funkcijo za izračun individualne spremenljivke, število odlovnih intervalov ter število simuliranih osebkov}
-Na slikah \ref{sli:slika7} in \ref{sli:slika8} smo podatke s slike \ref{sli:slika6} prikazali tako, da so podatki razdeljeni na odlovne intervale ($K = [5, 10, 15]$). Prikaz glede na število odlovnih intervalov nam je dal predvsem vpogled v spremembo variabilnosti. Pri simulacijah z najmanj odlovnimi intervali ($K = 5$) je varianca večja kot pri tistih z več odlovnimi intervali ($K = [10, 15]$). Pri slednjih že opazimo prevladujoč vzorec v povprečju kazalnika za vse modele glede na popravke velikosti območja vzorčenja (stolpci) in povprečno število simuliranih osebkov znotraj območja vzorčenja (vrstice). Vpliv povečanja površine vzorčenega območja se opazi predvsem za simulacije, kjer je razmerje med velikostjo domačega okoliša in velikostjo vzorčenega območja relativno veliko. Na simulacije, kjer je to razmerje relativno majhno, povečanje območja vzorčenja pri pristranskosti ne kaže očitnega učinka.
+Na slikah \ref{sli:slika8} in \ref{sli:slika9} smo podatke s slike \ref{sli:slika7} prikazali tako, da so podatki razdeljeni na odlovne intervale ($K = [5, 10, 15]$). Prikaz glede na število odlovnih intervalov nam je dal predvsem vpogled v spremembo variabilnosti. Pri simulacijah z najmanj odlovnimi intervali ($K = 5$) je varianca večja kot pri tistih z več odlovnimi intervali ($K = [10, 15]$). Pri slednjih že opazimo prevladujoč vzorec v povprečju kazalnika za vse modele glede na popravke velikosti območja vzorčenja (stolpci) in povprečno število simuliranih osebkov znotraj območja vzorčenja (vrstice). Vpliv povečanja površine vzorčenega območja se opazi predvsem za simulacije, kjer je razmerje med velikostjo domačega okoliša in velikostjo vzorčenega območja relativno veliko. Na simulacije, kjer je to razmerje relativno majhno, povečanje območja vzorčenja pri pristranskosti ne kaže očitnega učinka.
 
 \begin{figure}[H]
   \centering
@@ -370,7 +325,7 @@ Porazdelitve vrednosti so nekoliko bolj razvidne s slike \ref{sli:slika11}. Opaz
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[b]{1\textwidth}
+  \begin{subfigure}[b]{0.99\textwidth}
     \centering
     \includegraphics[width=1\linewidth]{C:/Users/romunov/Documents/workspace/doktorat/analiza/figures/E-8a_dAIC_glede_na_najboljsi_model.png}
     \label{sli:sub11.1}
@@ -378,13 +333,13 @@ Porazdelitve vrednosti so nekoliko bolj razvidne s slike \ref{sli:slika11}. Opaz
 
   \begin{subfigure}[b]{1\textwidth}
     \centering
-    \includegraphics[width=1\linewidth]{C:/Users/romunov/Documents/workspace/doktorat/analiza/figures/N-8a_dAIC_glede_na_najboljsi_model.png}
+    \includegraphics[width=0.99\linewidth]{C:/Users/romunov/Documents/workspace/doktorat/analiza/figures/N-8a_dAIC_glede_na_najboljsi_model.png}
     \label{sli:sub11.2}
   \end{subfigure}
-  \caption[Podrobnejši prikaz porazdelitev razlik v AICc za modela $M_0$ in $M_{sp}$]{Podrobnejši prikaz porazdelitev razlik v AICc za modela $M_0$ in $M_{sp}$ s slike \ref{sli:slika10}. Zgornja dva histograma predstavljata vrednosti, kjer smo za izračun individualne spremenljivke uporabili empirično porazdelitev, spodnja pa vrednosti, kjer smo uporabili normalno porazdelitev. Previdni moramo biti pri razlaganju osi $x$, saj med modeloma nista neposredno primerljivi.
+  \caption[Podrobnejši prikaz porazdelitev razlik v AICc za modela $M_0$ in $M_{sp}$]{Podrobnejši prikaz porazdelitev razlik v AICc za modela $M_0$ in $M_{sp}$ s slike \ref{sli:slika10}. Zgornja dva histograma predstavljata vrednosti, kjer smo za izračun individualne spremenljivke uporabili empirično porazdelitev, spodnja pa vrednosti, kjer smo uporabili normalno porazdelitev. Okenca z $M_0$ (levo) predstavlja razliko v AICc za simulacije, kjer je bil boljši model $M_0$, okence $M_{sp}$ pa razliko v AICc za modele, kjer je bil boljši model $M_{sp}$. Previdni moramo biti pri razlaganju osi $x$, saj med modeloma nista neposredno primerljivi.
 
   \medskip
 
-  Figure \ref{sli:slika11}: Detailed view of distribution of $\delta$AICc for models $M_0$ and $M_{sp}$ from figure \ref{sli:slika10}. Two histograms at the top and bottom represent simulations where individual covariate has been calculated using empirical and two-dimensional normal distributions, respectively. Note that $x$ axes are not directly comparable between graphs.}
+  Figure \ref{sli:slika11}: Detailed view of distribution of $\Delta$AICc for models $M_0$ and $M_{sp}$ from figure \ref{sli:slika10}. Two histograms at the top and bottom represent simulations where individual covariate has been calculated using empirical and two-dimensional normal distributions, respectively. Facets $M_0$ and $M_{sp}$ show differences in AICc for simulations where respective models performed better. Note that $x$ axes are not directly comparable between graphs.}
   \label{sli:slika11}
 \end{figure}

@@ -27,23 +27,23 @@ ggplot(ss, aes(x = x, y = y)) +
 # koliko točk je znotraj 1 SD?
 N <- 10000
 set.seed(357)
-xy <- data.frame(x = rnorm(n = N, mean = 10, sd = 1),
-                 y = rnorm(n = N, mean = 10, sd = 1))
+xy <- data.frame(x = rnorm(n = N, mean = 0, sd = 1),
+                 y = rnorm(n = N, mean = 0, sd = 1))
 
 # SD ni preprosto SD_x ali SD_y, ampak SD_x + SD_y + 2*korelacija(x,y) * cov_x * cov_y
 # https://www.probabilitycourse.com/chapter5/5_3_2_bivariate_normal_dist.php
 radius <- sqrt(sum(diag(var(xy))) + (2 * cor(xy$x, xy$y) * sd(xy$x) * sd(xy$y)))
 
 theta <- seq (0, 2 * pi, length = 1000)
-krog <- data.frame(x = radius * cos(theta),
-                   y = radius * sin(theta))
+krog <- data.frame(x = 0 + radius * cos(theta),
+                   y = 0 + radius * sin(theta))
 
 sp.krog <- SpatialPolygons(list(Polygons(list(Polygon(krog)), ID = 1)))
 
 sp.xy <- xy
 coordinates(sp.xy) <- ~ x + y
 
-plot(sp.xy, asp = 1)
+plot(xy, asp = 1)
 plot(sp.krog, lwd = 2, border = "red", add = TRUE, col = NA)
 
 pins <- over(x = sp.xy, y = sp.krog)
@@ -134,7 +134,7 @@ xy$accepted <- with(xy, random <= fit/maxDens)
 xy.out <- xy[xy$accepted, ] # retain only those values that are "below" the custom distribution
 
 hist(xy.out$proposed, freq = FALSE, breaks = 100, col = "light grey")
-curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/4500, # multiply to make it look fit nicely
+curve(weibullLikeDistribution(x, sigma = sigma, b = b, mx = mx)/4500, # divide to make it look fit nicely
       from = 0, to = 300, add = TRUE, col = "red", lwd = 2)
 
 abline(v = quantile(xy.out$proposed, probs = c(0.5, 0.6, 0.7, 0.8, 0.9, 0.95, 0.99)),
